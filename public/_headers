@@ -1,0 +1,19 @@
+# Cloudflare Pages custom headers
+# https://developers.cloudflare.com/pages/configuration/headers/
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# Cache images and fonts for 7 days
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+*.avif
+*.svg
+*.ico
+*.woff2
+  Cache-Control: public, max-age=604800, immutable

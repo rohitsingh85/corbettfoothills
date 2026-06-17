@@ -1,0 +1,158 @@
+---
+import siteData from "../data/site.json";
+---
+
+<header
+  id="site-header"
+  class="fixed top-0 z-50 w-full transition-all duration-300"
+  data-header
+>
+  <nav
+    class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8"
+  >
+    <a
+      href="/"
+      class="flex items-center gap-2 text-xl font-bold tracking-tight text-white"
+    >
+      <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-sand-500/20 backdrop-blur-sm">
+        <svg
+          class="h-5 w-5 text-sand-300"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418"
+          />
+        </svg>
+      </span>
+      <span class="font-display text-lg">{siteData.site.shortName}</span>
+    </a>
+
+    <!-- Desktop nav -->
+    <ul class="hidden items-center gap-8 md:flex">
+      {
+        siteData.nav.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class="relative text-sm font-medium text-sand-200 transition-colors duration-200 hover:text-white after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-0 after:bg-sand-400 after:transition-all after:duration-300 hover:after:w-full"
+            >
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+      <li>
+        <a href="/#contact" class="inline-flex items-center justify-center gap-2 rounded-lg bg-sand-500 px-6 py-3 text-sm font-semibold text-earth-700 transition-all duration-300 hover:bg-sand-400 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-sand-400 focus-visible:ring-offset-2 !rounded-full !px-5 !py-2 !text-xs !font-semibold !uppercase !tracking-wider">
+          Book Now
+        </a>
+      </li>
+    </ul>
+
+    <!-- Mobile hamburger -->
+    <button
+      id="menu-toggle"
+      class="relative z-50 flex h-10 w-10 items-center justify-center rounded-lg text-sand-200 md:hidden"
+      aria-label="Toggle navigation menu"
+      type="button"
+    >
+      <svg id="menu-open-icon" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+      </svg>
+      <svg id="menu-close-icon" class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </nav>
+
+  <!-- Mobile menu overlay -->
+  <div
+    id="mobile-menu"
+    class="invisible fixed inset-0 z-40 flex flex-col items-center justify-center bg-cfr-green-dark/98 backdrop-blur-xl opacity-0 transition-all duration-500 md:hidden"
+  >
+    <ul class="flex flex-col items-center gap-8">
+      {
+        siteData.nav.map((item, i) => (
+          <li
+            class="mobile-nav-item translate-y-4 opacity-0 transition-all duration-500"
+            style={`transition-delay: ${i * 80}ms`}
+          >
+            <a
+              href={item.href}
+              class="text-2xl font-medium text-sand-200 transition-colors hover:text-white"
+            >
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+      <li class="mt-4 mobile-nav-item translate-y-4 opacity-0 transition-all duration-500">
+        <a href="/#contact" class="inline-flex items-center justify-center gap-2 rounded-lg bg-sand-500 px-6 py-3 text-sm font-semibold text-earth-700 transition-all duration-300 hover:bg-sand-400 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-sand-400 focus-visible:ring-offset-2 !rounded-full !px-8 !py-3 !text-sm !font-semibold !uppercase !tracking-wider">
+          Book Now
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector("[data-header]");
+  const toggle = document.getElementById("menu-toggle");
+  const menu = document.getElementById("mobile-menu");
+  const openIcon = document.getElementById("menu-open-icon");
+  const closeIcon = document.getElementById("menu-close-icon");
+  const navItems = document.querySelectorAll(".mobile-nav-item");
+  let isOpen = false;
+
+  // Header scroll effect
+  let lastScroll = 0;
+  window.addEventListener("scroll", () => {
+    const y = window.scrollY;
+    if (y > 60) {
+      header.classList.add("bg-cfr-green-dark/95", "shadow-lg", "backdrop-blur-md");
+      header.classList.remove("bg-transparent");
+    } else {
+      header.classList.remove("bg-cfr-green-dark/95", "shadow-lg", "backdrop-blur-md");
+      header.classList.add("bg-transparent");
+    }
+    lastScroll = y;
+  });
+
+  // Mobile menu toggle
+  toggle.addEventListener("click", () => {
+    isOpen = !isOpen;
+    if (isOpen) {
+      menu.classList.remove("invisible", "opacity-0");
+      menu.classList.add("opacity-100");
+      document.body.style.overflow = "hidden";
+      openIcon.classList.add("hidden");
+      closeIcon.classList.remove("hidden");
+      navItems.forEach((item) => {
+        item.classList.remove("translate-y-4", "opacity-0");
+      });
+    } else {
+      menu.classList.add("opacity-0");
+      menu.classList.remove("opacity-100");
+      document.body.style.overflow = "";
+      openIcon.classList.remove("hidden");
+      closeIcon.classList.add("hidden");
+      navItems.forEach((item) => {
+        item.classList.add("translate-y-4", "opacity-0");
+      });
+      setTimeout(() => {
+        menu.classList.add("invisible");
+      }, 500);
+    }
+  });
+
+  // Close on link click
+  document.querySelectorAll("#mobile-menu a").forEach((link) => {
+    link.addEventListener("click", () => {
+      if (isOpen) toggle.click();
+    });
+  });
+</script>

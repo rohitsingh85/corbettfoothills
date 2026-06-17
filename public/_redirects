@@ -1,0 +1,7 @@
+# Cloudflare Pages redirects
+# https://developers.cloudflare.com/pages/configuration/redirects/
+
+/index.html          /                   301
+/home                /                   301
+/contact-us          /contact            301
+/gallery.html        /gallery            301

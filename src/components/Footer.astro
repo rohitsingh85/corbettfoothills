@@ -1,0 +1,115 @@
+---
+import siteData from "../data/site.json";
+---
+
+<footer class="relative overflow-hidden bg-cfr-green-dark">
+  <!-- Decorative top border -->
+  <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cfr-green-accent via-sand-500 to-cfr-green-leaf"></div>
+
+  <div class="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+    <div class="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
+      <!-- Brand -->
+      <div class="lg:col-span-1">
+        <a href="/" class="flex items-center gap-2">
+          <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-sand-500/20">
+            <svg class="h-5 w-5 text-sand-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
+            </svg>
+          </span>
+          <span class="font-display text-lg font-bold text-white">Corbett Foothills Retreat</span>
+        </a>
+        <p class="mt-4 text-sm leading-relaxed text-white">
+          {siteData.site.description}
+        </p>
+        <div class="mt-6 flex gap-4">
+          <a
+            href={siteData.site.social.instagram}
+            class="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-white/60 transition-colors hover:bg-cfr-green-accent hover:text-white"
+            aria-label="Instagram"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 016.11 2.525c.636-.247 1.363-.416 2.427-.465C8.83 2.013 9.942 2 12.315 2zm0 1.802c-2.373 0-2.7.01-3.656.053-1.023.047-1.58.218-1.95.362-.49.19-.84.416-1.207.783-.367.367-.593.717-.783 1.207-.144.37-.315.927-.362 1.95-.043.957-.053 1.283-.053 3.656 0 2.373.01 2.7.053 3.656.047 1.023.218 1.58.362 1.95.19.49.416.84.783 1.207.367.367.717.593 1.207.783.37.144.927.315 1.95.362.957.043 1.283.053 3.656.053 2.373 0 2.7-.01 3.656-.053 1.023-.047 1.58-.218 1.95-.362.49-.19.84-.416 1.207-.783.367-.367.593-.717.783-1.207.144-.37.315-.927.362-1.95.043-.957.053-1.283.053-3.656 0-2.373-.01-2.7-.053-3.656-.047-1.023-.218-1.58-.362-1.95-.19-.49-.416-.84-.783-1.207-.367-.367-.717-.593-1.207-.783-.37-.144-.927-.315-1.95-.362-.957-.043-1.283-.053-3.656-.053zm0 4.811a4.387 4.387 0 100 8.774 4.387 4.387 0 000-8.774zm0 1.802a2.585 2.585 0 110 5.17 2.585 2.585 0 010-5.17zm5.068-2.259a1.025 1.025 0 100 2.05 1.025 1.025 0 000-2.05z"/></svg>
+          </a>
+          <a
+            href={siteData.site.social.facebook}
+            class="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-white/60 transition-colors hover:bg-cfr-green-accent hover:text-white"
+            aria-label="Facebook"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+          <a
+            href={siteData.site.social.youtube}
+            class="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-white/60 transition-colors hover:bg-cfr-green-accent hover:text-white"
+            aria-label="YouTube"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick links -->
+      <div>
+        <h3 class="font-display text-sm font-semibold uppercase tracking-widest text-sand-300">Explore</h3>
+        <ul class="mt-4 space-y-3">
+          {
+            siteData.nav.map((item) => (
+              <li><a href={item.href} class="text-sm text-sand-300 transition-colors hover:text-white">{item.label}</a></li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div>
+        <h3 class="font-display text-sm font-semibold uppercase tracking-widest text-sand-300">Contact</h3>
+        <ul class="mt-4 space-y-3">
+          <li>
+            <a href={`tel:${siteData.site.phone}`} class="text-sm text-sand-300 transition-colors hover:text-white">
+              {siteData.site.phone}
+            </a>
+          </li>
+          <li>
+            <a href={`mailto:${siteData.site.email}`} class="text-sm text-sand-300 transition-colors hover:text-white">
+              {siteData.site.email}
+            </a>
+          </li>
+          <li class="text-sm text-white/70">
+            {siteData.site.location}
+          </li>
+        </ul>
+      </div>
+
+      <!-- Newsletter -->
+      <div>
+        <h3 class="font-display text-sm font-semibold uppercase tracking-widest text-sand-300">Stay Connected</h3>
+        <p class="mt-4 text-sm text-white">Get exclusive offers and wildlife stories.</p>
+        <form class="mt-4 flex gap-2">
+          <input
+            type="email"
+            placeholder="Your email"
+            class="min-w-0 flex-1 rounded-lg border-0 bg-white/10 px-3 py-2 text-sm text-white placeholder:text-sand-300 focus:outline-none focus:ring-2 focus:ring-cfr-green-accent"
+          />
+          <button type="submit" class="rounded-lg bg-cfr-green-accent px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-cfr-green-leaf">
+            Join
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="mt-12 border-t border-white/10 pt-8 flex flex-col items-center justify-between gap-4 sm:flex-row">
+      <p class="text-xs text-sand-300">
+        &copy; {new Date().getFullYear()} Corbett Foothills Retreat. All rights reserved.
+      </p>
+      <div class="flex gap-6">
+        <a href="#" class="text-xs text-sand-300 transition-colors hover:text-white">Privacy Policy</a>
+        <a href="#" class="text-xs text-sand-300 transition-colors hover:text-white">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>

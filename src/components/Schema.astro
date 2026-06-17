@@ -1,0 +1,43 @@
+---
+import siteData from "../data/site.json";
+
+const { url, name, description, location, phone, email, social } = siteData.site;
+---
+
+<script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Hotel",
+  name,
+  description,
+  url,
+  telephone: phone,
+  email,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: location.split(",")[0],
+    addressLocality: "Ramnagar",
+    addressRegion: "Nainital",
+    addressCountry: "IN",
+    postalCode: "263140",
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: 29.334,
+    longitude: 79.072,
+  },
+  sameAs: [social.instagram, social.facebook, social.youtube].filter(Boolean),
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: "4.9",
+    bestRating: "5",
+    ratingCount: "47",
+  },
+  priceRange: "₹₹₹₹",
+  image: "https://lh3.googleusercontent.com/sitesv/AA5AbUDiJJoEp_rKLPRAtQjdZj-48J0hANgpimqmWOOLDLJJvVvRl5JYYfg7yBlZ0GSIjxufApQHqA72Ja5ztYerclna9UWXzuBPoJRAB8xYLtd0Vd6V4ELp8W3CgCJ0NXm1XOkD81vz4J7VoeMGOxi61X91OzMql0gP4lWnySojLoKrBHqqOl2w1KcoFTtvb-Hgqi0k4URpv3efmCvd7aMUcVBvbsmVbRcwgV9VBD5x=w1280",
+  numberOfRooms: 6,
+  amenityFeature: [
+    { "@type": "LocationFeatureSpecification", name: "Jim Corbett National Park access", value: "8 km" },
+    { "@type": "LocationFeatureSpecification", name: "Organic farm", value: true },
+    { "@type": "LocationFeatureSpecification", name: "Pet-friendly", value: true },
+  ],
+})} />
