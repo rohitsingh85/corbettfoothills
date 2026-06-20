@@ -5,3 +5,11 @@
 /home                /                   301
 /contact-us          /contact            301
 /gallery.html        /gallery            301
+/about               /about-us           301
+/about/              /about-us           301
+/blog                /blogs               301
+/blog/*              /blogs/:splat        301
+/farmstay-vs-resort  /blogs/farmstay-vs-resort  301
+/farmstay-vs-resort/ /blogs/farmstay-vs-resort  301
+/how-to-reach        /blogs/how-to-reach        301
+/how-to-reach/       /blogs/how-to-reach        301

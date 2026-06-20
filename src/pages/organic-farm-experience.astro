@@ -1,0 +1,431 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import siteData from "../data/site.json";
+
+const siteUrl = Astro.site || new URL("https://corbett.life");
+const pageUrl = new URL("/organic-farm-experience", siteUrl).href;
+---
+
+<MainLayout
+  title="Organic Farm Experience Near Jim Corbett | Corbett Foothills Retreat"
+  description="Experience authentic organic farm living near Jim Corbett National Park. Farm-to-table dining, nature walks, and personalised farmstay experiences for families, couples, and pet owners."
+  breadcrumbs={[{name: "Organic Farm Experience"}]}
+>
+  <Fragment slot="head">
+    <meta property="og:title" content="Organic Farm Experience Near Jim Corbett – Farm-to-Table Living" />
+    <meta property="og:description" content="Experience authentic organic farm living near Jim Corbett National Park. Farm-to-table dining, nature walks, and personalised farmstay experiences for families, couples, and pet owners." />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:image" content={new URL("/images/live-1.webp", siteUrl).href} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Organic Farm Experience Near Jim Corbett – Corbett Foothills Retreat" />
+    <meta name="twitter:description" content="Farm-to-table dining, organic farm activities, nature walks, and personalised farmstay experiences near Jim Corbett National Park." />
+    <meta name="twitter:image" content={new URL("/images/live-1.webp", siteUrl).href} />
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: "Organic Farm Experience Near Jim Corbett National Park",
+      description: "A comprehensive guide to the organic farm experience at Corbett Foothills Retreat — farm-to-table dining, daily farm activities, nature walks, and personalised farmstay experiences for families, couples, and pet owners.",
+      author: { "@type": "Organization", name: "Corbett Foothills Retreat" },
+      publisher: { "@type": "Organization", name: "Corbett Foothills Retreat", logo: { "@type": "ImageObject", url: new URL("/logos/CFR_logo_v2.svg", siteUrl).href } },
+      datePublished: "2026-06-19",
+      dateModified: "2026-06-19",
+      mainEntityOfPage: { "@type": "WebPage", "@id": pageUrl },
+      image: new URL("/images/live-1.webp", siteUrl).href,
+    })} />
+  </Fragment>
+  <Fragment slot="header">
+    <Header />
+  </Fragment>
+
+  <section class="relative flex min-h-[40vh] items-end overflow-hidden pt-56">
+    <div class="absolute inset-0 bg-cfr-green-dark"></div>
+    <div class="absolute inset-0 bg-hero-pattern"></div>
+    <div class="absolute inset-0 bg-leaf-pattern opacity-30"></div>
+    <div class="relative z-10 w-full bg-cfr-green-dark">
+      <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8 lg:pb-16">
+        <div class="max-w-3xl">
+          <a href="/" class="mb-4 inline-flex items-center gap-1 text-xs uppercase tracking-widest text-cfr-sand-300 transition-colors hover:text-white">
+            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+            Back to Home
+          </a>
+          <h1 class="font-display text-4xl font-bold text-white sm:text-5xl lg:text-6xl">
+            Organic Farm Experience Near Jim Corbett
+          </h1>
+          <p class="mt-4 max-w-xl text-lg text-white">
+            Immerse yourself in organic farm living at Corbett Foothills Retreat — harvest fresh produce, enjoy farm-to-table meals, explore nature trails, and experience the simple rhythms of life on a working farm at the edge of the forest.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cfr-cream-dark py-16 sm:py-24">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display text-3xl font-bold text-cfr-green-dark sm:text-4xl">What is an Organic Farm Experience?</h2>
+        <p class="mt-6 text-base leading-relaxed text-cfr-earth-600">
+          An organic farm experience is more than just a stay in the countryside — it is an invitation to slow down, reconnect with where your food comes from, and participate in the daily rhythms of a working farm. At Corbett Foothills Retreat, our organic farm is not a demonstration plot or a decorative garden. It is the living heart of the property, supplying our kitchen with fresh seasonal produce, feeding our composting systems, and providing guests with a hands-on window into sustainable agriculture.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-cfr-earth-600">
+          Unlike a conventional resort stay where meals appear on a menu and nature is observed from a distance, an organic farm experience places you in the middle of the story. You can walk through the vegetable beds in the morning, pick tomatoes and herbs for your lunch, watch our farm staff tend to the crops using traditional methods, and learn about composting, natural pest control, and soil health — all while surrounded by the forested foothills of the Himalayas.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-cfr-earth-600">
+          This is farm living at its most authentic, designed for travellers who want to understand the land, support sustainable practices, and take home more than just photographs. For a broader comparison of accommodation styles, see our guide on <a href="/blogs/farmstay-vs-resort" class="text-cfr-green-accent underline hover:text-cfr-green-dark">farmstay vs resort living near Jim Corbett</a>.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-cfr-earth-600">
+          <a href="/tariff" class="text-cfr-green-accent underline hover:text-cfr-green-dark font-semibold">Check our rates</a> and start planning your organic farm getaway.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cfr-green-dark py-16 sm:py-24">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display text-3xl font-bold text-white sm:text-4xl">Life on the Farm — Daily Activities</h2>
+        <p class="mt-6 text-base leading-relaxed text-white">
+          Every day on the farm offers something different, shaped by the season, the weather, and what is ready to be harvested. Here is a glimpse of the activities that guests can participate in during their stay.
+        </p>
+
+        <div class="mt-10 space-y-3">
+          <div class="flex items-start gap-3 rounded-xl border border-white/10 bg-white/5 p-4">
+            <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-cfr-green-accent text-sm font-bold text-white">1</div>
+            <div>
+              <p class="text-sm font-semibold text-white">Morning Garden Walk & Harvest</p>
+              <p class="mt-1 text-sm text-white/70">Start your day with a guided walk through the organic vegetable garden. Our farm staff will show you what is in season — leafy greens, tomatoes, chillies, brinjal, gourds, and fresh herbs. You can harvest produce for the day's meals and learn about the traditional Kumaoni farming techniques we use.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3 rounded-xl border border-white/10 bg-white/5 p-4">
+            <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-cfr-green-accent text-sm font-bold text-white">2</div>
+            <div>
+              <p class="text-sm font-semibold text-white">Composting & Soil Care</p>
+              <p class="mt-1 text-sm text-white/70">See how we turn kitchen waste and farm residue into rich compost that feeds the soil. Learn about vermicomposting, green manure, and the natural cycles that keep our farm productive without synthetic fertilisers. Guests are welcome to get their hands dirty and help turn the compost beds.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3 rounded-xl border border-white/10 bg-white/5 p-4">
+            <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-cfr-green-accent text-sm font-bold text-white">3</div>
+            <div>
+              <p class="text-sm font-semibold text-white">Farm Animal Encounters</p>
+              <p class="mt-1 text-sm text-white/70">Our farm is home to friendly animals that guests of all ages enjoy meeting. Feed the goats, watch the chickens foraging, and learn about the role each animal plays in the farm ecosystem. These simple encounters are especially delightful for children visiting from the city.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3 rounded-xl border border-white/10 bg-white/5 p-4">
+            <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-cfr-green-accent text-sm font-bold text-white">4</div>
+            <div>
+              <p class="text-sm font-semibold text-white">Seed Sowing & Planting</p>
+              <p class="mt-1 text-sm text-white/70">Depending on the season, you can participate in sowing seeds, transplanting seedlings, or planting new beds. Our staff will explain the crop rotation cycle, companion planting strategies, and how we select varieties suited to the local climate and soil.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3 rounded-xl border border-white/10 bg-white/5 p-4">
+            <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-cfr-green-accent text-sm font-bold text-white">5</div>
+            <div>
+              <p class="text-sm font-semibold text-white">Herb Garden Tour</p>
+              <p class="mt-1 text-sm text-white/70">Explore our dedicated herb garden featuring tulsi, mint, lemongrass, coriander, curry leaves, and medicinal plants used in traditional Kumaoni remedies. Learn how these herbs are used in our kitchen and for natural wellness preparations.</p>
+            </div>
+          </div>
+        </div>
+
+        <p class="mt-8 text-base leading-relaxed text-white">
+          These farm activities are offered alongside the full range of <a href="/experiences" class="text-cfr-sand-300 underline hover:text-white">experiences at Corbett Foothills Retreat</a>, including nature walks, birdwatching, bonfire evenings, and forest stream picnics.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cfr-cream-dark py-16 sm:py-20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display text-3xl font-bold text-cfr-green-dark sm:text-4xl">Farm-to-Table Dining</h2>
+        <p class="mt-6 text-base leading-relaxed text-cfr-earth-600">
+          The farm-to-table experience at Corbett Foothills Retreat is not a curated event — it is the natural result of having a productive organic farm in the backyard. Vegetables picked in the morning appear on your plate at lunch. Herbs gathered before sunset season your dinner. The connection between the soil and the table is immediate and transparent.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-cfr-earth-600">
+          Our kitchen prepares authentic Kumaoni cuisine and North Indian dishes using farm-fresh ingredients. Meals are cooked to order, accommodating dietary preferences and restrictions. Guests can request a farm tour before meals to see exactly where their food comes from, and our chefs are happy to share cooking tips and traditional recipes.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-cfr-earth-600">
+          The farm also supplies seasonal specialties throughout the year — tender green peas in winter, juicy mangoes in summer, fresh leafy greens during the monsoon, and an abundance of gourds and pumpkins in the autumn harvest. Every meal tells the story of the season, the soil, and the hands that cultivated it. For a closer look at the dining setup and farm views, browse our <a href="/gallery" class="text-cfr-green-accent underline hover:text-cfr-green-dark">photo gallery</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cfr-green-dark py-16 sm:py-20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display text-3xl font-bold text-white sm:text-4xl">The Farm Experience for Families</h2>
+        <p class="mt-6 text-base leading-relaxed text-white">
+          An organic farm experience is one of the most enriching holidays you can share with your children. At Corbett Foothills Retreat, kids who have only seen vegetables in supermarket aisles get to discover them growing in the earth, learn their names, and taste the difference freshness makes. The farm becomes a living classroom where lessons about nature, food, and sustainability unfold naturally through hands-on activities.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-white">
+          Children can help collect eggs from the chicken coop, feed the goats, pick vegetables for their meals, and run freely through the safe, enclosed farm grounds. The simple joy of discovering a ripe tomato on the vine or chasing a butterfly across the garden creates memories that last long after the holiday ends. Our farm staff are patient and welcoming, always happy to answer curious questions and involve children in age-appropriate tasks.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-white">
+          Evenings are spent around the bonfire, sharing stories and roasting farm-fresh corn. The retreat's six-room boutique scale means families receive personal attention and flexible schedules — meals, activities, and rest times are arranged around your preferences. Our <a href="/accommodation" class="text-cfr-sand-300 underline hover:text-white">family-friendly rooms</a> provide comfortable space for parents and children to relax together after a day of farm exploration.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cfr-cream-dark py-16 sm:py-20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display text-3xl font-bold text-cfr-green-dark sm:text-4xl">The Farm Experience for Couples</h2>
+        <p class="mt-6 text-base leading-relaxed text-cfr-earth-600">
+          For couples seeking a romantic escape, the organic farm setting offers a pace and privacy that large resorts cannot match. Quiet mornings begin with a cup of tea overlooking the garden, followed by a leisurely farm walk hand in hand. The absence of crowds, queues, and scheduled entertainment creates space for genuine connection and unhurried togetherness.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-cfr-earth-600">
+          Couples can enjoy private farm-to-table dinners prepared with ingredients they picked together earlier in the day. Evening walks along the forest edge, starlit bonfire conversations, and the peaceful sounds of the countryside at night create a romantic atmosphere that feels both intimate and natural. The retreat's boutique scale ensures that your privacy is respected while warm hospitality remains available whenever you need it.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-cfr-earth-600">
+          The farm experience also offers couples a chance to slow down and reconnect with each other away from the distractions of daily life. Whether you are harvesting vegetables together, sharing a meal under the open sky, or simply sitting on the veranda watching the sunset paint the forest in shades of gold, the farm invites you to be present with each other. Learn more about our <a href="/tariff" class="text-cfr-green-accent underline hover:text-cfr-green-dark">couples-friendly pricing and packages</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cfr-green-dark py-16 sm:py-20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display text-3xl font-bold text-white sm:text-4xl">The Farm Experience for Pet Owners</h2>
+        <p class="mt-6 text-base leading-relaxed text-white">
+          One of the greatest joys of a farm holiday is experiencing it with your pet by your side. Corbett Foothills Retreat is a pet-friendly property, and our organic farm setting is a paradise for dogs who are used to city apartments and paved streets. Open lawns, garden paths, and the forest edge provide endless exploration opportunities for your four-legged companion.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-white">
+          Morning farm walks become even more enjoyable with your pet sniffing the herbs, chasing butterflies, and discovering new scents around every corner. The safe, enclosed farm environment allows supervised off-leash time, and our staff are welcoming to well-behaved pets. We provide pet-friendly accommodation arrangements, including designated sleeping areas and easy access to outdoor spaces for nighttime bathroom breaks.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-white">
+          It is important to note that the farm has resident animals, so pets should be comfortable around goats and chickens. We recommend keeping your pet on a leash when near the animal enclosures and the forest boundary. With these simple precautions, a farm stay offers one of the most rewarding holiday experiences you and your pet can share. View our <a href="/accommodation" class="text-cfr-sand-300 underline hover:text-white">pet-friendly accommodation options</a> for more details.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cfr-cream-dark py-16 sm:py-20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display text-3xl font-bold text-cfr-green-dark sm:text-4xl">Seasonal Farm Experiences</h2>
+        <p class="mt-6 text-base leading-relaxed text-cfr-earth-600">
+          The organic farm changes with the seasons, offering different experiences throughout the year. Knowing what each season brings can help you plan your visit around the activities that interest you most.
+        </p>
+
+        <h3 class="mt-8 font-display text-xl font-bold text-cfr-green-dark">Winter Harvest (October – February)</h3>
+        <p class="mt-2 text-base leading-relaxed text-cfr-earth-600">
+          This is the peak growing season at the farm. The vegetable garden is abundant with peas, carrots, cauliflower, cabbage, spinach, mustard greens, and radishes. The cool weather makes farm walks particularly pleasant, and the kitchen is busy with hearty winter dishes featuring fresh-harvested produce. This is also the best season for birdwatching, with migratory species visiting the region.
+        </p>
+
+        <h3 class="mt-8 font-display text-xl font-bold text-cfr-green-dark">Summer Bounty (March – June)</h3>
+        <p class="mt-2 text-base leading-relaxed text-cfr-earth-600">
+          Summer brings a different set of crops — tomatoes, chillies, brinjal, okra, gourds, and melons thrive in the warmth. Early mornings and late evenings are the best times for farm activities, with the middle of the day reserved for rest in the cool shade of the veranda. Summer is also prime safari season, and combining a morning farm walk with an afternoon wildlife excursion makes for a rich and varied day.
+        </p>
+
+        <h3 class="mt-8 font-display text-xl font-bold text-cfr-green-dark">Monsoon Greens (July – September)</h3>
+        <p class="mt-2 text-base leading-relaxed text-cfr-earth-600">
+          The monsoon transforms the farm into a lush green paradise. Leafy vegetables grow vigorously, and the air is filled with the scent of wet earth and blooming plants. The farm is particularly beautiful during this season, with the surrounding forest at its most vibrant. While heavy rain may limit outdoor activities at times, the peaceful atmosphere and lower crowd levels make this a favourite season for guests seeking solitude.
+        </p>
+
+        <p class="mt-6 text-base leading-relaxed text-cfr-earth-600">
+          For a detailed month-by-month breakdown of the best times to visit, read our blog on the <a href="/blogs/best-time-to-visit-jim-corbett-national-park" class="text-cfr-green-accent underline hover:text-cfr-green-dark">best time to visit Jim Corbett National Park</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cfr-cream-dark py-16 sm:py-20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display text-3xl font-bold text-cfr-green-dark sm:text-4xl text-center">Why Choose Corbett Foothills Retreat for an Organic Farm Experience?</h2>
+        <p class="mt-6 text-center text-lg text-cfr-earth-600">
+          Not all farmstays are created equal. Here is what makes our organic farm experience truly distinctive.
+        </p>
+
+        <div class="mt-10 overflow-x-auto">
+          <table class="w-full border-collapse text-left text-sm">
+            <thead>
+              <tr class="border-b border-cfr-earth-200">
+                <th class="py-4 pr-4 font-semibold text-cfr-green-dark">Feature</th>
+                <th class="py-4 px-4 font-semibold text-cfr-green-dark">Corbett Foothills Retreat</th>
+                <th class="py-4 pl-4 font-semibold text-cfr-green-dark">Typical Resort</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-cfr-earth-100 transition-colors hover:bg-cfr-earth-50">
+                <td class="py-4 pr-4 font-medium text-cfr-earth-700">Farm scale</td>
+                <td class="py-4 px-4 text-cfr-earth-600">Working organic farm supplying the kitchen daily</td>
+                <td class="py-4 pl-4 text-cfr-earth-600">Decorative garden or no farm at all</td>
+              </tr>
+              <tr class="border-b border-cfr-earth-100 transition-colors hover:bg-cfr-earth-50">
+                <td class="py-4 pr-4 font-medium text-cfr-earth-700">Guest involvement</td>
+                <td class="py-4 px-4 text-cfr-earth-600">Hands-on participation encouraged at every level</td>
+                <td class="py-4 pl-4 text-cfr-earth-600">Viewing only, if available</td>
+              </tr>
+              <tr class="border-b border-cfr-earth-100 transition-colors hover:bg-cfr-earth-50">
+                <td class="py-4 pr-4 font-medium text-cfr-earth-700">Meal source</td>
+                <td class="py-4 px-4 text-cfr-earth-600">Farm-to-table, produce picked hours before serving</td>
+                <td class="py-4 pl-4 text-cfr-earth-600">Procured from wholesale suppliers</td>
+              </tr>
+              <tr class="border-b border-cfr-earth-100 transition-colors hover:bg-cfr-earth-50">
+                <td class="py-4 pr-4 font-medium text-cfr-earth-700">Property size</td>
+                <td class="py-4 px-4 text-cfr-earth-600">Intimate 6-room boutique farmstay</td>
+                <td class="py-4 pl-4 text-cfr-earth-600">Large with hundreds of rooms</td>
+              </tr>
+              <tr class="border-b border-cfr-earth-100 transition-colors hover:bg-cfr-earth-50">
+                <td class="py-4 pr-4 font-medium text-cfr-earth-700">Personalisation</td>
+                <td class="py-4 px-4 text-cfr-earth-600">Highly personalised, flexible schedules</td>
+                <td class="py-4 pl-4 text-cfr-earth-600">Fixed schedules, limited individual attention</td>
+              </tr>
+              <tr class="border-b border-cfr-earth-100 transition-colors hover:bg-cfr-earth-50">
+                <td class="py-4 pr-4 font-medium text-cfr-earth-700">Pets</td>
+                <td class="py-4 px-4 text-cfr-earth-600">Pet-friendly farm environment</td>
+                <td class="py-4 pl-4 text-cfr-earth-600">Rarely allows pets</td>
+              </tr>
+              <tr class="border-b border-cfr-earth-100 transition-colors hover:bg-cfr-earth-50">
+                <td class="py-4 pr-4 font-medium text-cfr-earth-700">Forest access</td>
+                <td class="py-4 px-4 text-cfr-earth-600">50 metres from forest boundary</td>
+                <td class="py-4 pl-4 text-cfr-earth-600">Often far from forest entry points</td>
+              </tr>
+              <tr class="border-b border-cfr-earth-100 transition-colors hover:bg-cfr-earth-50">
+                <td class="py-4 pr-4 font-medium text-cfr-earth-700">Sustainability</td>
+                <td class="py-4 px-4 text-cfr-earth-600">Solar power, rainwater harvesting, zero plastic</td>
+                <td class="py-4 pl-4 text-cfr-earth-600">Variable, often limited sustainability practices</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="mt-6 text-center text-sm text-cfr-earth-500">
+          Our commitment to authentic organic farming is part of a broader philosophy of sustainable, personalised hospitality. Explore our full range of <a href="/experiences" class="text-cfr-green-accent underline hover:text-cfr-green-dark">experiences at Corbett Foothills Retreat</a> to see how we combine farm life with wildlife, adventure, and relaxation.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cfr-green-dark py-16 sm:py-20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-3xl text-center">
+        <h2 class="font-display text-3xl font-bold text-white sm:text-4xl">Experience the Organic Farm Life</h2>
+        <p class="mx-auto mt-4 max-w-xl text-lg text-white">
+          Book your stay at Corbett Foothills Retreat and discover the joy of organic farm living at the edge of the Corbett forest. Farm-to-table meals, hands-on activities, and the warmth of personalised hospitality await.
+        </p>
+        <div class="mt-8 flex flex-wrap justify-center gap-4">
+          <a href="/accommodation" class="inline-flex items-center justify-center gap-2 rounded-full bg-cfr-green-accent px-10 py-4 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark hover:shadow-lg hover:-translate-y-0.5">
+            View Accommodation
+          </a>
+          <a href="/tariff" class="inline-flex items-center justify-center gap-2 rounded-full border-2 border-cfr-sand-500 px-10 py-4 text-sm font-semibold text-cfr-sand-200 transition-all duration-300 hover:bg-cfr-sand-500/20">
+            Check Rates & Pricing
+          </a>
+          <a href="/gallery" class="inline-flex items-center justify-center gap-2 rounded-full border-2 border-cfr-green-accent px-10 py-4 text-sm font-semibold text-cfr-green-accent transition-all duration-300 hover:bg-cfr-green-accent hover:text-white">
+            View Photo Gallery
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <h2 class="sr-only" id="faqs">Frequently Asked Questions about the Organic Farm Experience</h2>
+  <section class="bg-cfr-cream-dark py-16 sm:py-20" aria-labelledby="faqs">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+      <h2 class="font-display text-3xl font-bold text-cfr-green-dark sm:text-4xl text-center">Frequently Asked Questions</h2>
+      <div class="mt-10 space-y-4">
+        <details class="group rounded-xl border border-cfr-earth-200 bg-white p-5 transition-all duration-200 open:border-cfr-green-accent open:shadow-sm">
+          <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-cfr-green-dark">
+            What is included in the organic farm experience at Corbett Foothills Retreat?
+            <svg class="h-4 w-4 shrink-0 text-cfr-earth-400 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+          </summary>
+          <p class="mt-3 text-sm leading-relaxed text-cfr-earth-600">The farm experience is included in your stay and features guided garden walks, hands-on harvesting, composting demonstrations, herb garden tours, and farm animal encounters. Farm-to-table meals with ingredients picked fresh from the garden are a part of every stay. Special activities like seed sowing and planting are available depending on the season and your interest level.</p>
+        </details>
+        <details class="group rounded-xl border border-cfr-earth-200 bg-white p-5 transition-all duration-200 open:border-cfr-green-accent open:shadow-sm">
+          <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-cfr-green-dark">
+            Do I need to participate in farm activities, or can I just observe?
+            <svg class="h-4 w-4 shrink-0 text-cfr-earth-400 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+          </summary>
+          <p class="mt-3 text-sm leading-relaxed text-cfr-earth-600">There is no pressure to participate. Some guests love getting their hands dirty, while others prefer to observe from a comfortable distance. The farm experience is entirely flexible — you choose the level of involvement that feels right for you. Our staff are happy to guide you through activities if you are interested, or simply leave you to enjoy the peaceful farm atmosphere at your own pace.</p>
+        </details>
+        <details class="group rounded-xl border border-cfr-earth-200 bg-white p-5 transition-all duration-200 open:border-cfr-green-accent open:shadow-sm">
+          <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-cfr-green-dark">
+            Is the farm experience suitable for young children?
+            <svg class="h-4 w-4 shrink-0 text-cfr-earth-400 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+          </summary>
+          <p class="mt-3 text-sm leading-relaxed text-cfr-earth-600">Yes, the farm is a wonderful environment for children of all ages. Toddlers can explore safe garden paths and meet friendly farm animals. Older children can participate in harvesting, seed sowing, and learning about where food comes from. The open, enclosed grounds allow children to play freely under supervision, and our staff are experienced with young guests.</p>
+        </details>
+        <details class="group rounded-xl border border-cfr-earth-200 bg-white p-5 transition-all duration-200 open:border-cfr-green-accent open:shadow-sm">
+          <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-cfr-green-dark">
+            Can dietary restrictions be accommodated with farm-to-table meals?
+            <svg class="h-4 w-4 shrink-0 text-cfr-earth-400 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+          </summary>
+          <p class="mt-3 text-sm leading-relaxed text-cfr-earth-600">Absolutely. Our kitchen accommodates vegetarian, vegan, gluten-free, Jain, and other dietary preferences with advance notice. Since meals are prepared fresh to order using farm ingredients, we have the flexibility to adapt dishes to your needs. Please inform us of any dietary requirements at the time of booking so we can plan accordingly.</p>
+        </details>
+        <details class="group rounded-xl border border-cfr-earth-200 bg-white p-5 transition-all duration-200 open:border-cfr-green-accent open:shadow-sm">
+          <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-cfr-green-dark">
+            What should I wear for farm activities?
+            <svg class="h-4 w-4 shrink-0 text-cfr-earth-400 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+          </summary>
+          <p class="mt-3 text-sm leading-relaxed text-cfr-earth-600">Comfortable closed-toe shoes are recommended for farm walks and garden activities. Light, breathable clothing works well for most seasons. During winter, carry a light jacket or sweater for morning walks. A hat and sunscreen are useful during summer months. We provide handwashing stations and boot cleaning facilities, so you do not need to worry about getting a little soil on your clothes.</p>
+        </details>
+        <details class="group rounded-xl border border-cfr-earth-200 bg-white p-5 transition-all duration-200 open:border-cfr-green-accent open:shadow-sm">
+          <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-cfr-green-dark">
+            Can I combine the farm experience with a jungle safari?
+            <svg class="h-4 w-4 shrink-0 text-cfr-earth-400 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+          </summary>
+          <p class="mt-3 text-sm leading-relaxed text-cfr-earth-600">Yes, and this combination is one of the most popular ways to experience Corbett Foothills Retreat. Start your morning with a farm walk and fresh breakfast, head out for an afternoon jungle safari in Jim Corbett National Park (just 8 km away), and return in the evening for a farm-to-table dinner and bonfire. We provide safari planning assistance to help you make the most of both experiences.</p>
+        </details>
+        <details class="group rounded-xl border border-cfr-earth-200 bg-white p-5 transition-all duration-200 open:border-cfr-green-accent open:shadow-sm">
+          <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-cfr-green-dark">
+            Is the farm organic certified?
+            <svg class="h-4 w-4 shrink-0 text-cfr-earth-400 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+          </summary>
+          <p class="mt-3 text-sm leading-relaxed text-cfr-earth-600">While we follow 100% organic farming practices — no synthetic fertilisers, pesticides, or genetically modified seeds — we are not formally certified under an organic certification programme. Our farm is managed using traditional Kumaoni agriculture methods passed down through generations, supplemented with modern composting and natural pest management techniques. Guests are welcome to inspect the farm, ask questions, and see firsthand how we grow our food.</p>
+        </details>
+        <details class="group rounded-xl border border-cfr-earth-200 bg-white p-5 transition-all duration-200 open:border-cfr-green-accent open:shadow-sm">
+          <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-cfr-green-dark">
+            How do I reach Corbett Foothills Retreat for the farm experience?
+            <svg class="h-4 w-4 shrink-0 text-cfr-earth-400 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+          </summary>
+          <p class="mt-3 text-sm leading-relaxed text-cfr-earth-600">Corbett Foothills Retreat is located in Gaibua Khas, Bail Parao, just 8 kilometres from Ramnagar town and the entry gates of Jim Corbett National Park. The retreat is easily reachable by car from Delhi (5.5–6.5 hours), by train to Ramnagar Railway Station, or by flight to Pantnagar Airport (65 km). For detailed directions, refer to our <a href="/blogs/how-to-reach" class="text-cfr-green-accent underline hover:text-cfr-green-dark">complete travel guide</a>.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      { "@type": "Question", name: "What is included in the organic farm experience at Corbett Foothills Retreat?", acceptedAnswer: { "@type": "Answer", text: "The farm experience is included in your stay and features guided garden walks, hands-on harvesting, composting demonstrations, herb garden tours, and farm animal encounters. Farm-to-table meals with ingredients picked fresh from the garden are a part of every stay." } },
+      { "@type": "Question", name: "Do I need to participate in farm activities, or can I just observe?", acceptedAnswer: { "@type": "Answer", text: "There is no pressure to participate. The farm experience is entirely flexible — you choose the level of involvement that feels right for you. Our staff are happy to guide you or simply leave you to enjoy the peaceful farm atmosphere." } },
+      { "@type": "Question", name: "Is the farm experience suitable for young children?", acceptedAnswer: { "@type": "Answer", text: "Yes, the farm is a wonderful environment for children of all ages. Toddlers can explore safe garden paths and meet friendly farm animals. Older children can participate in harvesting, seed sowing, and learning about where food comes from." } },
+      { "@type": "Question", name: "Can dietary restrictions be accommodated with farm-to-table meals?", acceptedAnswer: { "@type": "Answer", text: "Absolutely. Our kitchen accommodates vegetarian, vegan, gluten-free, Jain, and other dietary preferences with advance notice. Please inform us at the time of booking." } },
+      { "@type": "Question", name: "What should I wear for farm activities?", acceptedAnswer: { "@type": "Answer", text: "Comfortable closed-toe shoes are recommended. Light, breathable clothing works for most seasons. A hat and sunscreen are useful during summer months. We provide handwashing stations and boot cleaning facilities." } },
+      { "@type": "Question", name: "Can I combine the farm experience with a jungle safari?", acceptedAnswer: { "@type": "Answer", text: "Yes. Start with a farm walk and breakfast, head out for an afternoon jungle safari (just 8 km away), and return for a farm-to-table dinner and bonfire. We provide safari planning assistance." } },
+      { "@type": "Question", name: "Is the farm organic certified?", acceptedAnswer: { "@type": "Answer", text: "We follow 100% organic farming practices — no synthetic fertilisers, pesticides, or GMOs — but are not formally certified. Guests are welcome to inspect the farm and see firsthand how we grow our food." } },
+      { "@type": "Question", name: "How do I reach Corbett Foothills Retreat for the farm experience?", acceptedAnswer: { "@type": "Answer", text: "The retreat is 8 km from Ramnagar, easily reachable by car from Delhi (5.5-6.5 hrs), by train to Ramnagar Railway Station, or by flight to Pantnagar Airport (65 km)." } },
+    ],
+  })} />
+
+  <section class="bg-cfr-green-dark py-16 sm:py-20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="font-display text-3xl font-bold text-white sm:text-4xl">Ready for an Organic Farm Getaway?</h2>
+      <p class="mx-auto mt-4 max-w-xl text-lg text-white">
+        If you have any questions about the farm experience, activities, or planning your stay, we would love to hear from you. Get in touch and let us help you create the perfect farm holiday.
+      </p>
+      <div class="mt-8 flex flex-wrap justify-center gap-4">
+        <a href="/contact" class="inline-flex items-center justify-center gap-2 rounded-full bg-cfr-green-accent px-10 py-4 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark hover:shadow-lg hover:-translate-y-0.5">
+          Get in Touch
+        </a>
+        <a href="/tariff" class="inline-flex items-center justify-center gap-2 rounded-full border-2 border-cfr-sand-500 px-10 py-4 text-sm font-semibold text-cfr-sand-200 transition-all duration-300 hover:bg-cfr-sand-500/20">
+          Check Rates & Pricing
+        </a>
+        <a href="/accommodation" class="inline-flex items-center justify-center gap-2 rounded-full border-2 border-cfr-green-accent px-10 py-4 text-sm font-semibold text-cfr-green-accent transition-all duration-300 hover:bg-cfr-green-accent hover:text-white">
+          View Accommodation
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <Fragment slot="footer">
+    <Footer />
+  </Fragment>
+</MainLayout>

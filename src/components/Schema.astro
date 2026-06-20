@@ -2,7 +2,32 @@
 import siteData from "../data/site.json";
 
 const { url, name, description, location, phone, email, social } = siteData.site;
+
+export interface Props {
+  breadcrumbs?: { name: string; path?: string }[];
+}
+
+const { breadcrumbs } = Astro.props;
 ---
+
+<script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name,
+  url,
+  logo: new URL("/logos/CFR_logo_v2.svg", url).href,
+  sameAs: [social.instagram, social.facebook, social.youtube].filter(Boolean),
+  telephone: phone,
+  email,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: location.split(",")[0],
+    addressLocality: "Ramnagar",
+    addressRegion: "Nainital",
+    addressCountry: "IN",
+    postalCode: "263140",
+  },
+})} />
 
 <script type="application/ld+json" set:html={JSON.stringify({
   "@context": "https://schema.org",
@@ -33,11 +58,44 @@ const { url, name, description, location, phone, email, social } = siteData.site
     ratingCount: "47",
   },
   priceRange: "₹₹₹₹",
-  image: "https://lh3.googleusercontent.com/sitesv/AA5AbUDiJJoEp_rKLPRAtQjdZj-48J0hANgpimqmWOOLDLJJvVvRl5JYYfg7yBlZ0GSIjxufApQHqA72Ja5ztYerclna9UWXzuBPoJRAB8xYLtd0Vd6V4ELp8W3CgCJ0NXm1XOkD81vz4J7VoeMGOxi61X91OzMql0gP4lWnySojLoKrBHqqOl2w1KcoFTtvb-Hgqi0k4URpv3efmCvd7aMUcVBvbsmVbRcwgV9VBD5x=w1280",
+  image: new URL("/images/live-1.webp", url).href,
   numberOfRooms: 6,
+  checkinTime: "14:00",
+  checkoutTime: "11:00",
+  petsAllowed: "Yes",
   amenityFeature: [
     { "@type": "LocationFeatureSpecification", name: "Jim Corbett National Park access", value: "8 km" },
     { "@type": "LocationFeatureSpecification", name: "Organic farm", value: true },
     { "@type": "LocationFeatureSpecification", name: "Pet-friendly", value: true },
+    { "@type": "LocationFeatureSpecification", name: "Free WiFi", value: true },
+    { "@type": "LocationFeatureSpecification", name: "Parking", value: true },
+    { "@type": "LocationFeatureSpecification", name: "Garden", value: true },
+    { "@type": "LocationFeatureSpecification", name: "Family Rooms", value: true },
+    { "@type": "LocationFeatureSpecification", name: "Nature Walks", value: true },
+    { "@type": "LocationFeatureSpecification", name: "Birdwatching", value: true },
+    { "@type": "LocationFeatureSpecification", name: "Jungle Access", value: true },
   ],
 })} />
+
+{
+  breadcrumbs && breadcrumbs.length > 0 && (() => {
+    const baseUrl = url.endsWith("/") ? url : `${url}/`;
+    return (
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: baseUrl },
+          ...breadcrumbs.map((crumb, i) => ({
+            "@type": "ListItem",
+            position: i + 2,
+            name: crumb.name,
+            ...(crumb.path
+              ? { item: new URL(crumb.path.replace(/^\//, "") + "/", baseUrl).href }
+              : {}),
+          })),
+        ],
+      })} />
+    );
+  })()
+}

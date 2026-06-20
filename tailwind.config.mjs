@@ -59,7 +59,7 @@ export default {
       },
       fontFamily: {
         display: ["Playfair Display", ...defaultTheme.fontFamily.serif],
-        body: ["Inter", ...defaultTheme.fontFamily.sans],
+        body: ["Playfair Display", ...defaultTheme.fontFamily.serif],
       },
       backgroundImage: {
         "hero-pattern":

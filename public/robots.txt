@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /blog/blog-
 
 Sitemap: https://corbett.life/sitemap-index.xml

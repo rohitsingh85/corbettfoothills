@@ -5,51 +5,78 @@ import Footer from "../components/Footer.astro";
 import siteData from "../data/site.json";
 ---
 
-<MainLayout title="Accommodation" description="Boutique comfort in the heart of nature — six thoughtfully designed rooms at Corbett Foothills Retreat near Jim Corbett National Park.">
+<MainLayout title="Accommodation" description="Boutique comfort in the heart of nature — six thoughtfully designed rooms at Corbett Foothills Retreat near Jim Corbett National Park." breadcrumbs={[{name: "Accommodation"}]}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Product",
+      name: "Accommodation at Corbett Foothills Retreat",
+      description: "Six thoughtfully designed rooms offering boutique comfort, privacy, and a deep connection with nature near Jim Corbett National Park.",
+      brand: { "@type": "Brand", name: "Corbett Foothills Retreat" },
+      offers: {
+        "@type": "AggregateOffer",
+        priceCurrency: "INR",
+        lowPrice: "2000",
+        highPrice: "4000",
+        offerCount: 6,
+        availability: "https://schema.org/InStock",
+        url: "https://corbett.life/accommodation",
+      },
+      image: [
+        siteData.images.accommodation[0],
+        siteData.images.accommodation[1],
+        siteData.images.accommodation[2],
+      ],
+    })} />
+  </Fragment>
   <Fragment slot="header">
     <Header />
   </Fragment>
 
-  <!-- Hero banner -->
-  <section class="relative flex min-h-[50vh] items-end overflow-hidden bg-cfr-green-dark pt-24">
+  <section class="relative flex min-h-[40vh] items-end overflow-hidden pt-56">
+    <div class="absolute inset-0 bg-cfr-green-dark"></div>
     <div class="absolute inset-0 bg-hero-pattern"></div>
     <div class="absolute inset-0 bg-leaf-pattern opacity-30"></div>
-    <div class="relative mx-auto w-full max-w-7xl px-4 pb-12 sm:px-6 lg:px-8 lg:pb-16">
-      <div class="max-w-3xl">
-        <a href="/" class="inline-flex items-center gap-1 text-xs uppercase tracking-widest text-sand-300 hover:text-white transition-colors mb-4">
-          <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-          </svg>
-          Back to Home
-        </a>
-        <h1 class="font-display text-4xl font-bold text-white sm:text-5xl lg:text-6xl">
-          Accommodation
-        </h1>
-        <p class="mt-4 max-w-xl text-lg text-white">
-          {siteData.accommodationIntro.description}
-        </p>
+    <div class="relative z-10 w-full bg-cfr-green-dark">
+      <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8 lg:pb-16">
+        <div class="max-w-3xl">
+          <a href="/" class="mb-4 inline-flex items-center gap-1 text-xs uppercase tracking-widest text-cfr-sand-300 transition-colors hover:text-white">
+            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+            Back to Home
+          </a>
+          <h1 class="font-display text-4xl font-bold text-white sm:text-5xl lg:text-6xl">
+            Accommodation
+          </h1>
+          <p class="mt-4 max-w-xl text-lg text-white">
+            Boutique comfort in the heart of nature — six thoughtfully designed rooms at Corbett Foothills Retreat.
+          </p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Intro section -->
-  <section class="bg-cream-dark py-16 sm:py-24">
+  <!-- Boutique Comfort -->
+  <section class="bg-cfr-cream-dark py-16 sm:py-24">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="mx-auto max-w-3xl text-center">
-        <h2 class="section-heading !text-center">{siteData.accommodationIntro.heading}</h2>
-        <p class="mt-6 text-lg leading-relaxed text-earth-600">
-          Unlike large commercial resorts, our boutique retreat features just <strong class="text-cfr-green-dark">{siteData.accommodationIntro.roomCount} thoughtfully designed rooms</strong>, allowing us to offer every guest a level of attention, flexibility, and care that is increasingly rare in modern travel. Whether you are visiting for a wildlife safari, a family holiday, a romantic getaway, or simply a peaceful escape from city life, your stay is tailored to your unique preferences and pace.
+        <h2 class="font-display text-3xl font-bold text-cfr-green-dark sm:text-4xl">Boutique Comfort in the Heart of Nature</h2>
+        <p class="mt-6 text-lg leading-relaxed text-cfr-earth-600">
+          At Corbett Foothills Retreat, accommodation is designed to be more than just a place to sleep — it is an invitation to slow down, reconnect with nature, and experience hospitality in its most personal form.
         </p>
-        <p class="mt-4 text-lg leading-relaxed text-earth-600">
+        <p class="mt-4 text-lg leading-relaxed text-cfr-earth-600">
+          Unlike large commercial resorts, our boutique retreat features just six thoughtfully designed rooms, allowing us to offer every guest a level of attention, flexibility, and care that is increasingly rare in modern travel. Whether you're visiting for a wildlife safari, a family holiday, a romantic getaway, or simply a peaceful escape from city life, your stay is tailored to your unique preferences and pace.
+        </p>
+        <p class="mt-4 text-lg leading-relaxed text-cfr-earth-600">
           Surrounded by forested landscapes, fresh mountain air, and the quiet rhythms of nature, every room provides a comfortable sanctuary from the demands of everyday life.
         </p>
       </div>
 
-      <!-- Intro images -->
       <div class="mt-12 grid gap-4 sm:grid-cols-2">
         <div class="aspect-[4/3] overflow-hidden rounded-xl">
           <img
-            src={siteData.images.accommodation[0]}
+            src={siteData.images.accommodation[1]}
             alt="Retreat surrounded by forest"
             class="h-full w-full object-cover"
             loading="lazy"
@@ -57,26 +84,12 @@ import siteData from "../data/site.json";
         </div>
         <div class="aspect-[4/3] overflow-hidden rounded-xl">
           <img
-            src={siteData.images.accommodation[1]}
+            src={siteData.images.accommodation[2]}
             alt="Peaceful retreat views"
             class="h-full w-full object-cover"
             loading="lazy"
           />
         </div>
-      </div>
-
-      <!-- Highlights -->
-      <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {
-          siteData.accommodationIntro.highlights.map((h) => (
-            <div class="flex items-start gap-3 rounded-xl bg-white p-5 shadow-card">
-              <svg class="mt-0.5 h-5 w-5 shrink-0 text-cfr-green-accent" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-              </svg>
-              <span class="text-sm text-earth-700">{h}</span>
-            </div>
-          ))
-        }
       </div>
     </div>
   </section>
@@ -85,10 +98,12 @@ import siteData from "../data/site.json";
   <section class="bg-cfr-green-dark py-16 sm:py-20">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="mx-auto max-w-3xl text-center">
-        <p class="text-xs font-semibold uppercase tracking-widest text-sand-300">Boutique Hospitality</p>
-        <h2 class="mt-3 font-display text-3xl font-bold text-white sm:text-4xl">A Stay Defined by Space, Privacy & Personal Attention</h2>
+        <h2 class="font-display text-3xl font-bold text-white sm:text-4xl">Space, Privacy & Personal Attention</h2>
         <p class="mt-4 text-lg text-white">
-          With only {siteData.accommodationIntro.roomCount} rooms on the property, Corbett Foothills Retreat offers a sense of exclusivity that larger resorts often cannot match. Here, guests are never just room numbers. Our intimate setting allows us to understand individual preferences, accommodate special requests whenever possible, and create a more meaningful and personalized experience for every visitor.
+          With only six rooms on the property, Corbett Foothills Retreat offers a sense of exclusivity that larger resorts often cannot match.
+        </p>
+        <p class="mt-4 text-lg text-white">
+          Here, guests are never just room numbers. Our intimate setting allows us to understand individual preferences, accommodate special requests whenever possible, and create a more meaningful and personalized experience for every visitor.
         </p>
         <p class="mt-4 text-lg text-white">
           Whether it is arranging a safari, preparing a special meal, recommending local attractions, or simply ensuring your morning tea is served exactly the way you like it, our team takes pride in the small details that transform a stay into a memorable experience.
@@ -97,52 +112,47 @@ import siteData from "../data/site.json";
     </div>
   </section>
 
-  <!-- Room Features -->
-  <section class="bg-cream-dark py-16 sm:py-20">
+  <!-- Thoughtfully Designed Rooms -->
+  <section class="bg-cfr-cream-dark py-16 sm:py-20">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="mx-auto max-w-3xl text-center">
-        <p class="text-xs font-semibold uppercase tracking-widest text-cfr-green-accent">Comfort</p>
-        <h2 class="section-heading !text-center">Thoughtfully Designed Rooms</h2>
-        <p class="mt-4 text-lg text-earth-600">
+        <h2 class="font-display text-3xl font-bold text-cfr-green-dark sm:text-4xl">Thoughtfully Designed Rooms</h2>
+        <p class="mt-4 text-lg text-cfr-earth-600">
           Our rooms are designed to provide a harmonious balance between modern comfort and the natural beauty of the surrounding landscape.
         </p>
       </div>
 
-      <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <p class="mt-10 text-sm font-semibold uppercase tracking-widest text-cfr-green-accent text-center">Each room offers:</p>
+      <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {
           siteData.roomFeatures.map((f) => (
             <div class="flex items-center gap-3 rounded-xl bg-white px-5 py-4 shadow-card">
               <svg class="h-5 w-5 shrink-0 text-cfr-green-accent" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
               </svg>
-              <span class="text-sm text-earth-700">{f}</span>
+              <span class="text-sm text-cfr-earth-700">{f}</span>
             </div>
           ))
         }
       </div>
 
-      <!-- Image row -->
-      <div class="mt-12 grid gap-4 sm:grid-cols-3">
-        <div class="aspect-[4/3] overflow-hidden rounded-xl bg-gradient-to-br from-cfr-green/40 to-earth-700/40">
-          <img
-            src={siteData.images.accommodation[2]}
-            alt="Room interior"
-            class="h-full w-full object-cover"
-            loading="lazy"
-          />
-        </div>
-        <div class="aspect-[4/3] overflow-hidden rounded-xl bg-gradient-to-br from-cfr-green/40 to-earth-700/40">
+      <p class="mt-8 text-center text-sm leading-relaxed text-cfr-earth-600 max-w-2xl mx-auto">
+        The design philosophy emphasizes simplicity, comfort, and relaxation, creating an environment where guests can unwind after a day of exploring the Corbett region.
+      </p>
+
+      <div class="mt-12 grid gap-6 sm:grid-cols-2">
+        <div class="aspect-[4/3] overflow-hidden rounded-xl">
           <img
             src={siteData.images.accommodation[3]}
-            alt="Room with natural light"
+            alt="Luxury room style"
             class="h-full w-full object-cover"
             loading="lazy"
           />
         </div>
-        <div class="aspect-[4/3] overflow-hidden rounded-xl bg-gradient-to-br from-cfr-green/40 to-earth-700/40">
+        <div class="aspect-[4/3] overflow-hidden rounded-xl">
           <img
             src={siteData.images.accommodation[4]}
-            alt="Room view"
+            alt="Outside shot"
             class="h-full w-full object-cover"
             loading="lazy"
           />
@@ -157,34 +167,43 @@ import siteData from "../data/site.json";
       <div class="mx-auto max-w-3xl text-center">
         <h2 class="font-display text-3xl font-bold text-white sm:text-4xl">Wake Up to Nature</h2>
         <p class="mt-4 text-lg text-white">
-          One of the most cherished aspects of staying at Corbett Foothills Retreat is the opportunity to experience nature from the moment you wake up. Instead of traffic, horns, and crowded streets, mornings here begin with birdsong, cool mountain air, and gentle sunlight filtering through the surrounding greenery.
+          One of the most cherished aspects of staying at Corbett Foothills Retreat is the opportunity to experience nature from the moment you wake up.
         </p>
         <p class="mt-4 text-lg text-white">
-          Guests often spend their mornings enjoying tea in the open spaces, taking leisurely walks around the property, or simply relaxing while listening to the sounds of the forest. The pace here is intentionally slower, offering a refreshing contrast to the constant rush of urban life.
+          Instead of traffic, horns, and crowded streets, mornings here begin with birdsong, cool mountain air, and gentle sunlight filtering through the surrounding greenery.
+        </p>
+        <p class="mt-4 text-lg text-white">
+          Guests often spend their mornings enjoying tea in the open spaces, taking leisurely walks around the property, or simply relaxing while listening to the sounds of the forest.
+        </p>
+        <p class="mt-4 text-lg text-white">
+          The pace here is intentionally slower, offering a refreshing contrast to the constant rush of urban life.
         </p>
       </div>
     </div>
   </section>
 
-  <!-- Guest Types -->
-  <section class="bg-cream-dark py-16 sm:py-20">
+  <!-- Perfect for Families -->
+  <section class="bg-cfr-cream-dark py-16 sm:py-20">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="mx-auto max-w-3xl text-center">
-        <p class="text-xs font-semibold uppercase tracking-widest text-cfr-green-accent">Who We Welcome</p>
-        <h2 class="section-heading !text-center">Perfect for Families, Couples & Small Groups</h2>
-        <p class="mt-4 text-lg text-earth-600">
+        <h2 class="font-display text-3xl font-bold text-cfr-green-dark sm:text-4xl">Perfect for Families, Couples & Small Groups</h2>
+        <p class="mt-4 text-lg text-cfr-earth-600">
           Whether you are traveling as a couple, a family, or a small group of friends, our accommodation offers the ideal base for exploring Jim Corbett National Park and the surrounding attractions.
+        </p>
+        <p class="mt-4 text-lg text-cfr-earth-600">
+          The intimate nature of the retreat creates a warm and welcoming atmosphere where guests can enjoy both privacy and shared experiences amidst nature.
         </p>
       </div>
 
-      <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <p class="mt-10 text-sm font-semibold uppercase tracking-widest text-cfr-green-accent text-center">Popular among our guests:</p>
+      <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {
           siteData.guestTypes.map((g) => (
             <div class="flex items-center gap-3 rounded-xl bg-white px-5 py-4 shadow-card">
               <svg class="h-5 w-5 shrink-0 text-cfr-green-accent" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span class="text-sm text-earth-700">{g}</span>
+              <span class="text-sm text-cfr-earth-700">{g}</span>
             </div>
           ))
         }
@@ -203,7 +222,10 @@ import siteData from "../data/site.json";
         </div>
         <h2 class="font-display text-3xl font-bold text-white sm:text-4xl">Pet-Friendly Stays</h2>
         <p class="mt-4 text-lg text-white">
-          At Corbett Foothills Retreat, we understand that pets are family. Our pet-friendly environment allows guests to travel with their furry companions and enjoy nature together. Open spaces, fresh air, and a relaxed atmosphere make the retreat a welcoming destination for both guests and their pets.
+          At Corbett Foothills Retreat, we understand that pets are family.
+        </p>
+        <p class="mt-4 text-lg text-white">
+          Our pet-friendly environment allows guests to travel with their furry companions and enjoy nature together. Open spaces, fresh air, and a relaxed atmosphere make the retreat a welcoming destination for both guests and their pets.
         </p>
         <p class="mt-4 text-lg text-white">
           We encourage guests planning to travel with pets to contact us in advance so we can help make their stay as comfortable as possible.
@@ -212,7 +234,7 @@ import siteData from "../data/site.json";
       <div class="mt-12 grid gap-4 sm:grid-cols-3">
         <div class="aspect-[4/3] overflow-hidden rounded-xl">
           <img
-            src={siteData.images.accommodation[5]}
+            src="/images/pet-friendly-2.webp"
             alt="Pet-friendly grounds"
             class="h-full w-full object-cover"
             loading="lazy"
@@ -228,7 +250,7 @@ import siteData from "../data/site.json";
         </div>
         <div class="aspect-[4/3] overflow-hidden rounded-xl">
           <img
-            src={siteData.images.accommodation[7]}
+            src="/images/pet-friendly-3.webp"
             alt="Nature surroundings"
             class="h-full w-full object-cover"
             loading="lazy"
@@ -239,50 +261,78 @@ import siteData from "../data/site.json";
   </section>
 
   <!-- More Than a Room -->
-  <section class="bg-cream-dark py-16 sm:py-20">
+  <section class="bg-cfr-cream-dark py-16 sm:py-20">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="mx-auto max-w-3xl text-center">
-        <p class="text-xs font-semibold uppercase tracking-widest text-cfr-green-accent">Beyond Your Room</p>
-        <h2 class="section-heading !text-center">More Than a Room</h2>
-        <p class="mt-4 text-lg text-earth-600">
-          {siteData.accommodationCta}
+        <h2 class="font-display text-3xl font-bold text-cfr-green-dark sm:text-4xl">More Than a Room</h2>
+        <p class="mt-4 text-lg text-cfr-earth-600">
+          Your stay at Corbett Foothills Retreat extends beyond the comfort of your room.
         </p>
       </div>
-      <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+
+      <p class="mt-10 text-sm font-semibold uppercase tracking-widest text-cfr-green-accent text-center">Guests can enjoy:</p>
+      <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {siteData.accommodationMore.map((item) => (
           <div class="flex items-center gap-3 rounded-xl bg-white px-5 py-4 shadow-card">
             <svg class="h-5 w-5 shrink-0 text-cfr-green-accent" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
             </svg>
-            <span class="text-sm text-earth-700">{item}</span>
+            <span class="text-sm text-cfr-earth-700">{item}</span>
           </div>
         ))}
       </div>
-      <div class="mt-12 text-center">
-        <a href="/experiences" class="inline-flex items-center justify-center gap-2 rounded-lg bg-cfr-green-accent px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2 !rounded-full !px-10 !py-4">
-          Explore Experiences
+      <div class="mt-8 flex flex-wrap justify-center gap-4">
+        <a href="/gallery" class="inline-flex items-center gap-2 text-sm font-semibold text-cfr-green-accent hover:text-cfr-green-dark transition-colors">
+          View Photo Gallery
+        </a>
+        <a href="/tariff" class="inline-flex items-center gap-2 text-sm font-semibold text-cfr-green-accent hover:text-cfr-green-dark transition-colors">
+          Check Rates & Pricing
+        </a>
+        <a href="/blogs/why-choose-a-boutique-stay-near-jim-corbett" class="inline-flex items-center gap-2 text-sm font-semibold text-cfr-green-accent hover:text-cfr-green-dark transition-colors">
+          Read: Why Choose a Boutique Stay
+        </a>
+        <a href="/blogs/things-to-do-jim-corbett" class="inline-flex items-center gap-2 text-sm font-semibold text-cfr-green-accent hover:text-cfr-green-dark transition-colors">
+          Explore Things to Do Near Corbett
         </a>
       </div>
     </div>
   </section>
 
-  <!-- Closing images -->
-  <section class="bg-cream-dark pb-16 sm:pb-24">
+  <!-- CTA -->
+  <section class="bg-cfr-green-dark py-16 sm:py-20">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div class="grid gap-4 sm:grid-cols-2">
-        <div class="aspect-[16/9] overflow-hidden rounded-xl">
+      <div class="mx-auto max-w-3xl text-center">
+        <h2 class="font-display text-3xl font-bold text-white sm:text-4xl whitespace-nowrap">Experience Boutique Hospitality Near Jim Corbett</h2>
+        <p class="mt-4 text-lg text-white">
+          If you are looking for a peaceful retreat that combines personalized service, comfortable accommodation, natural surroundings, and authentic hospitality, Corbett Foothills Retreat offers a refreshing alternative to large commercial resorts.
+        </p>
+        <p class="mt-4 text-lg text-white">
+          With only six rooms, every stay receives the attention it deserves, creating an experience that is intimate, memorable, and deeply connected to the beauty of the Corbett landscape.
+        </p>
+        <p class="mt-4 text-lg text-white">
+          Book your stay and discover the difference that boutique hospitality can make.
+        </p>
+        <div class="mt-8 flex flex-wrap justify-center gap-4">
+          <a href="/contact" class="inline-flex items-center justify-center gap-2 rounded-lg bg-cfr-green-accent px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2 !rounded-full !px-10 !py-4">
+            Book Your Stay
+          </a>
+          <a href="/experiences" class="inline-flex items-center justify-center gap-2 rounded-lg border-2 border-cfr-green-accent px-6 py-3 text-sm font-semibold text-cfr-green-accent transition-all duration-300 hover:bg-cfr-green-accent hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2 !rounded-full !border-cfr-sand-500 !px-10 !py-4 !text-cfr-sand-200 hover:!bg-cfr-sand-500/20">
+            Explore Experiences
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Closing images -->
+  <section class="bg-cfr-cream-dark pb-16 sm:pb-24 pt-6 sm:pt-10">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-center">
+        <div class="w-full max-w-4xl overflow-hidden rounded-xl">
           <img
             src={siteData.images.accommodation[8]}
-            alt="Corbett Foothills Retreat property"
-            class="h-full w-full object-cover"
-            loading="lazy"
-          />
-        </div>
-        <div class="aspect-[16/9] overflow-hidden rounded-xl">
-          <img
-            src={siteData.images.accommodation[9]}
-            alt="Retreat landscape"
-            class="h-full w-full object-cover"
+            alt="Corbett Foothills Retreat landscape surrounded by forest"
+            class="w-full aspect-[16/9] object-cover"
             loading="lazy"
           />
         </div>

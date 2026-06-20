@@ -141,6 +141,20 @@ declare module 'astro:content' {
 
 	type ContentEntryMap = {
 		"blog": {
+"Best-Time-to-Visit-Jim-Corbett-National-Park.md": {
+	id: "Best-Time-to-Visit-Jim-Corbett-National-Park.md";
+  slug: "best-time-to-visit-jim-corbett-national-park";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"Complete-Guide-to-Jim-Corbett-Safari-Booking.md": {
+	id: "Complete-Guide-to-Jim-Corbett-Safari-Booking.md";
+  slug: "complete-guide-to-jim-corbett-safari-booking";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "The-Untold-Story-of-Jim-Corbett.md": {
 	id: "The-Untold-Story-of-Jim-Corbett.md";
   slug: "the-untold-story-of-jim-corbett";
@@ -148,44 +162,37 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
-"blog-1.md": {
-	id: "blog-1.md";
-  slug: "blog-1";
+"farmstay-vs-resort.md": {
+	id: "farmstay-vs-resort.md";
+  slug: "farmstay-vs-resort";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
-"blog-2.md": {
-	id: "blog-2.md";
-  slug: "blog-2";
+"how-to-reach.md": {
+	id: "how-to-reach.md";
+  slug: "how-to-reach";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
-"blog-3.md": {
-	id: "blog-3.md";
-  slug: "blog-3";
+"the-untold-corbett.md": {
+	id: "the-untold-corbett.md";
+  slug: "the-untold-corbett";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
-"blog-4.md": {
-	id: "blog-4.md";
-  slug: "blog-4";
+"things-to-do-jim-corbett.md": {
+	id: "things-to-do-jim-corbett.md";
+  slug: "things-to-do-jim-corbett";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
-"blog-5.md": {
-	id: "blog-5.md";
-  slug: "blog-5";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".md"] };
-"blog-6.md": {
-	id: "blog-6.md";
-  slug: "blog-6";
+"why-choose-a-boutique-stay-near-jim-corbett.md": {
+	id: "why-choose-a-boutique-stay-near-jim-corbett.md";
+  slug: "why-choose-a-boutique-stay-near-jim-corbett";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">

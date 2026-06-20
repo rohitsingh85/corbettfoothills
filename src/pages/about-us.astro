@@ -1,0 +1,177 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import siteData from "../data/site.json";
+---
+
+<MainLayout title="About Us" description="Learn about Corbett Foothills Retreat — a boutique farmstay sanctuary at the edge of Jim Corbett National Park with six exclusive suites, organic farming, and personalized hospitality." breadcrumbs={[{name: "About Us"}]}>
+  <Fragment slot="header">
+    <Header />
+  </Fragment>
+
+  <section class="relative flex min-h-[40vh] items-end overflow-hidden pt-56">
+    <div class="absolute inset-0 bg-cfr-green-dark"></div>
+    <div class="absolute inset-0 bg-hero-pattern"></div>
+    <div class="absolute inset-0 bg-leaf-pattern opacity-30"></div>
+    <div class="relative z-10 w-full bg-cfr-green-dark">
+      <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8 lg:pb-16">
+      <div class="max-w-3xl">
+        <a href="/" class="inline-flex items-center gap-1 text-xs uppercase tracking-widest text-cfr-sand-300 hover:text-white transition-colors mb-4">
+          <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          </svg>
+          Back to Home
+        </a>
+        <h1 class="font-display text-4xl font-bold text-white sm:text-5xl lg:text-6xl">
+          About Us
+        </h1>
+        <p class="mt-4 max-w-xl text-lg text-white">
+          A boutique farmstay sanctuary at the edge of Jim Corbett National Park with six exclusive suites, organic farming, and personalized hospitality.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cfr-cream-dark py-16 sm:py-24">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <div class="space-y-8">
+        {
+          siteData.about.paragraphs.map((p, index) => (
+            <div class={index % 2 === 1 ? "rounded-2xl bg-white/80 p-8 shadow-premium md:p-10" : ""}>
+              <p class="text-base leading-relaxed text-cfr-earth-700 md:text-lg">{p}</p>
+              {index === 0 && (
+                <div class="mt-6 flex justify-center">
+                  <div class="w-full max-w-3xl overflow-hidden rounded-xl">
+                    <video controls muted preload="metadata" class="w-full" poster="/images/live-46.webp" data-optimized-video>
+                      <source data-src="/videos/about-hero-compressed.mp4" type="video/mp4" />
+                      <source data-src="/videos/about-hero.webm" type="video/webm" />
+                    </video>
+                  </div>
+                </div>
+              )}
+              {index === 1 && (
+                <div class="mt-6 flex justify-center">
+                  <div class="w-full max-w-xl overflow-hidden rounded-xl">
+                    <img
+                      src={siteData.images.about[0]}
+                      alt="Corbett Foothills Retreat"
+                      class="w-full"
+                      loading="lazy"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="mt-12 rounded-2xl bg-cfr-green-dark p-8 md:p-12">
+        <svg class="mb-4 h-10 w-10 text-cfr-sand-300/40" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M4.583 17.321C3.553 16.227 3 15 3 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311C9.591 11.69 11 13.167 11 15c0 1.933-1.567 3.5-3.5 3.5-1.271 0-2.402-.642-2.917-1.179zm10 0C13.553 16.227 13 15 13 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311C19.591 11.69 21 13.167 21 15c0 1.933-1.567 3.5-3.5 3.5-1.271 0-2.402-.642-2.917-1.179z" />
+        </svg>
+        <p class="text-lg italic leading-relaxed text-cfr-sand-200 md:text-xl">&ldquo;{siteData.about.tagline}&rdquo;</p>
+      </div>
+
+      <div class="mt-12 overflow-hidden rounded-2xl shadow-card" data-map-placeholder>
+        <div class="relative flex h-[400px] w-full cursor-pointer items-center justify-center bg-cfr-earth-100">
+          <div class="map-overlay absolute inset-0 z-10 flex flex-col items-center justify-center bg-cfr-earth-100/90 transition-opacity hover:bg-cfr-earth-100/70">
+            <svg class="mb-3 h-10 w-10 text-cfr-earth-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0Z" /></svg>
+            <span class="text-sm font-semibold text-cfr-earth-700">Click to view map</span>
+          </div>
+          <iframe
+            data-src="https://maps.google.com/maps?q=Corbett+Foothills+Retreat&ll=29.325501%2C79.178461&t=k&z=16&output=embed"
+            width="100%"
+            height="400"
+            style="border:0;display:block"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Corbett Foothills Retreat location"
+            class="hidden"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cfr-green-dark py-16 sm:py-20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="font-display text-3xl font-bold text-white sm:text-4xl">{siteData.site.tagline}</h2>
+        <p class="mx-auto mt-4 max-w-2xl text-lg text-white">
+        Experience personalized hospitality where the wild meets comfort. Book your stay and discover the difference that boutique hospitality can make.
+        </p>
+        <div class="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-2">
+          <a href="/blogs/why-choose-a-boutique-stay-near-jim-corbett" class="text-sm font-semibold text-cfr-sand-300 hover:text-white underline">Why Choose a Boutique Stay</a>
+          <span class="text-cfr-sand-500 hidden sm:inline">&middot;</span>
+          <a href="/blogs/things-to-do-jim-corbett" class="text-sm font-semibold text-cfr-sand-300 hover:text-white underline">Things to Do Near Corbett</a>
+          <span class="text-cfr-sand-500 hidden sm:inline">&middot;</span>
+          <a href="/gallery" class="text-sm font-semibold text-cfr-sand-300 hover:text-white underline">View Photo Gallery</a>
+          <span class="text-cfr-sand-500 hidden sm:inline">&middot;</span>
+          <a href="/tariff" class="text-sm font-semibold text-cfr-sand-300 hover:text-white underline">Check Rates & Pricing</a>
+        </div>
+      <div class="mt-8 flex flex-wrap justify-center gap-4">
+        <a href="/accommodation" class="inline-flex items-center justify-center gap-2 rounded-lg bg-cfr-green-accent px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2 !rounded-full !px-10 !py-4">
+          View Accommodation
+        </a>
+        <a href="/gallery" class="inline-flex items-center justify-center gap-2 rounded-lg border-2 border-cfr-green-accent px-6 py-3 text-sm font-semibold text-cfr-green-accent transition-all duration-300 hover:bg-cfr-green-accent hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2 !rounded-full !border-cfr-sand-500 !px-10 !py-4 !text-cfr-sand-200 hover:!bg-cfr-sand-500/20">
+          View Photo Gallery
+        </a>
+        <a href="/tariff" class="inline-flex items-center justify-center gap-2 rounded-lg border-2 border-cfr-green-accent px-6 py-3 text-sm font-semibold text-cfr-green-accent transition-all duration-300 hover:bg-cfr-green-accent hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2 !rounded-full !border-cfr-sand-500 !px-10 !py-4 !text-cfr-sand-200 hover:!bg-cfr-sand-500/20">
+          Check Rates & Pricing
+        </a>
+        <a href="/contact" class="inline-flex items-center justify-center gap-2 rounded-lg border-2 border-cfr-green-accent px-6 py-3 text-sm font-semibold text-cfr-green-accent transition-all duration-300 hover:bg-cfr-green-accent hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2 !rounded-full !border-cfr-sand-500 !px-10 !py-4 !text-cfr-sand-200 hover:!bg-cfr-sand-500/20">
+          Contact Us
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <Fragment slot="footer">
+    <Footer />
+  </Fragment>
+</MainLayout>
+
+<script>
+(function() {
+  var videos = document.querySelectorAll('[data-optimized-video]');
+  var mapPlaceholder = document.querySelector('[data-map-placeholder]');
+
+  function loadVideo(v) {
+    var sources = v.querySelectorAll('source[data-src]');
+    sources.forEach(function(s) {
+      s.src = s.dataset.src;
+      s.removeAttribute('data-src');
+    });
+    v.load();
+  }
+
+  if ('IntersectionObserver' in window && videos.length) {
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          var v = entry.target;
+          loadVideo(v);
+          observer.unobserve(v);
+        }
+      });
+    }, { rootMargin: '200px' });
+    videos.forEach(function(v) { observer.observe(v); });
+  } else if (videos.length) {
+    window.addEventListener('load', function() {
+      videos.forEach(loadVideo);
+    });
+  }
+
+  if (mapPlaceholder) {
+    mapPlaceholder.addEventListener('click', function() {
+      var iframe = this.querySelector('iframe');
+      var overlay = this.querySelector('.map-overlay');
+      iframe.src = iframe.dataset.src;
+      iframe.classList.remove('hidden');
+      overlay.classList.add('hidden');
+    });
+  }
+})();
+</script>

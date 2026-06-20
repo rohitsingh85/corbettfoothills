@@ -1,9 +1,9 @@
 ---
 title: "The Untold Story of Jim Corbett: Hunter, Hero, and Protector of Tigers"
 description: "From tracking the deadliest man-eaters in history to becoming India's earliest conservation champions — discover the untold story of Jim Corbett, the hunter who became a protector."
-pubDate: 2026-01-05
+pubDate: 2026-06-01
 author: "Corbett Foothills Retreat"
-image: "https://lh3.googleusercontent.com/sitesv/AA5AbUDDuraNmrSf49PemZhkvurhB7Zlp9AVdWQVfaNIkDA5agcr0iXfHTNO9uMP9xm8dx99TDFR_kjKIyGZV2hNFAZK9Vw3KMduONbzGicCkAhCra01DH-ghCDqJH6bpwC35uR_apuzKSDgvqGrO4BQW_YBWjVAqvyQaDFxyG4k4GpZA07OGRRTmDVblhxjdPJjT8ZGSyAETpz9FAASWD9LFsCMf3uAVFD87lcbKtQGyfQ=w1280"
+image: "/images/blog-hero-untold-story.webp"
 tags: ["jim corbett", "history", "man-eater", "conservation", "kumaon", "tiger"]
 ---
 
@@ -19,7 +19,7 @@ Armed with a rifle, unmatched tracking skills, and extraordinary courage, Corbet
 
 ## The Champawat Tigress: 436 Victims
 
-![Champawat Tigress](https://lh3.googleusercontent.com/sitesv/AA5AbUAlaoUvJYKIIXMYnjxRwR5AvvtnS7M6p_WLIyVjUw2NvavBW0SpycQq8mTmtN-TJDkcDb9x54JvxOFawJi7fCWTBR8ajRQJkIEJhHzulArfHFKw5srsbewjanQgqBRmY2xL_aFLabPD796o_M9QawkNE27zekAzgvnmEKNPtLH3e2EdijWqDFpSXtn4AhaGffNX0ydIwtW4nYaY0V3ffJxATwuCGrSOnGoaDvOfQIc=w1280)
+![Champawat Tigress blamed for over 400 human deaths in Kumaon forests](/images/blog-champawat-tigress.jpg)
 
 No animal in recorded history is believed to have killed more people than the infamous Champawat Tigress.
 
@@ -33,7 +33,9 @@ The final hunt became legendary. Corbett followed the tigress after she killed a
 
 ## The Panar Leopard: The Ghost of Kumaon
 
-![Panar Leopard](https://lh3.googleusercontent.com/sitesv/AA5AbUA8NW0BUn81s6YvaPsCxHQBTmUHxGe0HjEf4Cs_q8z6gz5uu9erWwk-eFfpdAvKBgFqVftLy5k1XXOC0a_uuJ0y81hw-52HJkeKHLtpIIkGs1D4R5ExAO67rP-3aquoWpsZ5C-Cj5STnhT5Ura2C4hfaq__kZLOfwuFqw8SIAKss6V21Qy80OEbaB4gF-WIMH7-HMLH9HSwMz1oOS5UdOuVRVvDqH_4RlIcKldCZNI=w1280)
+<div style="display: flex; justify-content: center; margin: 2rem 0;">
+  <img src="/images/blog-panar-leopard.jpg" alt="Panar Leopard blamed for 400 deaths in Kumaon region of Uttarakhand" style="width: 100%; max-width: 600px; height: auto; border-radius: 0.75rem; display: block;" />
+</div>
 
 If the Champawat Tigress was terrifying, the Panar Leopard was something else entirely.
 
@@ -47,7 +49,9 @@ Corbett spent countless nights waiting in trees, studying tracks, and analyzing 
 
 ## The Chowgarh Tigress
 
-![Chowgarh Tigress](https://lh3.googleusercontent.com/sitesv/AA5AbUA9WtaC_ArqnWMRfI9d7ZZQNTl4pYB8etVJlCXTBIGy4mfERUdDShjyM6t4X1SqePyhmZrLQCjcttc_49AOhTwuEDIqf7Nct-ogy-e70LuFcnTYOpppY2w7r2Tdg00D4kTbrOZzsYH7wauhBeC_--S7MuBq-57esC-KXUfzRYnW2BtvZCAPzBW_3vW-1wP94_u744VOzIJWGKElA_rUYeX7g19BxqhlS56dyX7o2hk=w1280)
+<div style="display: flex; justify-content: center; margin: 2rem 0;">
+  <img src="/images/blog-chowgarh-tigress.webp" alt="Chowgarh Tigress and her cub terrorized Kumaon forest villages" style="width: 100%; max-width: 600px; height: auto; border-radius: 0.75rem; display: block;" />
+</div>
 
 The Chowgarh Tigress and her cub terrorized the region for years.
 
@@ -59,7 +63,9 @@ This realization would later shape Corbett's views on wildlife conservation.
 
 ## The Thak Man-Eater
 
-![Thak Man-Eater](https://lh3.googleusercontent.com/sitesv/AA5AbUAnxuwptDdGquTZt_zkAY64PdigKwh9OoZqyQQAh_FrZERt5q14UcR1pUJv1SRjPgA3V8-IqIMG-qS766gmleFZsxHAcVGGHwqZZsFE2pghDpidlkpZyoNw2nCF6LG0zX6wwtSEowGlHiVu2KGrz-G4612vFflwfXi_-DQoBbVCDk0SesJZPiz6Z-ZINg2IEtNMHPqtUDScBL6TSCY7RXEHtHWUVjJWvdCYTyTTXho=w1280)
+<div style="display: flex; justify-content: center; margin: 2rem 0;">
+  <img src="/images/blog-thak-man-eater.jpg" alt="Thak man-eating tigress hunted by Jim Corbett in Uttarakhand forests" style="width: 100%; max-width: 600px; height: auto; border-radius: 0.75rem; display: block;" />
+</div>
 
 The Thak Tigress became Jim Corbett's final man-eater.
 
@@ -71,7 +77,9 @@ After this hunt, he largely retired from pursuing man-eaters.
 
 ## The Rudraprayag Leopard: Eight Years of Fear
 
-![Rudraprayag Leopard](https://lh3.googleusercontent.com/sitesv/AA5AbUBctvkcKsuTFoR6Xwx2-D4XcVXEUc5G__vy9LoaAcESE87CtHVy3Y42bgaW9ddRKWlAeKDDjHuKWEPsLlqlxZgLGjj2TbXb26-ffThyGu_khJW-UsGrS2TWYjh2V9AJGsqTe_1kqvn763uoceU5Dt88VAPh10GlrZU88YcFK6jG04JzjZztAOhEyYZRiYtqQ1SE40nwIP533lircWO7mLtKi01NCNen9d8kTYJ-oK8=w1280)
+<div style="display: flex; justify-content: center; margin: 2rem 0;">
+  <img src="/images/blog-rudraprayag-leopard.jpg" alt="Rudraprayag leopard terrorized pilgrims for eight years in Garhwal" style="width: 100%; max-width: 600px; height: auto; border-radius: 0.75rem; display: block;" />
+</div>
 
 Perhaps no predator tested Corbett's patience more than the Leopard of Rudraprayag. For nearly eight years, the animal terrorized pilgrims traveling to the sacred shrines of Kedarnath and Badrinath. The leopard was blamed for more than 125 deaths.
 
@@ -143,18 +151,73 @@ His advocacy helped inspire future conservation efforts and contributed to the p
 
 ## The Legacy Lives On
 
-![Jim Corbett National Park](https://lh3.googleusercontent.com/sitesv/AA5AbUCxPo3lNnabEUZzzi7dac7wN_XVw3WZ6MkaJ_qGjF770SHC8QJ6IEOOVPY27spLLInaxjIHgYlCt_IkgK-S8Ywd7EGX9axfW4PTZzoDcDVe_UcDaTXqzkvRZ6mt8Bw9kr24Yw2XUtjm9K1moIZTg2bfcfm_p9HS_gPlWsSi6J8HqCIrNSAGGQZgOrfdRILkHcMH3DsoZZ8lH2Srf0kDoeoWD3adXc3C_vSKYvB1=w1280)
+<div style="display: flex; justify-content: center; gap: 1rem; margin: 2rem 0; flex-wrap: wrap;">
+  <img src="/images/blog-legacy-1.jpg" alt="Jim Corbett National Park forest landscape with wilderness beauty" style="width: 30%; min-width: 180px; height: auto; border-radius: 0.75rem;" />
+  <img src="/images/blog-legacy-2.jpg" alt="Conservation legacy of Jim Corbett lives on in Uttarakhand forests" style="width: 30%; min-width: 180px; height: auto; border-radius: 0.75rem;" />
+  <img src="/images/blog-legacy-3.jpg" alt="Visitors exploring Corbett National Park wilderness and nature trails" style="width: 30%; min-width: 180px; height: auto; border-radius: 0.75rem;" />
+</div>
 
-![Corbett landscape](https://lh3.googleusercontent.com/sitesv/AA5AbUB7MEmBAI12Iz3UA_1DedhqairrZx8nl8sVptw9Z0wi8rXzq_4sn4zK9nUptgHd7-k7CaHAbXbIAllX7M4tcPNeYsKfW1-6HmAX0rhe-kE0k_TcEewSRXo8KtpM2hY8krstH4P3rzGaiCP6Qgp7cTaTMNO_0LrX3538-6Wz4-hyJ4QOLrHhufFxax6Vj91mLmOX-PyedQmFM8oP1xoNMknZf8wbJgvk38SURKrqWLM=w1280)
+Today, the forests where Corbett tracked man-eaters are among the most celebrated [wildlife destinations](/blogs/best-time-to-visit-jim-corbett-national-park) in the world. [Plan your visit](/blogs/how-to-reach) to explore these historic forests and experience the wildlife that Jim Corbett dedicated his life to protecting.
+Named in his honour, [Jim Corbett National Park](/blogs/the-untold-corbett) stands as a reminder of a remarkable transformation—a hunter who became a protector.
+More than a century later, [visitors still explore the same forests](/blogs/things-to-do-jim-corbett), listen to the same alarm calls, and imagine the courage it took to follow a man-eater into the jungle armed with little more than a rifle and unwavering determination. Whether you prefer a [boutique farmstay or a large resort](/blogs/farmstay-vs-resort), the Corbett region offers accommodation options for every kind of traveller.
 
-![Forest trails](https://lh3.googleusercontent.com/sitesv/AA5AbUDPR75vreQhwTs4ncwHXqN7siskyFScSNQ1Xiy81Qzt1gCmNqnd4FVx1MShwPdj8wL7I6JNrsYRXuSQ2uT4YxdEott-kDXlWtB4Mzxq9vMZtmc-1j0TP79n4CSnw9yx6vloX0I3Fz9wXZpKe_wWv8S5mpWAjE-EsybAInhitnGrVBj_ekFCcdg6XgHS7N5xuZO2y7Wh_OnHjaK2SlT1eAX2tVlF1AIMitp-Qk059sM=w1280)
+<h2 id="faqs">Frequently Asked Questions</h2>
 
-Today, the forests where Corbett tracked man-eaters are among the most celebrated wildlife destinations in the world.
+<details class="group rounded-xl border border-cfr-earth-200 bg-white p-5 transition-all duration-200 open:border-cfr-green-accent open:shadow-sm">
+  <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-cfr-green-dark">
+    How many people did the Champawat Tigress kill?
+    <svg class="h-4 w-4 shrink-0 text-cfr-earth-400 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+  </summary>
+  <p class="mt-3 text-sm leading-relaxed text-cfr-earth-600">The Champawat Tigress is believed to have claimed approximately 436 lives, making her the deadliest man-eater in recorded history. Jim Corbett tracked and killed the tigress in 1907 after she had terrorised villages in Nepal and the Kumaon region of India.</p>
+</details>
 
-Named in his honor, Jim Corbett National Park stands as a reminder of a remarkable transformation — a hunter who became a protector.
+<details class="group rounded-xl border border-cfr-earth-200 bg-white p-5 transition-all duration-200 open:border-cfr-green-accent open:shadow-sm">
+  <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-cfr-green-dark">
+    What made the Panar Leopard so difficult to hunt?
+    <svg class="h-4 w-4 shrink-0 text-cfr-earth-400 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+  </summary>
+  <p class="mt-3 text-sm leading-relaxed text-cfr-earth-600">The Panar Leopard was particularly dangerous because it hunted at night, entering villages silently and lifting victims from their homes. Leopards are naturally elusive and far harder to track than tigers. Corbett spent countless nights waiting in trees and studying attack patterns before finally ending its deadly career.</p>
+</details>
 
-More than a century later, visitors still walk the same forests, listen to the same alarm calls, and imagine the courage it took to follow a man-eater into the jungle armed with little more than a rifle and unwavering determination.
+<details class="group rounded-xl border border-cfr-earth-200 bg-white p-5 transition-all duration-200 open:border-cfr-green-accent open:shadow-sm">
+  <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-cfr-green-dark">
+    How many major man-eaters did Jim Corbett hunt?
+    <svg class="h-4 w-4 shrink-0 text-cfr-earth-400 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+  </summary>
+  <p class="mt-3 text-sm leading-relaxed text-cfr-earth-600">The article covers five major man-eaters hunted by Corbett: the Champawat Tigress (436 victims), the Panar Leopard (400 deaths), the Chowgarh Tigress and her cub (64 deaths), the Rudraprayag Leopard (125+ deaths over eight years), and the Thak Tigress (four deaths), which was his final man-eater.</p>
+</details>
+
+<details class="group rounded-xl border border-cfr-earth-200 bg-white p-5 transition-all duration-200 open:border-cfr-green-accent open:shadow-sm">
+  <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-cfr-green-dark">
+    What made Jim Corbett's hunting methods unique?
+    <svg class="h-4 w-4 shrink-0 text-cfr-earth-400 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+  </summary>
+  <p class="mt-3 text-sm leading-relaxed text-cfr-earth-600">Unlike most hunters, Corbett relied on superior understanding rather than superior weapons. He could read tiny details in the jungle such as fresh paw prints, broken grass stems, and alarm calls from birds. He studied animal psychology, often hunted alone, and would wait motionless on a machan for entire nights or even days for a single opportunity.</p>
+</details>
+
+<details class="group rounded-xl border border-cfr-earth-200 bg-white p-5 transition-all duration-200 open:border-cfr-green-accent open:shadow-sm">
+  <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-cfr-green-dark">
+    Did Jim Corbett eventually become a conservationist?
+    <svg class="h-4 w-4 shrink-0 text-cfr-earth-400 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+  </summary>
+  <p class="mt-3 text-sm leading-relaxed text-cfr-earth-600">Yes, Jim Corbett evolved from a hunter into one of India's earliest and most influential conservationists. He repeatedly emphasised that most man-eaters became dangerous because of injuries, old age, or human interference. His experiences convinced him that India's wildlife needed protection, and he challenged the idea that tigers were naturally bloodthirsty killers.</p>
+</details>
+
+<details class="group rounded-xl border border-cfr-earth-200 bg-white p-5 transition-all duration-200 open:border-cfr-green-accent open:shadow-sm">
+  <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-cfr-green-dark">
+    What books did Jim Corbett write?
+    <svg class="h-4 w-4 shrink-0 text-cfr-earth-400 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+  </summary>
+  <p class="mt-3 text-sm leading-relaxed text-cfr-earth-600">Jim Corbett wrote several bestselling books including Man-Eaters of Kumaon, The Temple Tiger, and Jungle Lore. These books introduced readers worldwide to the beauty and complexity of India's forests and helped inspire future conservation efforts.</p>
+</details>
+
+<details class="group rounded-xl border border-cfr-earth-200 bg-white p-5 transition-all duration-200 open:border-cfr-green-accent open:shadow-sm">
+  <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-cfr-green-dark">
+    How did the Rudraprayag Leopard terrorise the region?
+    <svg class="h-4 w-4 shrink-0 text-cfr-earth-400 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+  </summary>
+  <p class="mt-3 text-sm leading-relaxed text-cfr-earth-600">The Rudraprayag Leopard terrorised pilgrims travelling to the sacred shrines of Kedarnath and Badrinath for nearly eight years. Blamed for more than 125 deaths, it seemed almost supernatural — traps failed, baits failed, and hunting parties failed. Corbett spent months studying its behaviour before finally succeeding.</p>
+</details>
 
 Few people have shaped the history of India's wilderness as profoundly as Jim Corbett. His adventures read like a thriller, but his legacy is far greater than any hunt.
-
 He taught the world that understanding wildlife is far more powerful than fearing it.

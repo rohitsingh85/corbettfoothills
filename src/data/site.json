@@ -5,7 +5,7 @@
     "tagline": "Where Farm life Meets Luxury",
     "description": "A boutique farmstay retreat nestled at the edge of Jim Corbett National Park. Experience personalized hospitality, organic farm living, and the untamed beauty of the forest in our six exclusive suites.",
     "url": "https://corbett.life",
-    "location": "Gaibua Khas, Bail Parao, Ramnagar, Nainital, Uttarakhand - 263140",
+    "location": "Jim Corbett, Gaibua Khas, Bail Parao, Ramnagar, Nainital, Uttarakhand - 263140",
     "locationShort": "Ramnagar, Nainital, Uttarakhand",
     "phone": "+91 98181 93314",
     "whatsapp": "+91 98181 93314",
@@ -23,13 +23,12 @@
     "nearestAirport": "Pantnagar Airport (65 km) / Indira Gandhi International Airport, Delhi (260 km)"
   },
   "nav": [
-    { "label": "Home", "href": "/" },
     { "label": "Accommodation", "href": "/accommodation" },
-    { "label": "Experiences", "href": "/experiences" },
-    { "label": "About Us", "href": "/about" },
     { "label": "Gallery", "href": "/gallery" },
-    { "label": "Contact", "href": "/contact" },
-    { "label": "Blogs", "href": "/blogs" }
+    { "label": "Experiences", "href": "/experiences" },
+    { "label": "About Us", "href": "/about-us" },
+    { "label": "Blogs", "href": "/blogs" },
+    { "label": "Contact", "href": "/contact" }
   ],
   "hero": {
     "badge": "Jim Corbett National Park, Uttarakhand",
@@ -40,22 +39,22 @@
   "features": [
     {
       "title": "Boutique Farmstay",
-      "description": "Unlike large commercial resorts, our retreat features just six thoughtfully designed rooms, offering every guest a level of attention, flexibility, and care that is rare in modern travel.",
+      "description": "Unlike large commercial resorts, our retreat features just six thoughtfully designed rooms, offering every guest a level of attention, flexibility, and care that is rare in modern travel. <a href=\"/blogs/farmstay-vs-resort\" class=\"text-cfr-green-accent underline hover:text-cfr-green-dark\">Compare farmstay vs resort →</a>",
       "icon": "home"
     },
     {
-      "title": "Jungle Safari",
-      "description": "Located only 8 km from Jim Corbett National Park. We assist with safari information and planning for convenient access to major safari zones including Dhela and Jhirna.",
-      "icon": "binoculars"
+      "title": "Nature Walks",
+      "description": "Explore the forest next to the retreat on guided nature walks led by local naturalists. Discover native birds, unique flora and fauna, and experience the serene beauty of Corbett's wilderness at a relaxed pace.",
+      "icon": "tree"
     },
     {
       "title": "Organic Farming",
-      "description": "Sustainability and responsible living are central to our philosophy. Guests are invited to explore organic farming practices and enjoy farm-to-table freshness.",
+      "description": "Sustainability and responsible living are central to our philosophy. Guests are invited to explore organic farming practices and enjoy farm-to-table freshness. <a href=\"/organic-farm-experience\" class=\"text-cfr-green-accent underline hover:text-cfr-green-dark\">Discover organic farm experience →</a>",
       "icon": "leaf"
     },
     {
       "title": "Pet-Friendly",
-      "description": "We understand pets are family. Our pet-friendly environment allows you to enjoy your holiday without leaving your furry companions behind.",
+      "description": "We understand pets are family. Our pet-friendly environment allows you to enjoy your holiday without leaving your furry companions behind. <a href=\"/pet-friendly-stay\" class=\"text-cfr-green-accent underline hover:text-cfr-green-dark\">Explore pet-friendly stay →</a>",
       "icon": "heart"
     }
   ],
@@ -72,13 +71,12 @@
     ]
   },
   "roomFeatures": [
-    "Comfortable king-size bedding",
+    "Comfortable king-size bed",
     "Air conditioning",
     "Modern attached bathrooms with hot water",
     "High-speed Wi-Fi connectivity",
-    "Smart television",
-    "Spacious interiors",
-    "Large windows with natural light",
+    "Spacious interiors with natural light",
+    "Freshly cooked Food",
     "Peaceful views of the surrounding property",
     "Daily housekeeping",
     "Complimentary parking"
@@ -89,7 +87,7 @@
     "Couples looking for a peaceful getaway",
     "Nature photographers and birdwatchers",
     "Remote workers seeking a workation in nature",
-    "Travelers looking to disconnect and recharge"
+    "Travellers seeking special long-stay packages"
   ],
   "accommodationCta": "Your stay at Corbett Foothills Retreat extends beyond the comfort of your room.",
   "accommodationMore": [
@@ -99,83 +97,84 @@
     "Forest-view relaxation areas",
     "Traditional Kumaoni cuisine",
     "Outdoor seating spaces",
-    "Easy access to Jim Corbett National Park",
+    "Easy access to Jim Corbett Park",
     "Scenic sunrise and sunset views"
   ],
   "experiences": [
     {
-      "title": "Jungle Safari — Dhela & Jhirna Zones",
-      "description": "A visit to Jim Corbett is incomplete without experiencing the thrill of a jungle safari. Corbett Foothills Retreat offers privileged access to the Dhela and Jhirna safari zones — two of the park's most biodiverse and tiger-rich ranges. Dhela, the newest tourism zone, is known for its open grasslands and high density of Bengal tiger sightings, while Jhirna offers year-round access with lush sal forests, sparkling streams, and abundant populations of elephants, wild boars, spotted deer, and sloth bears. Both zones provide exceptional birdwatching with over 600 avian species including crested serpent eagles, great hornbills, and kingfishers. Our expert naturalists accompany every safari, sharing deep knowledge of animal behaviour, tracking techniques, and the unique ecology of each zone.",
+      "title": "Jungle Safari",
+      "description": "A visit to Jim Corbett is incomplete without experiencing the thrill of a jungle safari. Explore the forests, grasslands, and riverine ecosystems that make this region one of India's most celebrated wildlife destinations.\n\nGuests can enjoy guided safari experiences that provide opportunities to spot wildlife in their natural habitat, including deer, elephants, wild boars, and hundreds of bird species. The park is also renowned for being home to the majestic Bengal tiger.",
+      "highlightsTitle": "Why Choose Us",
       "highlights": [
-        "Dhela Zone: Open grasslands, high tiger density, excellent for photography",
-        "Jhirna Zone: Year-round access, sal forests, elephants and sloth bears",
-        "Expert naturalist guides with deep knowledge of animal behaviour and tracking",
-        "Over 600 bird species including crested serpent eagles and great hornbills",
-        "Canter & gypsy safaris available with flexible timing options",
-        "Located only 8 km from the retreat"
-      ]
+        "Located only 8 km from Jim Corbett National Park",
+        "Assistance with safari information and planning",
+        "Convenient access to major safari zones"
+      ],
+      "images": ["/images/safari-1.webp", "/images/safari-2.webp", "/images/safari-3.jpg"]
     },
     {
-      "title": "Guided Wilderness Walks",
-      "description": "Step beyond the safari vehicle and immerse yourself in the jungle on foot with our expert-led wilderness walks. These guided interpretive treks take you through the forest fringe, riverine trails, and village pathways that border the Corbett landscape. Led by trained naturalists, each walk reveals the hidden world of animal tracks, medicinal plants, edible forest produce, and the intricate web of life that sustains the wilderness. Guests learn to identify pugmarks, distinguish bird calls, recognize native tree species like sal, khair, and semal, and understand the ancient bond between local communities and the forest. These walks are tailored to all fitness levels — from gentle morning strolls to more immersive half-day expeditions.",
-      "highlights": [
-        "Expert-led interpretive treks through forest fringe and riverine trails",
-        "Learn to identify animal tracks, pugmarks, and bird calls",
-        "Discover medicinal plants, native tree species, and edible forest produce",
-        "Tailored to all fitness levels — gentle strolls to half-day expeditions",
-        "Morning and twilight walks available",
-        "Photography-friendly itineraries with naturalist guidance"
-      ]
+      "title": "Nature Walks",
+      "description": "Wake up to birdsong, enjoy peaceful morning walks, breathe clean forest air, and reconnect with nature at your own pace. Slow down and immerse yourself in the natural beauty surrounding the retreat. The forest-edge location of Corbett Foothills Retreat makes it ideal for leisurely walks through peaceful landscapes rich in flora and fauna.\n\nNature walks offer a chance to observe local wildlife, discover native plant species, enjoy fresh mountain air, and experience the tranquility that defines the Corbett region.\n\nPerfect for families, couples, photographers, and anyone seeking a deeper connection with nature.",
+      "images": ["/images/nature-walks-1.jpg", "/images/nature-walks-2.jpg", "/images/nature-walks-3.webp"]
     },
     {
       "title": "Bird Watching",
-      "description": "The forests and surrounding habitats of Jim Corbett are a paradise for bird enthusiasts. The region is home to hundreds of resident and migratory bird species, making it one of North India's most rewarding birdwatching destinations. Early mornings are particularly magical, with the sounds of birds echoing through the forest canopy. Guests may encounter kingfishers, woodpeckers, hornbills, barbets, eagles, and numerous other species depending on the season. Whether you are an experienced birder or a curious beginner, birdwatching around the retreat is a peaceful and rewarding experience.",
+      "description": "The forests and surrounding habitats of Jim Corbett are a paradise for bird enthusiasts. The region is home to hundreds of resident and migratory bird species, making it one of North India's most rewarding birdwatching destinations.\n\nEarly mornings are particularly magical, with the sounds of birds echoing through the forest canopy. Guests may encounter kingfishers, woodpeckers, hornbills, barbets, eagles, and numerous other species depending on the season. Whether you are an experienced birder or a curious beginner, birdwatching around the retreat is a peaceful and rewarding experience.",
+      "highlightsTitle": "Perfect For",
       "highlights": [
-        "Ideal for bird enthusiasts and wildlife photographers",
-        "Great for families with children and nature lovers",
-        "Hundreds of resident and migratory bird species"
-      ]
+        "Bird Enthusiasts",
+        "Wildlife Photographers",
+        "Families with Children",
+        "Nature Lovers"
+      ],
+      "images": ["/images/bird-watching-1.jpg", "/images/bird-watching-2.jpg", "/images/bird-watching-3.jpg"]
     },
     {
       "title": "Organic Farming Experience",
-      "description": "Guests are invited to explore our organic farming practices and learn how fresh produce is cultivated using environmentally conscious methods. This hands-on experience offers insights into sustainable agriculture and the benefits of farm-fresh ingredients.",
+      "description": "Sustainability and responsible living are central to the philosophy of Corbett Foothills Retreat.\n\nGuests are invited to explore our organic farming practices and learn how fresh produce is cultivated using environmentally conscious methods. This hands-on experience offers insights into sustainable agriculture and the benefits of farm-fresh ingredients.",
+      "highlightsTitle": "Highlights include:",
       "highlights": [
         "Seasonal vegetables and herbs",
         "Sustainable growing practices",
         "Farm-to-table food philosophy",
-        "Educational experiences for children"
-      ]
+        "Educational experiences for children",
+        "A closer connection with nature and local traditions"
+      ],
+      "images": ["/images/organic-farming-1.jpg", "/images/organic-farming-2.jpg", "/images/organic-farming-3.jpg"]
     },
     {
-      "title": "Late-Night Riverside Bonfire",
-      "description": "As darkness settles over the jungle and the stars emerge above the Kosi riverbed, gather around a crackling bonfire for an evening of storytelling, stargazing, and soulful connection. Our late-night riverside bonfire gatherings are a signature Corbett Foothills Retreat experience — the perfect antidote to city life. Seated on traditional earthen diyas-lit grounds with the sound of the river flowing nearby, guests share tales of the day's wildlife encounters, toast marshmallows under the open sky, and listen to folk tales of the Kumaon hills narrated by local village elders. The experience includes freshly brewed chai, locally sourced snacks, and the warm glow of a fire that mirrors the hospitality of the retreat itself.",
-      "highlights": [
-        "Riverside location along the Kosi riverbed under a canopy of stars",
-        "Traditional earthen diya-lit seating creating an intimate ambience",
-        "Local Kumaoni folk tales narrated by village elders",
-        "Freshly brewed chai and locally sourced snacks by the fire",
-        "Stargazing opportunities in the pristine night sky",
-        "Perfect for families, couples, and solo travelers"
-      ]
+      "title": "Bonfire Evenings",
+      "description": "As dusk settles over the forest and the stars begin to light up the night sky, gather around a warm bonfire for an evening of relaxation and connection. Surrounded by the serenity of nature, these moments invite unhurried conversations, shared stories, and the simple pleasure of being together.\n\nWhether with family, friends, or fellow travellers, bonfire evenings at Corbett Foothills Retreat create a memorable atmosphere where warmth, laughter, and lasting memories come naturally.",
+      "images": ["/images/bonfire-1.jpg", "/images/bonfire-2.jpg", "/images/bonfire-3.jpg"]
+    },
+    {
+      "title": "Family Getaways",
+      "description": "Create meaningful memories together amidst the tranquility of nature. With spacious suites, open lawns, nature-based activities, and a safe, welcoming environment, Corbett Foothills Retreat is the perfect destination for families to reconnect and unwind. Children can explore the outdoors, experience farm life, and discover nature, while parents relax and enjoy the slower pace of the retreat.\n\nWhether it's sharing stories around a bonfire, enjoying leisurely walks, or simply spending quality time together, every moment here is designed to foster connection, relaxation, and lasting family memories.",
+      "images": ["/images/family-1.jpg", "/images/family-2.jpg", "/images/family-3.jpg"]
+    },
+    {
+      "title": "Forest Stream Picnic",
+      "description": "Escape into the heart of the forest and spend a day beside a crystal-clear mountain stream, surrounded by the sights and sounds of nature. Cool waters, shaded woodland trails, and a thoughtfully arranged picnic create the perfect setting to relax, reconnect, and experience Corbett beyond the ordinary.\n\nWhether you're sharing the experience with family, friends, or a loved one, this secluded forest retreat offers a refreshing blend of adventure, tranquility, and unforgettable moments in nature.",
+      "images": ["/images/stream-picnic-1.webp", "/images/stream-picnic-2.webp", "/images/stream-picnic-3.webp"]
     },
     {
       "title": "Forest Mornings & Sunset Views",
-      "description": "Wake up to soothing birdsong, enjoy a peaceful cup of tea overlooking the forest, and breathe in the fresh mountain air. As the day closes, unwind amidst breathtaking sunset views where the changing colours of the sky create a magical backdrop for relaxation and reflection.",
-      "highlights": [
-        "Morning tea overlooking the forest canopy",
-        "Sunset views with panoramic jungle vistas",
-        "Perfect for meditation, yoga, and quiet reflection"
-      ]
+      "description": "At Corbett Foothills Retreat, some of the most memorable moments are the simplest ones. Wake up to the soothing sounds of birdsong, enjoy a peaceful cup of tea overlooking the forest, and breathe in the fresh mountain air as nature comes alive around you. As the day draws to a close, unwind amidst breathtaking sunset views, where the changing colours of the sky create a magical backdrop for relaxation and reflection. It is the perfect opportunity to slow down, reconnect with nature, and experience the tranquility that makes Corbett truly unforgettable.",
+      "images": ["/images/forest-mornings-1.webp", "/images/forest-mornings-2.webp", "/images/forest-mornings-3.jpg"]
+    },
+    {
+      "title": "Reconnect & Rejuvenate",
+      "description": "Step away from the rush of everyday life and rediscover the joy of slowing down. Wake to birdsong, breathe in the fresh forest air, and immerse yourself in the calming rhythms of nature. Surrounded by serene landscapes and peaceful surroundings, Corbett Foothills Retreat offers the perfect setting to unwind, reflect, and recharge.\n\nWhether enjoying quiet moments amidst nature, meaningful time with loved ones, or simply embracing the stillness around you, every experience here is designed to restore balance and rejuvenate the mind, body, and soul."
     }
   ],
   "about": {
-    "tagline": "Where personalized hospitality meets the untamed beauty of the forest",
+    "tagline": "Corbett Foothills Retreat is where personalized hospitality meets the untamed beauty of the forest — a rare harmony between luxury and nature, where every guest is welcomed not as a visitor, but as part of a slower, more meaningful journey.",
     "paragraphs": [
       "Nestled at the edge of the legendary Jim Corbett Forest, Corbett Foothills Retreat is not merely a destination — it is a thoughtfully curated sanctuary for travelers seeking authenticity, tranquility, and meaningful connection with nature. Conceived around a bespoke hospitality philosophy, the retreat offers an experience that is both intimate and deeply personal, where every stay is shaped by genuine care, attentive service, and an unwavering commitment to guest comfort.",
-      "Unlike large commercial resorts where guests often become just another room number, Corbett Foothills Retreat is a boutique farmstay with only six exclusive suites. This intentionally intimate scale allows the hosts to devote individual attention to every guest, understanding their unique preferences and creating experiences tailored to their needs.",
-      "Positioned in a privileged forest-edge location adjoining the wilderness of Corbett, the retreat offers uninterrupted views, pristine air, and a rare opportunity to experience nature in its purest form. Here, the rhythm of life slows down. Mornings begin with birdsong instead of traffic, evenings unfold beneath starlit skies, and the constant urgency of city life gradually gives way to a more mindful and restorative pace.",
-      "A deep commitment to organic farming and sustainable living lies at the heart of the retreat's ethos. The property embraces responsible stewardship of the land through eco-conscious practices and farm-to-table experiences that celebrate freshness, seasonality, and local produce.",
-      "Seamlessly balancing wilderness with comfort, Corbett Foothills Retreat offers contemporary conveniences thoughtfully integrated into the surrounding landscape. Every element has been designed to preserve the serenity of the environment while providing the warmth and refinement expected by modern travelers."
+      "Unlike large commercial resorts where guests often become just another room number, Corbett Foothills Retreat is a boutique farmstay with only six exclusive suites. This intentionally intimate scale allows the hosts to devote individual attention to every guest, understanding their unique preferences and creating experiences tailored to their needs. Whether it is arranging a memorable wildlife excursion, accommodating special dietary requirements, helping families plan activities, or simply ensuring a peaceful and comfortable stay, hospitality here is personal, thoughtful, and sincere.",
+      "Positioned in a privileged forest-edge location adjoining the wilderness of Corbett, the retreat offers uninterrupted views, pristine air, and a rare opportunity to experience nature in its purest form. Here, the rhythm of life slows down. Mornings begin with birdsong instead of traffic, evenings unfold beneath starlit skies, and the constant urgency of city life gradually gives way to a more mindful and restorative pace. Guests are invited to disconnect from schedules, screens, and distractions, and reconnect with nature, loved ones, and themselves.",
+      "A deep commitment to organic farming and sustainable living lies at the heart of the retreat's ethos. The property embraces responsible stewardship of the land through eco-conscious practices and farm-to-table experiences that celebrate freshness, seasonality, and local produce. Nature is not simply observed from a distance — it is woven into everyday life, creating an atmosphere that feels both grounding and rejuvenating.",
+      "Seamlessly balancing wilderness with comfort, Corbett Foothills Retreat offers contemporary conveniences thoughtfully integrated into the surrounding landscape. Every element has been designed to preserve the serenity of the environment while providing the warmth and refinement expected by modern travelers. This is more than a place to stay; it is a space to pause, breathe deeply, and embrace a gentler way of living."
     ],
     "ecoPractices": [
       {
@@ -229,45 +228,110 @@
   ],
   "galleryLayout": {
     "jungle": [
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUDiJJoEp_rKLPRAtQjdZj-48J0hANgpimqmWOOLDLJJvVvRl5JYYfg7yBlZ0GSIjxufApQHqA72Ja5ztYerclna9UWXzuBPoJRAB8xYLtd0Vd6V4ELp8W3CgCJ0NXm1XOkD81vz4J7VoeMGOxi61X91OzMql0gP4lWnySojLoKrBHqqOl2w1KcoFTtvb-Hgqi0k4URpv3efmCvd7aMUcVBvbsmVbRcwgV9VBD5x=w1280",
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUCnjWnJrV-7LCjP6wa4V03NjtVEjhLu5AmHqn707Ed_VkG2SWa2uEWYu5gLSlFNMuzbhQM9r3j6q7OYZwY1P9-TZudhIwAfusXif0wW28_Oe1Nr5fvVUGN4O50P3zItDT1w4wIxTR6VWGKEJ5DvXgQB8PDn2KMD_fyzboZnkA2ni9g0yhWGwa8rmqxGnHlVNniGR3Z7p1b1ZLcxbkvznscJXR_8bYMsaZFvKe46OYM=w1280",
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUDWmSgpOHdllvpkOQgAhbdB15cMf-o72D_Eb2EFDGEwwQjt8SylEVjpaUfuN3_0_ueYvyXViBzSsaZBFzb3y1G-TGoRMxx4gyWqVwubI1ZNYGouzHj-vInXqqFDBNDnslzkUdEMQlVz3xsj7ZY7EPISVF1hkjpnDVKveOZuJSA13HXFBxdO3C-X8WF-FoOkjhu9jBbYsJSDJDFiEEHnt1_bErqLl0s8R7eCc6lqP4E=w1280"
+      "/images/image-1.jpg",
+      "/images/image-2.webp",
+      "/images/image-3.webp"
     ],
     "architecture": [
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUB2lTBLOVg8UdX9W4LmkKm2m-mk9pOqcrxuQpyycEoLvBfZgt1SDFi_83_M5xC9SYP67CefmLQ7EGgs4IxrLrTiDfeLey3ooXM4cFZNY3xMx5egLHIlTMMCVksEg2mFzVBB7bpm03KklXyGmVSwVfgtIx1vMVae3tBTlfPYoTNQywSAT-VlPbkDGagtxEwF7JsymipQ6IgEFLMfC20TVVM3LwwmRXML8OnXw56I6ww=w1280",
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUAmCvQpHh4hUXKi9439CTVghZgiaJxALYsJvd06rXNBaWkDy14-qSeyDV_Zh9wwDSQTJSbwvXeNHQTB7cfyL3PJFIiwW8bd6Ksawlj8-hiX7L4cfl1NyLBUZOx2d6afyOCX0kw2oDF-JImfvil0bS3HMtkEWOhyekryhTPz_DWevAsjNP39XC6R9jBWZTkfHTMDAMZcj_TeNZcF0Rkf2sqWRMYQJo_hBzUQ-UBh=w1280",
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUAL7Iyu0XYCIOtxaUMbjga4q8Hvlit_bOtNCOaHiB2w4rJQP4Dex26_cpGwXo9qMcH0JSXqVzsVoM0KXJgavUU5g-OY10nNutS0PN9rAI2PFiXVluAtgzNcbwdHD1oT11d2TsOQesZ4C19Hb5cxNfaR_7rtMcM236BGEYfKyRLMrfifUSx8oxZFcnYQIVi_UmahqGc4cAbzc60QWurE14ZTK0r_Un1sDP-pJ6UDwi0=w1280"
+      "/images/image-7.webp",
+      "/images/image-8.jpg",
+      "/images/image-4.webp"
     ],
     "avian": [
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUD3L4Z_PoD5OShr29ift2Z_WIkYD6K9e4r6mmlvYVaapZv9fKsMuIvRTMPigDH19NyL2pIvA0P3VKjXY0FXDSNcJULvcmYuamvhztWG6ZeSZaQKc383gsOR7uorkCfyg7ZAjc-2Jim8KNaxZWmlNQCI7Guub87JDm7PPwEHJWG4Hy_bmZotg6-ywTiE4s6qmLaFozGJfa_2tAX75W7-bbAx81Ta5cxCbOtS0jDQsgo=w1280",
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUDnetsrQ5WHIVBYWj9jd8sYIVuEpapluQNYSSDFCu14IVA_34udfJb7422R7tuiaIcaRHTwhqTc73VKiPc6X2rJ9kfSwSyQc2Ct6Oc51ZZ8eISIOF_InwHMWSmf2OgWREEMC4a_b6bu8ByY4yWait534mqJT927Wbhnj4PdNOC0TZl7tCBFG1VHPB-m5PARY2Wf6us6YShLHJrEosi05_j97FcobjE0KfdVyqNN=w1280",
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUB6PSjX1QEwvK1Hp2WphF7jsVPoy1ByWNOnA-6QGcH4hDiGx92jFhJyDBpaKPA-SN2RPyDeA6zpvOeo-EOSkZe2C-_e5ZhPttZd-qVqkP6_fIZ0ZQabqcdzps90vtqXbzKtjHe1tRqoO_OtCxXARB7VzDTQvrAbw7XbrJKv3cQD4UKdpP3aESc75PPTdJfv0gSUlJcyNS6HkvF3pza3kWGFBrou68vt5_P4nO_6=w1280"
+      "/images/image-5.webp",
+      "/images/image-6.webp",
+      "/images/image-19.jpg"
     ]
   },
   "images": {
     "accommodation": [
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUBjxisPIOLfUcVw0Q8z0FFG7hj57-UejoTxcpWze7yU1SWrdMUXoASdeMxuDS-G6qfweQ-3lR1KkAHILm3QlWRujsKedytCQmQTTNozmbdrFKkgfdGUjXreJWtj4x1TYYP6gfDNAvdrnwlEyxargJCwnNOrhe2SsrtYgWqMACKFCh5zwr-kw1frDrlGbWAtjQ6Sww9GA75-5mVQv8WUgcqpcvD_XdhjYhPtQ0qbMb4=w1280",
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUDOfr8x_MDBVVNkWZIUgIO3o3_v0DFAtgpRNcBStLw6K_zudJlHEVvwZWbJW0WxA40COuHIREohjfZLM7x6B-O0uUtyz642Xgs-XnARS40_D9aWIhomPNYN9UQkFkNHRmnDeJEc7KpsHoubjdU_uNLb6s6R8RErNZInbs4Q6zh9IBXnqd5LiEjbeK1LgoMUnePGskVS2Qpl7ifR5eznmiCpoTOWZg4yz1XwZQz3=w1280",
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUC9NeaIlVVDbfKiHhTRJEdbM7qFdMxtQ86P_AKdLVSg8kczASDvtGpVWGVso9CcObxMsWS1oheoxAzAcVkoC1l_L3tRlCS1wGRR9nirGoPZhKBXMUBFtzATsqvdmGm9aPpcJ4Vrn0yvz23Yd-DIjrEKWHGN4oDW-QVoSEcTgKgmtdbuFErZU6ILxoFyCZ9L5PPIndOSXxFx6WOK5SthYV_uRP5y1hkyj9QJcTUQ=w1280",
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUDBfSquVgdHr2dxt12iTKG8PcsKSxVn7tNvcK-TKFf5vuGvvqh9SJxJ3evqqLa5S8Ozkfd3oF38xrNFP21DhxFy39WGV5O67dgykSy2GXZusprQSeTP3kI16lu2E8BoaochUFuS79bFcI7nMFfRfl9GxnyC_3A3sLMWGwpSzvOcsUpjiqCZU8dDdjppNqEckTRvm0YimkLv2lNJ2VOHBcvZu5nNS3SVVfEdxwsp=w1280",
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUBpRgJlPHkfVG6Mwk69YgWTriQXhupwBMrhEFCzCcJqltqjf7IC0GGo1mbz2m_V3_PQNX7bmfOyIxQUE5LAO3sMquqzdf22rPIRVRHdfdqNkaxDMvC8UYWz0Q6eaklXeSCrJatY9cpfRv50ZH4HhRt4RCP35-UZDBoJLIQVdoC7pr4Luffv8-pD3zNd_Z9f5YQ5KpoxqNSKTz8TwTg5YYsE-uXzXHWIm9lRh6x6=w1280",
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUDMoLSuIk2PX-BgYzlr87RZrscxwYSYi9GTq9OomB6dKaX_xEXW9M_lP8Emct1pi0MOsnoOM8a3aEzohURfhyZuGSM5QbsH83xpmY0wgPxu1ZYMwCM0TkHXHnC1MzpFmVwCU0GQkFjsmV8POxviABt86vqxWslnJgupTqJ7XGQcK3wiDTZ59kW1tmMDj0qCuADXFhvRFkCBaQu3_I8AdyYqbe-9zXqP6PlWn1Fhhh8=w1280",
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUCSHFtxeFuu6qGhx82hUVgB3eXYldBaplsspTKuVtmKHWgjfCST07VtBQ5YSbHg8lJ2DDQWCyOye8nUuM9aeot0VclC7o-85_W0vGEXYWwXKXlvQtnvyFnRZz6zuwX6F5xIyRNalh1BXvLt6fGvmdv347WBsydTwZ7X-qXRu5Dn-91Vt3Xph-xgOqLtcYzqQBv_3eLByEN0LOKRi_72z5z-e6I7RILHSfjGQQoZ-Iw=w1280",
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUC7anTu867pR47MsYV-XtHb0E3HMNS_e4v1Nt6nTe5tzvtzreUiRzNwMDnBCpaeIkhEZZgU9Ac8uzqGwXqjju_Fo76kulpzTrsLoNqx559sV_hq3jiC3V5jaEYZy1Ei_oNdLnmkCJQ43TcfAEq0VRhBfItes_5PxnKJJaWySrBEp6KPik5AMNbZ_yp-RdTWkYVSLcaqDTy7umyMnwpOXPO6aBvYrGEYxMFH7SZw7fw=w1280",
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUBgO_sQvLnaX6ni4E_Rfk7FmB7WMF4j_X324RcUl0y3ktyKlffmGP7uBSjcrdlC775oB8k_BruhuQ3H1jzcj4ch_E_MzV29M6b6iITaamlRfJnGdP06pwK68pyb3isigHRgxPYdF1oDZ30eqaaLKdCJBHc6L-w80jJUZ_rIbV15puYGSe2mitQ1dOd0WKONMKmO-R2uQzAPnbkpJk8wJ-xEATpSYwZzlTLLz-Om0KQ=w1280",
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUDwn_-wldlPgltIMZpTfOFvlGMFIddsM6OAtEbApwd1B2nGA1dLJptvv4XfMcSrE2bjyuwqU17rjo-agurcGKsYUX4Cm0Xh8TyM58GU050J3E2feu-M1BSLDvIRgBjbsF3QlO2RyWEqQpCJ_pROwOVUdxwELmQaPpj_lwbZS8KKzg4-Ry8TKnjFrrA2ZpC57Sn-64VT1tmPbz5231nDIQKL11EXAfG7_AcBA5W1YKM=w1280"
+      "/images/live-7.jpg",
+      "/images/accommodation-8.webp",
+      "/images/accommodation-11.jpeg",
+      "/images/luxury-room-style.webp",
+      "/images/outside-shot.webp",
+      "/images/live-13.jpg",
+      "/images/live-14.webp",
+      "/images/live-5.webp",
+      "/images/live-15.webp"
     ],
     "hero": [
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUDiJJoEp_rKLPRAtQjdZj-48J0hANgpimqmWOOLDLJJvVvRl5JYYfg7yBlZ0GSIjxufApQHqA72Ja5ztYerclna9UWXzuBPoJRAB8xYLtd0Vd6V4ELp8W3CgCJ0NXm1XOkD81vz4J7VoeMGOxi61X91OzMql0gP4lWnySojLoKrBHqqOl2w1KcoFTtvb-Hgqi0k4URpv3efmCvd7aMUcVBvbsmVbRcwgV9VBD5x=w1280",
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUCnjWnJrV-7LCjP6wa4V03NjtVEjhLu5AmHqn707Ed_VkG2SWa2uEWYu5gLSlFNMuzbhQM9r3j6q7OYZwY1P9-TZudhIwAfusXif0wW28_Oe1Nr5fvVUGN4O50P3zItDT1w4wIxTR6VWGKEJ5DvXgQB8PDn2KMD_fyzboZnkA2ni9g0yhWGwa8rmqxGnHlVNniGR3Z7p1b1ZLcxbkvznscJXR_8bYMsaZFvKe46OYM=w1280",
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUDWmSgpOHdllvpkOQgAhbdB15cMf-o72D_Eb2EFDGEwwQjt8SylEVjpaUfuN3_0_ueYvyXViBzSsaZBFzb3y1G-TGoRMxx4gyWqVwubI1ZNYGouzHj-vInXqqFDBNDnslzkUdEMQlVz3xsj7ZY7EPISVF1hkjpnDVKveOZuJSA13HXFBxdO3C-X8WF-FoOkjhu9jBbYsJSDJDFiEEHnt1_bErqLl0s8R7eCc6lqP4E=w1280"
+      "/images/live-1.webp",
+      "/images/live-3.webp"
     ],
     "gallery": [
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUAL7Iyu0XYCIOtxaUMbjga4q8Hvlit_bOtNCOaHiB2w4rJQP4Dex26_cpGwXo9qMcH0JSXqVzsVoM0KXJgavUU5g-OY10nNutS0PN9rAI2PFiXVluAtgzNcbwdHD1oT11d2TsOQesZ4C19Hb5cxNfaR_7rtMcM236BGEYfKyRLMrfifUSx8oxZFcnYQIVi_UmahqGc4cAbzc60QWurE14ZTK0r_Un1sDP-pJ6UDwi0=w1280",
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUD3L4Z_PoD5OShr29ift2Z_WIkYD6K9e4r6mmlvYVaapZv9fKsMuIvRTMPigDH19NyL2pIvA0P3VKjXY0FXDSNcJULvcmYuamvhztWG6ZeSZaQKc383gsOR7uorkCfyg7ZAjc-2Jim8KNaxZWmlNQCI7Guub87JDm7PPwEHJWG4Hy_bmZotg6-ywTiE4s6qmLaFozGJfa_2tAX75W7-bbAx81Ta5cxCbOtS0jDQsgo=w1280",
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUDnetsrQ5WHIVBYWj9jd8sYIVuEpapluQNYSSDFCu14IVA_34udfJb7422R7tuiaIcaRHTwhqTc73VKiPc6X2rJ9kfSwSyQc2Ct6Oc51ZZ8eISIOF_InwHMWSmf2OgWREEMC4a_b6bu8ByY4yWait534mqJT927Wbhnj4PdNOC0TZl7tCBFG1VHPB-m5PARY2Wf6us6YShLHJrEosi05_j97FcobjE0KfdVyqNN=w1280",
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUB2lTBLOVg8UdX9W4LmkKm2m-mk9pOqcrxuQpyycEoLvBfZgt1SDFi_83_M5xC9SYP67CefmLQ7EGgs4IxrLrTiDfeLey3ooXM4cFZNY3xMx5egLHIlTMMCVksEg2mFzVBB7bpm03KklXyGmVSwVfgtIx1vMVae3tBTlfPYoTNQywSAT-VlPbkDGagtxEwF7JsymipQ6IgEFLMfC20TVVM3LwwmRXML8OnXw56I6ww=w1280",
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUAmCvQpHh4hUXKi9439CTVghZgiaJxALYsJvd06rXNBaWkDy14-qSeyDV_Zh9wwDSQTJSbwvXeNHQTB7cfyL3PJFIiwW8bd6Ksawlj8-hiX7L4cfl1NyLBUZOx2d6afyOCX0kw2oDF-JImfvil0bS3HMtkEWOhyekryhTPz_DWevAsjNP39XC6R9jBWZTkfHTMDAMZcj_TeNZcF0Rkf2sqWRMYQJo_hBzUQ-UBh=w1280"
+      "/images/live-50.webp"
+    ],
+    "about": [
+      "/images/live-46.webp"
+    ],
+    "blogs": [
+      "/images/live-51.webp",
+      "/images/live-52.webp",
+      "/images/live-53.webp",
+      "/images/live-54.webp",
+      "/images/live-55.webp",
+      "/images/live-56.webp",
+      "/images/live-57.webp",
+      "/images/live-1.webp"
     ]
-  }
+  },
+  "blogs": [
+    {
+      "title": "The Untold Story of Jim Corbett",
+      "slug": "the-untold-story-of-jim-corbett",
+      "description": "Step into the thrilling world of Jim Corbett, the legendary hunter who tracked some of India's deadliest man-eating tigers and leopards before becoming one of the country's earliest wildlife conservationists. Discover the true stories behind the man, the man-eaters, and the remarkable legacy that lives on in Jim Corbett National Park today.",
+      "date": "June 2026",
+      "image": "/images/live-51.webp"
+    },
+    {
+      "title": "Corbett Through the Seasons",
+      "slug": "best-time-to-visit-jim-corbett-national-park",
+      "description": "Thinking of visiting Jim Corbett National Park? Whether you're hoping to spot a tiger, enjoy pleasant weather, or experience the forest at its most beautiful, this guide will help you choose the perfect time for your trip.",
+      "date": "April 2026",
+      "image": "/images/live-52.webp"
+    },
+    {
+      "title": "The Untold Corbett",
+      "slug": "the-untold-corbett",
+      "description": "Jim Corbett is known for its tigers, but its most captivating stories often remain hidden from view. Journey into The Untold Corbett and discover facts that will change the way you see this iconic wilderness.",
+      "date": "April 2026",
+      "image": "/images/live-53.webp"
+    },
+    {
+      "title": "Top Things to Do Near Jim Corbett",
+      "slug": "things-to-do-jim-corbett",
+      "description": "10 unforgettable experiences near Jim Corbett that most visitors miss. From forest walks and riverside sunsets to local cuisine and hidden spiritual gems, discover the best of Ramnagar beyond the safari.",
+      "date": "May 2026",
+      "image": "/images/live-54.webp"
+    },
+    {
+      "title": "Complete Guide to Jim Corbett Safari Booking",
+      "slug": "complete-guide-to-jim-corbett-safari-booking",
+      "description": "Everything you need to know about Jim Corbett safari booking in 2026 — zones, fees, timings, tiger sighting hotspots, and step-by-step booking instructions. Plan smarter and make the most of your Corbett adventure.",
+      "date": "May 2026",
+      "image": "/images/live-55.webp"
+    },
+    {
+      "title": "Why Choose a Boutique Stay Near Jim Corbett?",
+      "slug": "why-choose-a-boutique-stay-near-jim-corbett",
+      "description": "Looking for the best place to stay near Jim Corbett? Find out why boutique retreats are becoming the preferred choice for travellers seeking peaceful surroundings, personalized service, authentic local experiences, and better value for money than many large resorts.",
+      "date": "June 2026",
+      "image": "/images/live-56.webp"
+    },
+    {
+      "title": "Farmstay vs Resort Near Jim Corbett – Which Is Better?",
+      "slug": "farmstay-vs-resort",
+      "description": "Compare boutique farmstay vs large resort near Jim Corbett National Park. Find out which is best for families, couples, pet owners, and nature lovers.",
+      "date": "March 2026",
+      "image": "/images/live-57.webp"
+    },
+    {
+      "title": "How to Reach Corbett Foothills Retreat – Complete Travel Guide",
+      "slug": "how-to-reach",
+      "description": "Complete travel guide to Corbett Foothills Retreat — driving directions from Delhi, nearest railway stations and airports, distances from major cities, and travel tips.",
+      "date": "March 2026",
+      "image": "/images/live-1.webp"
+    }
+  ]
 }

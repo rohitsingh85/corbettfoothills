@@ -1,97 +1,111 @@
 ---
 import siteData from "../data/site.json";
+
+export interface Props {
+  variant?: "transparent" | "solid";
+}
+
+const { variant = "solid" } = Astro.props;
+const currentPath = Astro.url.pathname;
 ---
 
 <header
   id="site-header"
-  class="fixed top-0 z-50 w-full transition-all duration-300"
+  class={`fixed top-0 z-50 w-full transition-all duration-300 ${variant === "solid" ? "bg-cfr-green-dark shadow-lg" : ""}`}
   data-header
+  data-variant={variant}
 >
   <nav
     class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8"
   >
     <a
       href="/"
-      class="flex items-center gap-2 text-xl font-bold tracking-tight text-white"
+      class="flex items-center"
     >
-      <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-sand-500/20 backdrop-blur-sm">
-        <svg
-          class="h-5 w-5 text-sand-300"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418"
-          />
-        </svg>
-      </span>
-      <span class="font-display text-lg">{siteData.site.shortName}</span>
+      <img
+        src="/logos/CFR_logo_white_v2.png"
+        alt="Corbett Foothills Retreat"
+        width="1280"
+        height="1024"
+        class="h-24 w-auto sm:h-32 md:h-40 lg:h-48"
+        loading="eager"
+      />
     </a>
 
-    <!-- Desktop nav -->
-    <ul class="hidden items-center gap-8 md:flex">
-      {
-        siteData.nav.map((item) => (
-          <li>
-            <a
-              href={item.href}
-              class="relative text-sm font-medium text-sand-200 transition-colors duration-200 hover:text-white after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-0 after:bg-sand-400 after:transition-all after:duration-300 hover:after:w-full"
-            >
-              {item.label}
-            </a>
-          </li>
-        ))
-      }
-      <li>
-        <a href="/#contact" class="inline-flex items-center justify-center gap-2 rounded-lg bg-sand-500 px-6 py-3 text-sm font-semibold text-earth-700 transition-all duration-300 hover:bg-sand-400 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-sand-400 focus-visible:ring-offset-2 !rounded-full !px-5 !py-2 !text-xs !font-semibold !uppercase !tracking-wider">
-          Book Now
-        </a>
-      </li>
-    </ul>
+    <div class="flex flex-1 items-center justify-end gap-6">
+      <ul class="hidden items-center gap-1 lg:flex">
+        {
+          siteData.nav.map((item) => {
+            const isActive = currentPath === item.href || (item.href !== "/" && currentPath.startsWith(item.href));
+            return (
+              <li>
+                <a
+                  href={item.href}
+                  class={`rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 ${
+                    isActive
+                      ? "text-cfr-sand-200 bg-cfr-green-accent/20"
+                      : "text-cfr-sand-300 hover:text-cfr-sand-100 hover:bg-white/5"
+                  }`}
+                >
+                  {item.label}
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
 
-    <!-- Mobile hamburger -->
-    <button
-      id="menu-toggle"
-      class="relative z-50 flex h-10 w-10 items-center justify-center rounded-lg text-sand-200 md:hidden"
-      aria-label="Toggle navigation menu"
-      type="button"
-    >
-      <svg id="menu-open-icon" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-      </svg>
-      <svg id="menu-close-icon" class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-      </svg>
-    </button>
+      <div class="flex items-center gap-3">
+      <a href="/#contact" class="inline-flex items-center justify-center gap-2 rounded-full bg-cfr-sand-500 px-5 py-2 text-xs font-semibold uppercase tracking-wider text-cfr-earth-700 transition-all duration-300 hover:bg-cfr-sand-400 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-sand-400 focus-visible:ring-offset-2">
+        Book Now
+      </a>
+      <button
+        id="menu-toggle"
+        class="relative z-50 flex h-10 w-10 items-center justify-center rounded-lg text-cfr-sand-200 lg:hidden"
+        aria-label="Toggle navigation menu"
+        type="button"
+      >
+        <svg id="menu-open-icon" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+        </svg>
+        <svg id="menu-close-icon" class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    </div>
   </nav>
 
   <!-- Mobile menu overlay -->
   <div
     id="mobile-menu"
-    class="invisible fixed inset-0 z-40 flex flex-col items-center justify-center bg-cfr-green-dark/98 backdrop-blur-xl opacity-0 transition-all duration-500 md:hidden"
+    class="invisible fixed inset-0 z-40 flex flex-col items-center justify-center bg-cfr-green-dark/98 backdrop-blur-xl opacity-0 transition-all duration-500"
   >
-    <ul class="flex flex-col items-center gap-8">
+    <ul class="flex w-full max-w-xs flex-col items-stretch gap-3">
       {
-        siteData.nav.map((item, i) => (
+        siteData.nav.map((item, i) => {
+          const isActive = currentPath === item.href || (item.href !== "/" && currentPath.startsWith(item.href));
+          return (
           <li
-            class="mobile-nav-item translate-y-4 opacity-0 transition-all duration-500"
+            class="w-full mobile-nav-item translate-y-4 opacity-0 transition-all duration-500"
             style={`transition-delay: ${i * 80}ms`}
           >
             <a
               href={item.href}
-              class="text-2xl font-medium text-sand-200 transition-colors hover:text-white"
+              class={`block w-full rounded-xl px-6 py-4 text-center text-base font-semibold transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-sand-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cfr-green-dark ${
+                isActive
+                  ? "bg-cfr-green-accent text-cfr-sand-200 border border-cfr-sand-500/30"
+                  : "bg-cfr-green text-white border border-white/10 hover:bg-cfr-green-accent hover:border-white/20"
+              }`}
             >
               {item.label}
             </a>
           </li>
-        ))
+          );
+        })
       }
-      <li class="mt-4 mobile-nav-item translate-y-4 opacity-0 transition-all duration-500">
-        <a href="/#contact" class="inline-flex items-center justify-center gap-2 rounded-lg bg-sand-500 px-6 py-3 text-sm font-semibold text-earth-700 transition-all duration-300 hover:bg-sand-400 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-sand-400 focus-visible:ring-offset-2 !rounded-full !px-8 !py-3 !text-sm !font-semibold !uppercase !tracking-wider">
+      <li class="w-full mobile-nav-item translate-y-4 opacity-0 transition-all duration-500" style="transition-delay: 800ms">
+        <a href="/#contact" class="flex w-full items-center justify-center rounded-xl bg-cfr-sand-500 px-6 py-4 text-center text-base font-bold uppercase tracking-wider text-cfr-earth-700 transition-all duration-300 hover:bg-cfr-sand-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-sand-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cfr-green-dark">
           Book Now
         </a>
       </li>
@@ -109,18 +123,21 @@ import siteData from "../data/site.json";
   let isOpen = false;
 
   // Header scroll effect
-  let lastScroll = 0;
-  window.addEventListener("scroll", () => {
-    const y = window.scrollY;
-    if (y > 60) {
-      header.classList.add("bg-cfr-green-dark/95", "shadow-lg", "backdrop-blur-md");
-      header.classList.remove("bg-transparent");
-    } else {
-      header.classList.remove("bg-cfr-green-dark/95", "shadow-lg", "backdrop-blur-md");
-      header.classList.add("bg-transparent");
-    }
-    lastScroll = y;
-  });
+  const variant = header.dataset.variant;
+  if (variant === "transparent") {
+    let lastScroll = 0;
+    window.addEventListener("scroll", () => {
+      const y = window.scrollY;
+      if (y > 60) {
+        header.classList.add("bg-cfr-green-dark/95", "shadow-lg", "backdrop-blur-md");
+        header.classList.remove("bg-transparent");
+      } else {
+        header.classList.remove("bg-cfr-green-dark/95", "shadow-lg", "backdrop-blur-md");
+        header.classList.add("bg-transparent");
+      }
+      lastScroll = y;
+    });
+  }
 
   // Mobile menu toggle
   toggle.addEventListener("click", () => {

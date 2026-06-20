@@ -1,0 +1,251 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { getCollection } from "astro:content";
+import siteData from "../../data/site.json";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+const { title, description, pubDate, author, image, tags } = post.data;
+
+const siteUrl = Astro.site || new URL("https://corbett.life");
+const pageUrl = new URL(Astro.url.pathname, siteUrl).href;
+const imageUrl = image ? new URL(image, siteUrl).href : "";
+
+const blogPostingSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: title,
+  description,
+  image: imageUrl,
+  author: {
+    "@type": "Organization",
+    name: author || siteData.site.name,
+    url: siteData.site.url,
+  },
+  publisher: {
+    "@type": "Organization",
+    name: siteData.site.name,
+    logo: {
+      "@type": "ImageObject",
+      url: new URL("/logos/CFR_logo_v2.svg", siteUrl).href,
+      width: 1280,
+      height: 1024,
+    },
+  },
+  datePublished: pubDate.toISOString(),
+  dateModified: pubDate.toISOString(),
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": pageUrl,
+  },
+  };
+
+const faqPages = {
+  "complete-guide-to-jim-corbett-safari-booking": [
+    { name: "What are the different safari zones in Jim Corbett National Park?", text: "Jim Corbett National Park is divided into several tourism zones, each offering unique landscapes and wildlife experiences. The main zones are Dhikala (the largest, with vast grasslands and riverbeds), Bijrani (accessible from Ramnagar with excellent wildlife viewing), Jhirna (open year-round), Dhela (diverse landscapes), Garjia (newer with growing wildlife activity), and the Sitabani Forest Area (popular for nature walks and birdwatching)." },
+    { name: "Which safari zone is best for tiger sightings?", text: "Dhikala Zone is considered the crown jewel of Corbett and offers some of the best opportunities for tiger sightings, with its vast grasslands and riverbeds supporting high wildlife density. Bijrani Zone is another top choice, known for good tiger movement and dense forests. For visitors specifically seeking tiger sightings, both Dhikala and Bijrani are preferred zones." },
+    { name: "How much does a Jim Corbett safari cost in 2026?", text: "For Indian visitors, a standard jeep safari generally costs between ₹4,000 and ₹8,000 per vehicle, depending on the zone and season. This includes forest entry fees, vehicle charges, guide fees, and online booking charges. Canter safaris, available primarily in the Dhikala Zone, are usually more economical per person." },
+    { name: "How do I book a Jim Corbett safari?", text: "Booking involves four steps: first, select your preferred safari zone based on your interests; second, choose your safari date (permits are limited and sell out quickly, especially during weekends and holidays); third, provide visitor details including full name, age, gender, and valid identification; and fourth, complete payment. The original ID used during booking must be carried during the safari. Booking several weeks in advance is strongly recommended." },
+    { name: "When should I book my Corbett safari?", text: "During peak season from October to February, book 30 to 60 days in advance. For long weekends and holidays, book even earlier. In summer from March to June, book 15 to 30 days ahead. Availability is generally easier during monsoon season from July to September." },
+    { name: "Which safari zone is open year-round?", text: "The Jhirna Zone remains open throughout the year, making it a popular choice during seasons when other zones may be closed, such as the monsoon season. This makes it a reliable option for visitors travelling during the rainy months when many other zones are inaccessible." },
+    { name: "What identification is required for the safari?", text: "The forest department requires valid identification details during booking, including full name, age, and gender of each visitor. The original identification document used during the booking process must be carried and presented during the safari." },
+  ],
+  "best-time-to-visit-jim-corbett-national-park": [
+    { name: "What is the best time to visit Jim Corbett National Park for wildlife sightings?", text: "March to June is considered the best period for wildlife sightings. As temperatures rise during summer, animals gather around water sources, making them more visible. Early morning and evening safaris during this season offer excellent opportunities to spot elephants, deer, and other wildlife." },
+    { name: "Which season offers the most pleasant weather in Corbett?", text: "October to February is widely considered the best time for comfortable weather. Day temperatures typically range between 15°C and 25°C, with pleasantly chilly mornings and evenings. The post-monsoon landscape is lush and vibrant, making it ideal for safaris, sightseeing, and outdoor activities." },
+    { name: "When is the best time for birdwatching in Corbett?", text: "Birdwatching enthusiasts should plan their visit between November and February. During this period, the region hosts a variety of resident and migratory bird species. Early mornings are especially rewarding, with opportunities to observe kingfishers, woodpeckers, barbets, hornbills, eagles, and many other species." },
+    { name: "Is the monsoon season a good time to visit Corbett?", text: "Yes, the monsoon season from July to September transforms Corbett into a lush green paradise with stunning landscapes and fewer crowds. However, some safari zones may remain closed during parts of this season. It is best suited for visitors seeking relaxation, scenic beauty, and a peaceful nature retreat." },
+    { name: "What is the temperature range in Corbett during summer?", text: "During the summer season from March to June, temperatures in Corbett can range between 25°C and 40°C. Despite the heat, early morning and evening safaris remain enjoyable, and this period offers some of the best wildlife encounters of the year." },
+    { name: "When should I visit Corbett for a quiet, less crowded trip?", text: "The monsoon season from July to September offers the most peaceful experience with fewer tourists. The rain-washed forests, abundant streams, and tranquil atmosphere make it ideal for nature lovers and those looking to unwind away from crowds." },
+  ],
+  "the-untold-corbett": [
+    { name: "What was the original name of Jim Corbett National Park?", text: "When established in 1936, the park was originally called Hailey National Park, named after Sir Malcolm Hailey, the Governor of the United Provinces. It was later renamed Ramganga National Park before finally becoming Jim Corbett National Park in 1957." },
+    { name: "When was Jim Corbett National Park established?", text: "Jim Corbett National Park was established in 1936 as India's first national park, decades before most other famous reserves were created. This makes it not just a wildlife destination but also a landmark in India's conservation history." },
+    { name: "Was Jim Corbett a hunter or a conservationist?", text: "He was both. Jim Corbett hunted man-eating tigers and leopards that threatened local communities, but he strongly opposed indiscriminate hunting. He spent years advocating for wildlife protection and warning against habitat destruction, making him one of India's earliest conservationists." },
+    { name: "Why is the Ramganga River important for Corbett?", text: "The Ramganga River is the real lifeline of the park. It sustains countless species including elephants, crocodiles, otters, fish, and hundreds of bird species. During summer, wildlife sightings often concentrate around the river and its reservoirs." },
+    { name: "Where can I visit Jim Corbett's former home?", text: "Jim Corbett's historic residence is located in Kaladhungi and has been converted into a museum. It showcases his personal belongings, photographs, hunting memorabilia, and stories from his life, offering a fascinating glimpse into the man behind the legend." },
+    { name: "Are there historic forest rest houses in Corbett?", text: "Yes, scattered across the reserve are historic forest rest houses dating back to the British era. These structures were originally built for forest officers and naturalists, and staying in one feels like stepping back into a different era of Indian wildlife exploration." },
+    { name: "What wildlife can visitors see beyond tigers in Corbett?", text: "Visitors may encounter elephants, leopards, crocodiles, gharials, barking deer, sambar, hog deer, otters, and more than 600 species of birds. Corbett is also considered one of the finest birdwatching destinations in northern India." },
+  ],
+  "the-untold-story-of-jim-corbett": [
+    { name: "How many people did the Champawat Tigress kill?", text: "The Champawat Tigress is believed to have claimed approximately 436 lives, making her the deadliest man-eater in recorded history. Jim Corbett tracked and killed the tigress in 1907 after she had terrorised villages in Nepal and the Kumaon region of India." },
+    { name: "What made the Panar Leopard so difficult to hunt?", text: "The Panar Leopard was particularly dangerous because it hunted at night, entering villages silently and lifting victims from their homes. Leopards are naturally elusive and far harder to track than tigers. Corbett spent countless nights waiting in trees and studying attack patterns before finally ending its deadly career." },
+    { name: "How many major man-eaters did Jim Corbett hunt?", text: "The article covers five major man-eaters hunted by Corbett: the Champawat Tigress (436 victims), the Panar Leopard (400 deaths), the Chowgarh Tigress and her cub (64 deaths), the Rudraprayag Leopard (125+ deaths over eight years), and the Thak Tigress (four deaths), which was his final man-eater." },
+    { name: "What made Jim Corbett's hunting methods unique?", text: "Unlike most hunters, Corbett relied on superior understanding rather than superior weapons. He could read tiny details in the jungle such as fresh paw prints, broken grass stems, and alarm calls from birds. He studied animal psychology, often hunted alone, and would wait motionless on a machan for entire nights or even days for a single opportunity." },
+    { name: "Did Jim Corbett eventually become a conservationist?", text: "Yes, Jim Corbett evolved from a hunter into one of India's earliest and most influential conservationists. He repeatedly emphasised that most man-eaters became dangerous because of injuries, old age, or human interference. His experiences convinced him that India's wildlife needed protection, and he challenged the idea that tigers were naturally bloodthirsty killers." },
+    { name: "What books did Jim Corbett write?", text: "Jim Corbett wrote several bestselling books including Man-Eaters of Kumaon, The Temple Tiger, and Jungle Lore. These books introduced readers worldwide to the beauty and complexity of India's forests and helped inspire future conservation efforts." },
+    { name: "How did the Rudraprayag Leopard terrorise the region?", text: "The Rudraprayag Leopard terrorised pilgrims travelling to the sacred shrines of Kedarnath and Badrinath for nearly eight years. Blamed for more than 125 deaths, it seemed almost supernatural — traps failed, baits failed, and hunting parties failed. Corbett spent months studying its behaviour before finally succeeding." },
+  ],
+  "things-to-do-jim-corbett": [
+    { name: "What are the top attractions near Ramnagar besides safaris?", text: "Beyond safaris, visitors can enjoy birdwatching, nature walks through forest trails, visits to religious sites like Garjiya Devi Temple and Hanuman Dham, scenic views along the Kosi River, exploration of local village life, organic farming experiences, and tasting traditional Kumaoni cuisine." },
+    { name: "Which religious sites can I visit near Ramnagar?", text: "Key religious sites include Garjiya Devi Temple (perched on a rock formation along the Kosi River), Hanuman Dham (featuring a large idol), Sitabani Temple (set within a scenic forest area), Kainchi Dham (ashram of Neem Karoli Baba, 2–2.5 hours away), and Naina Devi Temple (in Nainital, roughly 2 hours from Ramnagar)." },
+    { name: "What local dishes should I try in the Corbett region?", text: "Traditional Kumaoni dishes to try include Aloo Ke Gutke, Bhatt Ki Churkani, Dubke, Kumaoni Raita, Chainsoo, Mutton Bhutuwa, and Jhangora Kheer. These dishes reflect a simple, wholesome culinary heritage deeply connected to the land." },
+    { name: "Is birdwatching good near Ramnagar?", text: "Yes, the forests and riverbanks surrounding Ramnagar are a paradise for bird lovers. The region is home to hundreds of resident and migratory bird species, making it one of North India's premier birdwatching destinations. Early mornings are particularly rewarding." },
+    { name: "Can I experience organic farming near Corbett?", text: "Yes, organic farming experiences are available near Ramnagar. Visitors can learn about sustainable agriculture, seasonal crops, and farm-to-table living. These experiences offer a refreshing change from urban life and are enjoyable for both adults and children." },
+    { name: "What makes the Kosi River special?", text: "The Kosi River flows through the Corbett landscape and adds to the region's natural charm. Visitors can enjoy scenic views, watch birds, or relax along the riverbanks. The river is especially beautiful during sunrise and sunset when changing light creates spectacular reflections across the water." },
+    { name: "How can I experience local culture near Ramnagar?", text: "The villages surrounding Ramnagar offer opportunities to experience authentic Kumaoni culture. Visitors can interact with local communities, learn about traditional farming practices, explore rural landscapes, and savour traditional mountain cuisine for an immersive cultural experience." },
+  ],
+  "farmstay-vs-resort": [
+    { name: "What is the main difference between a farmstay and a resort?", text: "The main difference is scale and philosophy. A farmstay is a small, intimate property (typically 4–6 rooms) where guests experience life on a working farm with personalised hospitality, home-style cooking, and direct connection with nature. A resort is a large commercial establishment with extensive facilities, multiple rooms, standardised service, and structured activities." },
+    { name: "Is a farmstay cheaper than a resort?", text: "Farmstays often offer better value for money. While the room rate may be comparable to mid-range resorts, farmstay pricing is typically more transparent with fewer hidden charges. Meals are often included or reasonably priced, and the personalised service adds value that is difficult to quantify." },
+    { name: "Do farmstays have modern amenities like Wi-Fi and air conditioning?", text: "Yes. Boutique farmstays like Corbett Foothills Retreat offer all essential modern amenities including high-speed Wi-Fi, air conditioning, modern attached bathrooms with hot water, and daily housekeeping." },
+    { name: "Can I go on a jungle safari while staying at a farmstay?", text: "Absolutely. Corbett Foothills Retreat is located just 8 kilometres from Jim Corbett National Park, making it an excellent base for safari excursions. We provide safari planning assistance and can help arrange jeep safaris." },
+    { name: "Are farmstays suitable for children?", text: "Yes, farmstays are excellent for children. The open spaces, farm animals, nature walks, and hands-on activities provide a richer experience than structured kids' clubs. Children learn about organic farming and develop an appreciation for nature." },
+    { name: "What kind of food is served at a farmstay?", text: "Farmstay meals are home-style, freshly prepared, and often use ingredients grown on the property. At Corbett Foothills Retreat, we serve traditional Kumaoni cuisine and familiar Indian dishes made with seasonal vegetables from our organic farm." },
+    { name: "Do farmstays offer activities beyond farming?", text: "Yes. Guests enjoy guided nature walks, birdwatching, bonfire evenings, forest stream picnics, farm tours, and safari planning assistance. Activities are flexible and tailored to guest preferences." },
+    { name: "How do I choose between a farmstay and a resort for my Corbett trip?", text: "If you value personalised service, peace and quiet, authentic local experiences, farm-to-table food, pet-friendly policies, and a deep connection with nature, choose a boutique farmstay. If you prefer large swimming pools and scheduled entertainment, a resort may suit you." },
+  ],
+  "how-to-reach": [
+    { name: "What is the best way to reach Corbett Foothills Retreat from Delhi?", text: "Driving is the most flexible and takes 5.5–6.5 hours via Moradabad and Kashipur. The overnight Ranikhet Express train to Ramnagar is comfortable and economical. Buses from Anand Vihar ISBT and Kashmere Gate ISBT are budget-friendly but take longer." },
+    { name: "Which is the nearest railway station to Corbett Foothills Retreat?", text: "Ramnagar Railway Station is the nearest railhead, located just 8 kilometres from the retreat. It is well-connected to Delhi via trains like the Ranikhet Express and Corbett Park Link Express. Kathgodam (70 km) is an alternative with more frequent train services." },
+    { name: "What is the closest airport to Corbett Foothills Retreat?", text: "Pantnagar Airport (PGH) is the closest, located 65 kilometres away with flights from Delhi. Taxis are available from the airport for the 1.5-hour drive to the retreat." },
+    { name: "Can I reach Corbett Foothills Retreat without a car?", text: "Yes. Take a train to Ramnagar Railway Station or a bus to Ramnagar bus stand, both approximately 8 kilometres from the retreat. Taxis and auto-rickshaws are readily available for the short onward journey." },
+    { name: "Is the road from Delhi to Corbett Foothills Retreat in good condition?", text: "Yes, the route is well-maintained for most of the journey. NH-9 from Delhi to Kashipur is a good highway suitable for all vehicle types. During monsoon season, check local conditions." },
+    { name: "Does Corbett Foothills Retreat offer pickup from the railway station or airport?", text: "We can arrange pickup from Ramnagar Railway Station, Ramnagar bus stand, or Pantnagar Airport upon prior request. Please contact us with your travel details at least 48 hours before arrival." },
+    { name: "What should I pack for my stay at Corbett Foothills Retreat?", text: "Pack comfortable clothing suitable for the season. Light cottons for summer, warm layers for winter, and rain gear for monsoon. Comfortable walking shoes, insect repellent, sunscreen, a torch, and binoculars for birdwatching are recommended." },
+    { name: "How far is Corbett Foothills Retreat from Jim Corbett National Park?", text: "The retreat is located just 8 kilometres from the entry gates of Jim Corbett National Park and 50 metres from the forest boundary, making it an ideal base for safari excursions." },
+  ],
+  "why-choose-a-boutique-stay-near-jim-corbett": [
+    { name: "What makes a boutique stay different from a large resort near Corbett?", text: "Unlike large hotels with hundreds of rooms and standardised guest experiences, boutique stays focus on intimacy, character, and personalised hospitality. Guests are welcomed as individuals rather than room numbers, with attention given to comfort, preferences, and meaningful interactions." },
+    { name: "Are boutique stays near Jim Corbett pet-friendly?", text: "Many boutique properties welcome pets, with some like Corbett Foothills Retreat allowing pets without any extra charges. This makes boutique stays an excellent choice for travellers who want to enjoy their holiday without leaving their furry companions behind." },
+    { name: "What kind of food can I expect at a boutique stay?", text: "Rather than mass-produced buffet spreads, boutique stays typically offer freshly prepared meals made on prior order. This approach focuses on quality over quantity, with opportunities to enjoy local delicacies, traditional Kumaoni flavours, and à la carte dishes made with fresh ingredients." },
+    { name: "Are boutique stays more expensive than large resorts?", text: "Not necessarily. Boutique properties often provide exceptional value by focusing resources on guest comfort, personalised service, and meaningful experiences rather than extravagant infrastructure. Many travellers find boutique stays offer better value for money without compromising comfort." },
+    { name: "Can I experience local Kumaoni cuisine at a boutique stay?", text: "Yes, boutique stays are well-positioned to introduce guests to regional cuisines. From traditional Kumaoni preparations to seasonal ingredients sourced locally, guests can enjoy flavours that connect them more deeply with Uttarakhand's rich culinary heritage." },
+    { name: "Why should I choose a boutique stay for my Corbett trip?", text: "A boutique stay offers personalised hospitality, freshly prepared food, peaceful surroundings, authentic local experiences, and the freedom to enjoy nature without unnecessary crowds. It transforms a simple holiday into a memorable escape with a stronger connection to the landscape and culture." },
+  ],
+};
+---
+
+
+
+<MainLayout title={title} description={description} breadcrumbs={[{name: "Blogs", path: "/blogs"}, {name: title}]}>
+  <Fragment slot="head">
+    {image && <link rel="preload" href={image} as="image" fetchpriority="high" />}
+    <meta property="article:published_time" content={pubDate.toISOString()} />
+    <meta property="article:author" content={author || siteData.site.name} />
+    {tags.slice(0, 4).map((tag) => (
+      <meta property="article:tag" content={tag} />
+    ))}
+  </Fragment>
+  <script type="application/ld+json" set:html={JSON.stringify(blogPostingSchema)} />
+  {faqPages[post.slug] && (
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqPages[post.slug].map((faq) => ({
+        "@type": "Question",
+        name: faq.name,
+        acceptedAnswer: { "@type": "Answer", text: faq.text },
+      })),
+    })} />
+  )}
+  <Fragment slot="header">
+    <Header />
+  </Fragment>
+
+  <section class="relative flex min-h-[40vh] items-end overflow-hidden pt-56">
+    <div class="absolute inset-0 bg-cfr-green-dark"></div>
+    <div class="absolute inset-0 bg-hero-pattern"></div>
+    <div class="absolute inset-0 bg-leaf-pattern opacity-30"></div>
+    <div class="relative z-10 w-full bg-cfr-green-dark">
+      <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8 lg:pb-16">
+      <div class="max-w-3xl">
+        <a href="/blogs" class="inline-flex items-center gap-1 text-xs uppercase tracking-widest text-cfr-sand-300 hover:text-white transition-colors mb-4">
+          <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          </svg>
+          Back to Blogs
+        </a>
+        <h1 class="font-display text-4xl font-bold text-white sm:text-5xl lg:text-6xl">
+          {title}
+        </h1>
+        {description && (
+          <p class="mt-4 max-w-xl text-lg text-white">
+            {description}
+          </p>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <article class="bg-cfr-cream-dark py-16 sm:py-24">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+      {tags.length > 0 && (
+        <div class="mb-4 flex flex-wrap gap-2">
+          {tags.map((tag) => (
+            <span class="rounded-full bg-cfr-green-accent/10 px-3 py-1 text-xs font-medium text-cfr-green-accent">
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
+
+      <div class="mt-4 flex items-center gap-4 text-sm text-cfr-earth-500">
+        <span>{author}</span>
+        <span class="text-cfr-earth-300">&middot;</span>
+        <time datetime={pubDate.toISOString()}>
+          {pubDate.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+        </time>
+      </div>
+
+      {image && (
+        <div class="mt-8 overflow-hidden rounded-2xl">
+          <img
+            src={image}
+            alt={`Hero image for ${title}`}
+            class="w-full"
+            loading="eager"
+            fetchpriority="high"
+          />
+        </div>
+      )}
+
+      <div class="mt-10 prose prose-lg prose-earth max-w-none">
+        <Content />
+      </div>
+
+      <div class="mt-12 border-t border-cfr-earth-200 pt-8">
+        <a
+          href="/blogs"
+          class="inline-flex items-center gap-2 text-sm font-semibold text-cfr-green-accent hover:text-cfr-green-dark transition-colors"
+        >
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          </svg>
+          Read More Blogs
+        </a>
+      </div>
+
+      <div class="mt-8 rounded-2xl bg-cfr-green-dark p-8 text-center sm:p-12">
+        <h3 class="font-display text-2xl font-bold text-white sm:text-3xl">
+          Plan Your Stay at Corbett Foothills Retreat
+        </h3>
+        <p class="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-white/80">
+          Experience the tranquility of a boutique farmstay with personalised hospitality, organic farm-to-table dining, and easy access to Jim Corbett National Park.
+        </p>
+        <div class="mt-6 flex flex-wrap justify-center gap-4">
+          <a href="/accommodation" class="inline-flex items-center justify-center gap-2 rounded-full bg-cfr-green-accent px-8 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark hover:shadow-lg hover:-translate-y-0.5">
+            View Accommodation
+          </a>
+          <a href="/contact" class="inline-flex items-center justify-center gap-2 rounded-full border-2 border-cfr-sand-500 px-8 py-3 text-sm font-semibold text-cfr-sand-200 transition-all duration-300 hover:bg-cfr-sand-500/20">
+            Book Your Stay
+          </a>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <Fragment slot="footer">
+    <Footer />
+  </Fragment>
+</MainLayout>

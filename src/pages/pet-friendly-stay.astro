@@ -1,0 +1,470 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import siteData from "../data/site.json";
+
+const siteUrl = Astro.site || new URL("https://corbett.life");
+const pageUrl = new URL("/pet-friendly-stay", siteUrl).href;
+
+const comparisonRows = [
+  { feature: "Pet policy", ours: "Pets welcome with no extra charges", other: "Often restricted or charged extra" },
+  { feature: "Open spaces", ours: "Expansive lawns, gardens, and farm grounds", other: "Limited outdoor access for pets" },
+  { feature: "Accommodation", ours: "Pet-friendly rooms with easy outdoor access", other: "Pets often not allowed inside rooms" },
+  { feature: "Forest access", ours: "50 metres from forest boundary", other: "Far from natural outdoor spaces" },
+  { feature: "Farm animals", ours: "Resident farm animals for supervised interaction", other: "No farm or animal interaction" },
+  { feature: "Nature walks", ours: "Guided walks suitable for leashed dogs", other: "No pet-inclusive activity options" },
+  { feature: "Staff training", ours: "Staff comfortable and experienced with pets", other: "Staff may be unfamiliar with pets" },
+  { feature: "Quiet environment", ours: "Intimate 6-room property, minimal noise", other: "Crowded, loud, stressful for pets" },
+  { feature: "Flexibility", ours: "Flexible meal and activity schedules", other: "Fixed schedules, limited exceptions" },
+  { feature: "Outdoor dining", ours: "Pet-friendly outdoor seating areas", other: "Pets restricted from dining areas" },
+];
+---
+
+<MainLayout
+  title="Pet-Friendly Stay Near Jim Corbett – Corbett Foothills Retreat"
+  description="Looking for a pet-friendly stay near Jim Corbett? Corbett Foothills Retreat welcomes dogs and pets with open spaces, nature walks, and personalised hospitality at the forest edge."
+  breadcrumbs={[{name: "Pet-Friendly Stay"}]}
+>
+  <Fragment slot="head">
+    <meta property="og:title" content="Pet-Friendly Stay Near Jim Corbett – Corbett Foothills Retreat" />
+    <meta property="og:description" content="Looking for a pet-friendly stay near Jim Corbett? Corbett Foothills Retreat welcomes dogs and pets with open spaces, nature walks, and personalised hospitality at the forest edge." />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:image" content={new URL("/images/live-1.webp", siteUrl).href} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Pet-Friendly Stay Near Jim Corbett – Corbett Foothills Retreat" />
+    <meta name="twitter:description" content="Welcome dogs and pets at Corbett Foothills Retreat — open lawns, nature walks, pet-friendly rooms, and personalised hospitality near Jim Corbett National Park." />
+    <meta name="twitter:image" content={new URL("/images/live-1.webp", siteUrl).href} />
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: "Pet-Friendly Stay Near Jim Corbett National Park",
+      description: "A complete guide to pet-friendly accommodation at Corbett Foothills Retreat — open spaces, nature walks with your dog, pet-friendly rooms, and tips for travelling to Corbett with pets.",
+      author: { "@type": "Organization", name: "Corbett Foothills Retreat" },
+      publisher: { "@type": "Organization", name: "Corbett Foothills Retreat", logo: { "@type": "ImageObject", url: new URL("/logos/CFR_logo_v2.svg", siteUrl).href } },
+      datePublished: "2026-06-19",
+      dateModified: "2026-06-19",
+      mainEntityOfPage: { "@type": "WebPage", "@id": pageUrl },
+      image: new URL("/images/live-1.webp", siteUrl).href,
+    })} />
+  </Fragment>
+  <Fragment slot="header">
+    <Header />
+  </Fragment>
+
+  <section class="relative flex min-h-[40vh] items-end overflow-hidden pt-56">
+    <div class="absolute inset-0 bg-cfr-green-dark"></div>
+    <div class="absolute inset-0 bg-hero-pattern"></div>
+    <div class="absolute inset-0 bg-leaf-pattern opacity-30"></div>
+    <div class="relative z-10 w-full bg-cfr-green-dark">
+      <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8 lg:pb-16">
+        <div class="max-w-3xl">
+          <a href="/" class="mb-4 inline-flex items-center gap-1 text-xs uppercase tracking-widest text-cfr-sand-300 transition-colors hover:text-white">
+            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+            Back to Home
+          </a>
+          <h1 class="font-display text-4xl font-bold text-white sm:text-5xl lg:text-6xl">
+            Pet-Friendly Stay Near Jim Corbett
+          </h1>
+          <p class="mt-4 max-w-xl text-lg text-white">
+            At Corbett Foothills Retreat, your pet is not just allowed — they are welcomed with the same warmth and care as every guest. Open lawns, forest-edge walks, farm animals, and a peaceful environment make this the ideal pet-friendly getaway near Jim Corbett National Park.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cfr-cream-dark py-16 sm:py-24">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display text-3xl font-bold text-cfr-green-dark sm:text-4xl">Why Travel With Pets?</h2>
+        <p class="mt-6 text-base leading-relaxed text-cfr-earth-600">
+          For millions of pet owners, leaving a beloved dog or cat behind when going on holiday is one of the hardest parts of travel. Kennels, pet sitters, and boarding facilities can be stressful for animals and expensive for owners. The anxiety of wondering whether your pet is comfortable, well-exercised, and happy can overshadow even the most carefully planned vacation.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-cfr-earth-600">
+          The alternative — travelling with your pet — transforms the holiday into a shared adventure. Watching your dog discover new scents in the forest, run freely across open lawns, and curl up contentedly by the bonfire at the end of a day of exploration is a joy that pet owners understand deeply. Travel becomes not just about your own relaxation but about creating happy memories together with the animals who are part of your family.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-cfr-earth-600">
+          However, not all accommodation is genuinely pet-friendly. Many properties that advertise themselves as welcoming to pets impose restrictions — confining animals to specific rooms, charging premium fees, or limiting access to most areas of the property. Finding a place that truly embraces pets as guests rather than tolerating them as exceptions requires careful research. Our <a href="/blogs/farmstay-vs-resort" class="text-cfr-green-accent underline hover:text-cfr-green-dark">farmstay vs resort comparison</a> explains why boutique properties like ours offer a fundamentally different experience for pet owners.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-cfr-earth-600">
+          <a href="/accommodation" class="text-cfr-green-accent underline hover:text-cfr-green-dark font-semibold">View our pet-friendly rooms</a> and plan a holiday every member of your family will love.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cfr-green-dark py-16 sm:py-24">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display text-3xl font-bold text-white sm:text-4xl">What Makes Corbett Foothills Retreat Pet-Friendly?</h2>
+        <p class="mt-6 text-base leading-relaxed text-white">
+          Being truly pet-friendly means designing the entire guest experience around the reality that pets are family. At Corbett Foothills Retreat, this philosophy shapes everything from the layout of the property to the training of our staff and the flexibility of our schedules.
+        </p>
+
+        <div class="mt-10 space-y-3">
+          <div class="flex items-start gap-3 rounded-xl border border-white/10 bg-white/5 p-4">
+            <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-cfr-green-accent text-sm font-bold text-white">1</div>
+            <div>
+              <p class="text-sm font-semibold text-white">No Extra Charges for Pets</p>
+              <p class="mt-1 text-sm text-white/70">We do not charge additional fees or deposits for pets. Your pet stays as a guest, not as an add-on. This is a deliberate choice — we believe welcoming pets is part of our hospitality, not a revenue opportunity.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3 rounded-xl border border-white/10 bg-white/5 p-4">
+            <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-cfr-green-accent text-sm font-bold text-white">2</div>
+            <div>
+              <p class="text-sm font-semibold text-white">Pet-Friendly Rooms</p>
+              <p class="mt-1 text-sm text-white/70">All our rooms welcome pets. They are designed with easy access to outdoor areas so your pet can step outside without navigating long corridors or shared indoor spaces. Rooms have tiled floors that are easy to clean and comfortable bedding where your pet can settle in.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3 rounded-xl border border-white/10 bg-white/5 p-4">
+            <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-cfr-green-accent text-sm font-bold text-white">3</div>
+            <div>
+              <p class="text-sm font-semibold text-white">Staff Trained for Pets</p>
+              <p class="mt-1 text-sm text-white/70">Our team is experienced with animals and genuinely enjoys having pets on the property. They know how to approach unfamiliar dogs, read body language, and make both pets and their owners feel at ease. Many of our staff have their own pets at home.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3 rounded-xl border border-white/10 bg-white/5 p-4">
+            <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-cfr-green-accent text-sm font-bold text-white">4</div>
+            <div>
+              <p class="text-sm font-semibold text-white">Flexible Schedules</p>
+              <p class="mt-1 text-sm text-white/70">Pets do not operate on fixed timetables, and neither do we. Need a late checkout because your dog is napping peacefully? Want an early morning walk before breakfast? Our flexible approach means your schedule adapts to your pet, not the other way around.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3 rounded-xl border border-white/10 bg-white/5 p-4">
+            <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-cfr-green-accent text-sm font-bold text-white">5</div>
+            <div>
+              <p class="text-sm font-semibold text-white">Quiet, Intimate Environment</p>
+              <p class="mt-1 text-sm text-white/70">With only six rooms, the property is naturally quiet and free from the crowds, loud noises, and chaotic energy that can stress anxious pets. The peaceful atmosphere helps both pets and owners relax fully into their holiday.</p>
+            </div>
+          </div>
+        </div>
+
+        <p class="mt-8 text-base leading-relaxed text-white">
+          These features are part of a broader commitment to personalised hospitality. For more on our approach, explore our <a href="/accommodation" class="text-cfr-sand-300 underline hover:text-white">accommodation options</a> and see how each room is designed for comfort and convenience.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cfr-cream-dark py-16 sm:py-20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display text-3xl font-bold text-cfr-green-dark sm:text-4xl">Open Spaces and Safe Exploration</h2>
+        <p class="mt-6 text-base leading-relaxed text-cfr-earth-600">
+          One of the greatest gifts you can give a city dog is space. At Corbett Foothills Retreat, that is exactly what they get. The property features expansive lawns, garden paths, and open farm grounds where your pet can run, sniff, and explore to their heart's content. Unlike cramped hotel rooms or restricted resort grounds, our farmstay offers the kind of freedom that makes pets visibly happier within minutes of arrival.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-cfr-earth-600">
+          The property is enclosed and secure, allowing supervised off-leash time in designated areas. The lawns are well-maintained and free of harmful plants or chemicals, so you can let your pet roam without worry. The open layout also means you can keep an eye on your pet from the veranda, the outdoor dining area, or your room's private entrance.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-cfr-earth-600">
+          The farm section of the property adds another dimension of exploration. Your leashed pet can accompany you on morning garden walks, meet the farm animals (if they are comfortable around goats and chickens), and explore the herb garden with its fascinating scents. This variety of environments — lawn, garden, farm, and forest edge — means every day brings new stimulation and new adventures for your canine companion.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-cfr-earth-600">
+          Browse our <a href="/gallery" class="text-cfr-green-accent underline hover:text-cfr-green-dark">photo gallery</a> to see the open spaces and natural surroundings that make this property so well-suited for pets.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cfr-green-dark py-16 sm:py-20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display text-3xl font-bold text-white sm:text-4xl">Pet-Friendly Rooms and Amenities</h2>
+        <p class="mt-6 text-base leading-relaxed text-white">
+          Every room at Corbett Foothills Retreat is pet-friendly, meaning there are no restricted categories or upgraded rooms required for guests travelling with animals. Our room design takes pet comfort into account without compromising on the quality of your own experience.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-white">
+          Rooms feature easy-access ground-floor entrances so your pet can step directly outside. The flooring is practical for pet owners — easy to clean and resistant to scratches from enthusiastic paws. Each room has space for a pet bed or blanket in a quiet corner where your dog can retreat when they need rest. Large windows and doors let in natural light and fresh air, and the proximity to outdoor areas means you never have to walk your pet through busy indoor spaces.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-white">
+          We provide fresh water bowls on request and can prepare simple, pet-safe meals if needed. Outdoor areas have shaded spots where your pet can rest during the warmer parts of the day. After a day of exploration, the quiet, comfortable rooms offer a peaceful environment where both you and your pet can sleep soundly, undisturbed by the noise of large hotels or busy roads.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-white">
+          For detailed information on room types, sizes, and features, visit our <a href="/accommodation" class="text-cfr-sand-300 underline hover:text-white">accommodation page</a>. You can also check our <a href="/tariff" class="text-cfr-sand-300 underline hover:text-white">rates and pricing</a> for current seasonal offers.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cfr-cream-dark py-16 sm:py-20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display text-3xl font-bold text-cfr-green-dark sm:text-4xl">Nature Walks With Your Pet</h2>
+        <p class="mt-6 text-base leading-relaxed text-cfr-earth-600">
+          One of the most rewarding aspects of a pet-friendly stay at Corbett Foothills Retreat is exploring the natural surroundings with your dog. The property sits at the edge of the Corbett forest, with nature trails that are ideal for leashed walks with your canine companion. Early mornings are especially magical — the forest is alive with birdsong, the air is cool and fresh, and the trails are quiet and uncrowded.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-cfr-earth-600">
+          Guided nature walks can be arranged where your dog is welcome on a leash. Our naturalists are comfortable with dogs and understand how to include them in the experience. Your pet will encounter a world of new scents — wild herbs, animal tracks, forest flowers — that provide mental stimulation far beyond what a city park can offer. The walks are paced gently and can be adjusted to your dog's fitness level and interest.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-cfr-earth-600">
+          For safety, it is important to keep your pet on a leash when walking near the forest boundary. Wildlife in the area includes deer, wild boars, and occasionally leopards and tigers. A leashed dog is safe, and responsible walking ensures that both wildlife and your pet remain undisturbed. The retreat also has on-leash walking paths around the property perimeter and farm boundaries that offer variety without venturing deep into the forest.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-cfr-earth-600">
+          Nature walks and other outdoor activities are part of the broader <a href="/experiences" class="text-cfr-green-accent underline hover:text-cfr-green-dark">experiences at Corbett Foothills Retreat</a>. Many of these can be enjoyed alongside your pet with appropriate precautions.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cfr-green-dark py-16 sm:py-20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display text-3xl font-bold text-white sm:text-4xl">Tips for Travelling to Corbett With Dogs</h2>
+        <p class="mt-6 text-base leading-relaxed text-white">
+          A well-planned journey makes all the difference when travelling with pets. Here are practical tips to ensure a smooth trip to Corbett Foothills Retreat with your dog.
+        </p>
+
+        <div class="mt-8 space-y-6">
+          <div class="rounded-xl border border-white/10 bg-white/5 p-5">
+            <h3 class="font-display text-base font-bold text-cfr-sand-200">Before You Travel</h3>
+            <ul class="mt-3 space-y-2">
+              <li class="flex items-start gap-3 text-sm text-white/80">
+                <svg class="mt-0.5 h-4 w-4 shrink-0 text-cfr-green-accent" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                <span>Visit your veterinarian for a pre-travel health check-up and ensure vaccinations are up to date.</span>
+              </li>
+              <li class="flex items-start gap-3 text-sm text-white/80">
+                <svg class="mt-0.5 h-4 w-4 shrink-0 text-cfr-green-accent" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                <span>Pack a pet travel kit: food, treats, portable water bowl, leash, collar with ID tag, waste bags, medication, and a familiar blanket or bed.</span>
+              </li>
+              <li class="flex items-start gap-3 text-sm text-white/80">
+                <svg class="mt-0.5 h-4 w-4 shrink-0 text-cfr-green-accent" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                <span>Carry a recent photograph of your pet and their medical records in case of emergencies.</span>
+              </li>
+            </ul>
+          </div>
+          <div class="rounded-xl border border-white/10 bg-white/5 p-5">
+            <h3 class="font-display text-base font-bold text-cfr-sand-200">During the Journey</h3>
+            <ul class="mt-3 space-y-2">
+              <li class="flex items-start gap-3 text-sm text-white/80">
+                <svg class="mt-0.5 h-4 w-4 shrink-0 text-cfr-green-accent" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                <span>If driving, plan for breaks every 2–3 hours. Let your dog stretch, hydrate, and relieve themselves at safe rest stops.</span>
+              </li>
+              <li class="flex items-start gap-3 text-sm text-white/80">
+                <svg class="mt-0.5 h-4 w-4 shrink-0 text-cfr-green-accent" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                <span>Never leave your pet alone in a parked car, especially during warm weather. Temperatures inside a car can rise dangerously within minutes.</span>
+              </li>
+              <li class="flex items-start gap-3 text-sm text-white/80">
+                <svg class="mt-0.5 h-4 w-4 shrink-0 text-cfr-green-accent" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                <span>Feed your pet a light meal at least 3–4 hours before departure to reduce the risk of motion sickness.</span>
+              </li>
+            </ul>
+          </div>
+          <div class="rounded-xl border border-white/10 bg-white/5 p-5">
+            <h3 class="font-display text-base font-bold text-cfr-sand-200">At the Retreat</h3>
+            <ul class="mt-3 space-y-2">
+              <li class="flex items-start gap-3 text-sm text-white/80">
+                <svg class="mt-0.5 h-4 w-4 shrink-0 text-cfr-green-accent" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                <span>Keep your pet on a leash near the forest boundary and farm animal enclosures for everyone's safety.</span>
+              </li>
+              <li class="flex items-start gap-3 text-sm text-white/80">
+                <svg class="mt-0.5 h-4 w-4 shrink-0 text-cfr-green-accent" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                <span>Let us know your pet's habits and preferences in advance — we will prepare comfortable arrangements.</span>
+              </li>
+              <li class="flex items-start gap-3 text-sm text-white/80">
+                <svg class="mt-0.5 h-4 w-4 shrink-0 text-cfr-green-accent" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                <span>Clean up after your pet using the waste bags and disposal facilities we provide around the property.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="mt-6 text-base leading-relaxed text-white">
+          For detailed driving routes and travel options, visit our <a href="/blogs/how-to-reach" class="text-cfr-sand-300 underline hover:text-white">complete travel guide</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cfr-cream-dark py-16 sm:py-20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display text-3xl font-bold text-cfr-green-dark sm:text-4xl">Family Holidays With Pets</h2>
+        <p class="mt-6 text-base leading-relaxed text-cfr-earth-600">
+          For families, the ability to bring a pet along transforms the holiday experience. Children who grow up with pets often feel their absence acutely during family trips, and the joy of having the family dog along for the adventure adds a layer of warmth and continuity that makes the holiday truly complete.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-cfr-earth-600">
+          At Corbett Foothills Retreat, we see families with pets regularly, and the dynamic is heartwarming to watch. Children and dogs explore the lawns together, discover the farm animals side by side, and curl up together by the bonfire in the evenings. The open, safe environment allows kids and pets to enjoy each other's company in ways that are impossible in city apartments or restricted hotel rooms.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-cfr-earth-600">
+          The farm environment adds another dimension to family-pet holidays. Children can feed the goats while the family dog watches from a safe distance, or the whole family can take a leashed nature walk together. Meals can be arranged at pet-friendly outdoor seating areas so nobody has to be separated from the family dog during dining. The flexible schedule means that walks, meals, and rest times can be arranged around the needs of children and pets alike.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-cfr-earth-600">
+          Our spacious family-friendly rooms comfortably accommodate both children and pets. For more details on family accommodation, visit our <a href="/accommodation" class="text-cfr-green-accent underline hover:text-cfr-green-dark">room options</a>. Families may also enjoy our <a href="/organic-farm-experience" class="text-cfr-green-accent underline hover:text-cfr-green-dark">organic farm experience</a>, which offers hands-on activities that children and parents can enjoy together.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cfr-green-dark py-16 sm:py-20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-3xl text-center">
+        <h2 class="font-display text-3xl font-bold text-white sm:text-4xl">Bring Your Pet on Holiday</h2>
+        <p class="mx-auto mt-4 max-w-xl text-lg text-white">
+          Give your pet the holiday they deserve. Open spaces, forest walks, farm animals, and the warmest welcome await at Corbett Foothills Retreat — Uttarakhand's most pet-friendly farmstay.
+        </p>
+        <div class="mt-8 flex flex-wrap justify-center gap-4">
+          <a href="/accommodation" class="inline-flex items-center justify-center gap-2 rounded-full bg-cfr-green-accent px-10 py-4 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark hover:shadow-lg hover:-translate-y-0.5">
+            View Accommodation
+          </a>
+          <a href="/tariff" class="inline-flex items-center justify-center gap-2 rounded-full border-2 border-cfr-sand-500 px-10 py-4 text-sm font-semibold text-cfr-sand-200 transition-all duration-300 hover:bg-cfr-sand-500/20">
+            Check Rates & Pricing
+          </a>
+          <a href="/gallery" class="inline-flex items-center justify-center gap-2 rounded-full border-2 border-cfr-green-accent px-10 py-4 text-sm font-semibold text-cfr-green-accent transition-all duration-300 hover:bg-cfr-green-accent hover:text-white">
+            See Photo Gallery
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cfr-cream-dark py-16 sm:py-20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display text-3xl font-bold text-cfr-green-dark sm:text-4xl text-center">Why Guests Choose Corbett Foothills Retreat for Pet-Friendly Stays</h2>
+        <p class="mt-6 text-center text-lg text-cfr-earth-600">
+          Here is how our pet-friendly offering compares with typical resorts and hotels near Jim Corbett.
+        </p>
+
+        <div class="mt-10 overflow-x-auto">
+          <table class="w-full border-collapse text-left text-sm">
+            <thead>
+              <tr class="border-b border-cfr-earth-200">
+                <th class="py-4 pr-4 font-semibold text-cfr-green-dark">Feature</th>
+                <th class="py-4 px-4 font-semibold text-cfr-green-dark">Corbett Foothills Retreat</th>
+                <th class="py-4 pl-4 font-semibold text-cfr-green-dark">Typical Resorts & Hotels</th>
+              </tr>
+            </thead>
+            <tbody>
+              {comparisonRows.map((row, i) => (
+                <tr class="border-b border-cfr-earth-100 transition-colors hover:bg-cfr-earth-50">
+                  <td class="py-4 pr-4 font-medium text-cfr-earth-700">{row.feature}</td>
+                  <td class="py-4 px-4 text-cfr-earth-600">{row.ours}</td>
+                  <td class="py-4 pl-4 text-cfr-earth-600">{row.other}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <p class="mt-6 text-center text-sm text-cfr-earth-500">
+          The difference comes down to philosophy. We believe pets are family, not an afterthought. Explore our <a href="/experiences" class="text-cfr-green-accent underline hover:text-cfr-green-dark">full range of experiences</a> to see everything that awaits you and your pet at Corbett Foothills Retreat.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <h2 class="sr-only" id="faqs">Frequently Asked Questions About Pet-Friendly Stays at Corbett Foothills Retreat</h2>
+  <section class="bg-cfr-green-dark py-16 sm:py-20" aria-labelledby="faqs">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+      <h2 class="font-display text-3xl font-bold text-white sm:text-4xl text-center">Frequently Asked Questions</h2>
+      <div class="mt-10 space-y-4">
+        <details class="group rounded-xl border border-white/10 bg-white/5 p-5 transition-all duration-200 open:border-cfr-green-accent">
+          <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-cfr-sand-200">
+            Are all types of pets welcome at Corbett Foothills Retreat?
+            <svg class="h-4 w-4 shrink-0 text-white/40 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+          </summary>
+          <p class="mt-3 text-sm leading-relaxed text-white/80">We primarily welcome dogs, as our property and facilities are best suited for them. We evaluate other types of pets on a case-by-case basis. Please contact us before booking if you are travelling with a pet other than a dog so we can confirm arrangements.</p>
+        </details>
+        <details class="group rounded-xl border border-white/10 bg-white/5 p-5 transition-all duration-200 open:border-cfr-green-accent">
+          <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-cfr-sand-200">
+            Do you charge extra for pets?
+            <svg class="h-4 w-4 shrink-0 text-white/40 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+          </summary>
+          <p class="mt-3 text-sm leading-relaxed text-white/80">No. We do not charge any extra fees, deposits, or surcharges for pets. Your pet stays as a welcome guest, not a paid add-on. This is part of our commitment to making pet-friendly travel accessible and stress-free.</p>
+        </details>
+        <details class="group rounded-xl border border-white/10 bg-white/5 p-5 transition-all duration-200 open:border-cfr-green-accent">
+          <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-cfr-sand-200">
+            Are there any restrictions on where pets can go on the property?
+            <svg class="h-4 w-4 shrink-0 text-white/40 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+          </summary>
+          <p class="mt-3 text-sm leading-relaxed text-white/80">Pets are welcome in all outdoor areas, including lawns, gardens, farm areas (on leash near animals), and outdoor dining spaces. They are allowed in guest rooms and common indoor areas. The only restriction is near the forest boundary, where pets must be on a leash at all times for their safety and the safety of local wildlife.</p>
+        </details>
+        <details class="group rounded-xl border border-white/10 bg-white/5 p-5 transition-all duration-200 open:border-cfr-green-accent">
+          <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-cfr-sand-200">
+            Can I leave my pet alone in the room?
+            <svg class="h-4 w-4 shrink-0 text-white/40 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+          </summary>
+          <p class="mt-3 text-sm leading-relaxed text-white/80">We recommend against leaving pets alone in the room for extended periods, as unfamiliar surroundings may cause anxiety. However, if your pet is comfortable being alone for short durations, please inform us so we can ensure housekeeping schedules and noise levels are coordinated appropriately.</p>
+        </details>
+        <details class="group rounded-xl border border-white/10 bg-white/5 p-5 transition-all duration-200 open:border-cfr-green-accent">
+          <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-cfr-sand-200">
+            What should I bring for my pet?
+            <svg class="h-4 w-4 shrink-0 text-white/40 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+          </summary>
+          <p class="mt-3 text-sm leading-relaxed text-white/80">Bring your pet's regular food, treats, a portable water bowl, leash, collar with ID tag, waste bags, bedding or blanket for comfort, and any medications. We provide fresh water bowls on request. A familiar toy or chewy can help your pet settle in more comfortably in the new environment.</p>
+        </details>
+        <details class="group rounded-xl border border-white/10 bg-white/5 p-5 transition-all duration-200 open:border-cfr-green-accent">
+          <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-cfr-sand-200">
+            Are there any dog-friendly activities and experiences?
+            <svg class="h-4 w-4 shrink-0 text-white/40 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+          </summary>
+          <p class="mt-3 text-sm leading-relaxed text-white/80">Yes. Your leashed dog can join you on nature walks, garden tours, and farm visits. The open lawns and grounds are perfect for playtime and exploration. Evening bonfires are pet-friendly as well. Activities that involve entering the forest or safari zones are not suitable for pets due to wildlife safety concerns.</p>
+        </details>
+        <details class="group rounded-xl border border-white/10 bg-white/5 p-5 transition-all duration-200 open:border-cfr-green-accent">
+          <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-cfr-sand-200">
+            Is the property safe for small or elderly dogs?
+            <svg class="h-4 w-4 shrink-0 text-white/40 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+          </summary>
+          <p class="mt-3 text-sm leading-relaxed text-white/80">Yes, the property is very safe for dogs of all sizes and energy levels. The grounds are enclosed, well-maintained, and free of hazards. There are no steep drops, busy roads, or aggressive animals on the property. Small and elderly dogs can enjoy gentle walks on the lawns without the exertion required by more rugged terrains.</p>
+        </details>
+        <details class="group rounded-xl border border-white/10 bg-white/5 p-5 transition-all duration-200 open:border-cfr-green-accent">
+          <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-cfr-sand-200">
+            What if my pet has an emergency during the stay?
+            <svg class="h-4 w-4 shrink-0 text-white/40 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+          </summary>
+          <p class="mt-3 text-sm leading-relaxed text-white/80">Ramnagar town, just 8 kilometres away, has veterinary clinics that can handle emergencies. Our team can assist with transport and contact information in case of an urgent situation. We recommend carrying your pet's medical records and your veterinarian's contact number when travelling.</p>
+        </details>
+        <details class="group rounded-xl border border-white/10 bg-white/5 p-5 transition-all duration-200 open:border-cfr-green-accent">
+          <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-cfr-sand-200">
+            Can I bring my pet to the farm animal area?
+            <svg class="h-4 w-4 shrink-0 text-white/40 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+          </summary>
+          <p class="mt-3 text-sm leading-relaxed text-white/80">Yes, but your pet must be on a leash and under control near the farm animal enclosures. Our resident goats and chickens are accustomed to dogs but may become stressed if approached too enthusiastically. If your dog has a strong prey drive, we recommend observing the farm animals from a respectful distance for everyone's comfort.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      { "@type": "Question", name: "Are all types of pets welcome at Corbett Foothills Retreat?", acceptedAnswer: { "@type": "Answer", text: "We primarily welcome dogs, as our property and facilities are best suited for them. We evaluate other types of pets on a case-by-case basis. Please contact us before booking if you are travelling with a pet other than a dog." } },
+      { "@type": "Question", name: "Do you charge extra for pets?", acceptedAnswer: { "@type": "Answer", text: "No. We do not charge any extra fees, deposits, or surcharges for pets. Your pet stays as a welcome guest, not a paid add-on." } },
+      { "@type": "Question", name: "Are there any restrictions on where pets can go on the property?", acceptedAnswer: { "@type": "Answer", text: "Pets are welcome in all outdoor areas including lawns, gardens, farm areas, and outdoor dining spaces. They are allowed in guest rooms and common indoor areas. Pets must be on a leash near the forest boundary." } },
+      { "@type": "Question", name: "Can I leave my pet alone in the room?", acceptedAnswer: { "@type": "Answer", text: "We recommend against leaving pets alone for extended periods as unfamiliar surroundings may cause anxiety. If your pet is comfortable alone for short durations, please inform us so we can coordinate accordingly." } },
+      { "@type": "Question", name: "What should I bring for my pet?", acceptedAnswer: { "@type": "Answer", text: "Bring your pet's regular food, treats, portable water bowl, leash, collar with ID tag, waste bags, bedding, and any medications. We provide fresh water bowls on request." } },
+      { "@type": "Question", name: "Are there any dog-friendly activities and experiences?", acceptedAnswer: { "@type": "Answer", text: "Your leashed dog can join nature walks, garden tours, and farm visits. The open lawns are perfect for playtime. Evening bonfires are pet-friendly. Forest or safari activities are not suitable for pets." } },
+      { "@type": "Question", name: "Is the property safe for small or elderly dogs?", acceptedAnswer: { "@type": "Answer", text: "Yes, the property is very safe for dogs of all sizes. The grounds are enclosed, well-maintained, and free of hazards. Small and elderly dogs can enjoy gentle walks on the lawns." } },
+      { "@type": "Question", name: "What if my pet has an emergency during the stay?", acceptedAnswer: { "@type": "Answer", text: "Ramnagar town, 8 km away, has veterinary clinics for emergencies. Our team can assist with transport and contact information. Carry your pet's medical records when travelling." } },
+      { "@type": "Question", name: "Can I bring my pet to the farm animal area?", acceptedAnswer: { "@type": "Answer", text: "Yes, but your pet must be on a leash near the farm animal enclosures. If your dog has a strong prey drive, we recommend observing from a respectful distance." } },
+    ],
+  })} />
+
+  <section class="bg-cfr-cream-dark py-16 sm:py-20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="font-display text-3xl font-bold text-cfr-green-dark sm:text-4xl">Book Your Pet-Friendly Stay Today</h2>
+      <p class="mx-auto mt-4 max-w-xl text-lg text-cfr-earth-600">
+        Give your pet the holiday they deserve and yourself the peace of mind that comes from knowing every member of the family is welcome. Contact us to plan your pet-friendly getaway to Corbett Foothills Retreat.
+      </p>
+      <div class="mt-8 flex flex-wrap justify-center gap-4">
+        <a href="/contact" class="inline-flex items-center justify-center gap-2 rounded-full bg-cfr-green-accent px-10 py-4 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark hover:shadow-lg hover:-translate-y-0.5">
+          Get in Touch
+        </a>
+        <a href="/tariff" class="inline-flex items-center justify-center gap-2 rounded-full border-2 border-cfr-earth-300 px-10 py-4 text-sm font-semibold text-cfr-green-dark transition-all duration-300 hover:bg-cfr-earth-100">
+          Check Rates & Pricing
+        </a>
+        <a href="/accommodation" class="inline-flex items-center justify-center gap-2 rounded-full border-2 border-cfr-green-accent px-10 py-4 text-sm font-semibold text-cfr-green-accent transition-all duration-300 hover:bg-cfr-green-accent hover:text-white">
+          View Accommodation
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <Fragment slot="footer">
+    <Footer />
+  </Fragment>
+</MainLayout>

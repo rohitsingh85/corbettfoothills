@@ -6,80 +6,83 @@ import siteData from "../data/site.json";
 ---
 
 <MainLayout>
+  <Fragment slot="head">
+    <link rel="preload" href="/images/hero-bg-design.webp" as="image" fetchpriority="high" />
+  </Fragment>
   <Fragment slot="header">
-    <Header />
+    <Header variant="transparent" />
   </Fragment>
 
   <!-- ==================== HERO ==================== -->
-  <section class="relative flex min-h-[90vh] items-center overflow-hidden bg-cfr-green-dark">
-    <!-- Background layers -->
-    <div class="absolute inset-0 bg-hero-pattern"></div>
-    <div class="absolute inset-0 bg-leaf-pattern opacity-50"></div>
-
-    <div class="relative mx-auto max-w-7xl px-4 pt-24 pb-16 sm:px-6 lg:px-8 lg:pt-32 lg:pb-24">
-      <div class="max-w-3xl">
-        <div class="inline-flex items-center gap-2 rounded-full border border-sand-500/20 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-sand-300 backdrop-blur-sm">
-          <span class="flex h-2 w-2 rounded-full bg-sand-500 animate-pulse"></span>
-          Jim Corbett National Park, Uttarakhand
-        </div>
-
-        <h1 class="mt-6 font-display text-5xl font-bold leading-tight text-white sm:text-6xl lg:text-7xl xl:text-8xl">
-          {siteData.site.tagline.split('Meets')[0]}
-          <span class="block italic text-sand-300">{siteData.hero.headingItalic}</span>
-        </h1>
-
-        <p class="mt-6 max-w-xl text-lg leading-relaxed text-white sm:text-xl">
-          {siteData.site.description}
-        </p>
-
-        <div class="mt-10 flex flex-wrap gap-4">
-          <a href="/accommodation" class="inline-flex items-center justify-center gap-2 rounded-lg bg-cfr-green-accent px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2 !rounded-full !px-8 !py-4 !text-base">
-            Explore Stays
-            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-            </svg>
-          </a>
-          <a href="#experiences" class="inline-flex items-center justify-center gap-2 rounded-lg border-2 border-cfr-green-accent px-6 py-3 text-sm font-semibold text-cfr-green-accent transition-all duration-300 hover:bg-cfr-green-accent hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2 !rounded-full !border-sand-500 !px-8 !py-4 !text-base !text-sand-200 hover:!bg-sand-500/20">
-            Virtual Tour
-          </a>
-        </div>
-
-        <!-- Stats -->
-        <div class="mt-16 grid grid-cols-3 gap-8 border-t border-white/10 pt-10">
-          <div>
-            <p class="font-display text-3xl font-bold text-white sm:text-4xl">6</p>
-            <p class="mt-1 text-xs uppercase tracking-widest text-sand-300">Exclusive Suites</p>
+  <section class="relative flex flex-col overflow-hidden bg-cfr-green-dark">
+    <div class="relative w-full">
+      <img
+        src="/images/hero-bg-design.webp"
+        alt=""
+        class="absolute inset-0 h-full w-full object-cover"
+        fetchpriority="high"
+        loading="eager"
+      />
+      <div class="absolute inset-0 bg-cfr-green-dark/30"></div>
+      <div class="relative mx-auto max-w-7xl px-4 pt-56 pb-16 sm:px-6 lg:px-8 lg:pt-56 lg:pb-24">
+        <div class="mx-auto max-w-3xl text-center">
+          <div class="inline-flex items-center gap-2 rounded-full border border-cfr-sand-500/20 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-cfr-sand-300 backdrop-blur-sm">
+            <span class="flex h-2 w-2 rounded-full bg-cfr-sand-500 animate-pulse"></span>
+            Jim Corbett National Park, Uttarakhand
           </div>
-          <div>
-            <p class="font-display text-3xl font-bold text-white sm:text-4xl">8 km</p>
-            <p class="mt-1 text-xs uppercase tracking-widest text-sand-300">From Corbett Park</p>
-          </div>
-          <div>
-            <p class="font-display text-3xl font-bold text-white sm:text-4xl">600+</p>
-            <p class="mt-1 text-xs uppercase tracking-widest text-sand-300">Bird Species</p>
-          </div>
+
+          <h1 class="mt-6 font-display text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-7xl xl:text-8xl">
+            {siteData.site.tagline.split('Meets')[0]}
+            <span class="block italic text-cfr-sand-300">{siteData.hero.headingItalic}</span>
+          </h1>
+
+          <p class="mt-6 mx-auto max-w-xl text-lg leading-relaxed text-white sm:text-xl">
+            {siteData.site.description}
+          </p>
         </div>
       </div>
     </div>
 
-    <!-- Scroll indicator -->
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 hidden sm:block">
-      <div class="flex flex-col items-center gap-2 text-sand-300">
-        <span class="text-xs uppercase tracking-widest">Scroll</span>
-        <svg class="h-5 w-5 animate-bounce" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-        </svg>
+    <!-- Buttons and stats outside the background image -->
+    <div class="relative w-full bg-cfr-green-dark">
+      <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-3xl text-center">
+          <div class="flex flex-wrap justify-center gap-4">
+            <a href="/accommodation" class="inline-flex items-center justify-center gap-2 rounded-lg bg-cfr-green-accent px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2 !rounded-full !px-8 !py-4 !text-base">
+              Explore Stays
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
+            </a>
+
+          </div>
+
+          <div class="mt-12 flex flex-col items-center gap-0 border-t border-white/10 pt-10 md:grid md:grid-cols-3 md:gap-0 md:items-start">
+            <div class="flex w-full flex-col items-center border-b border-white/10 py-6 last:border-b-0 md:border-b-0 md:py-0">
+              <p class="font-display text-4xl font-bold text-white whitespace-nowrap md:text-5xl">6</p>
+              <p class="mt-1 max-w-[180px] text-center text-sm uppercase tracking-widest text-cfr-sand-300">Exclusive Family Rooms</p>
+            </div>
+            <div class="flex w-full flex-col items-center border-b border-white/10 py-6 last:border-b-0 md:border-b-0 md:py-0">
+              <p class="font-display text-4xl font-bold text-white whitespace-nowrap md:text-5xl">8 km</p>
+              <p class="mt-1 max-w-[180px] text-center text-sm uppercase tracking-widest text-cfr-sand-300">From Jim Corbett Park Gate</p>
+            </div>
+            <div class="flex w-full flex-col items-center border-b border-white/10 py-6 last:border-b-0 md:border-b-0 md:py-0">
+              <p class="font-display text-4xl font-bold text-white whitespace-nowrap md:text-5xl">50 Meters</p>
+              <p class="mt-1 max-w-[180px] text-center text-sm uppercase tracking-widest text-cfr-sand-300">From Jim Corbett Forest</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- ==================== FEATURES ==================== -->
-  <section class="bg-cream-dark py-20 sm:py-28">
+  <section class="bg-cfr-cream-dark py-20 sm:py-28">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="mx-auto max-w-2xl text-center">
-        <p class="text-xs font-semibold uppercase tracking-widest text-cfr-green-accent">Why CFR</p>
+        <p class="text-base font-semibold uppercase tracking-widest text-cfr-green-accent">Why Corbett Foothills Retreat</p>
         <h2 class="font-display text-3xl font-bold tracking-tight text-cfr-green-dark sm:text-4xl lg:text-5xl mt-3">Designed for the Wild at Heart</h2>
-        <p class="mt-4 max-w-2xl text-lg leading-relaxed text-earth-600 mx-auto">
+        <p class="mt-4 max-w-2xl text-lg leading-relaxed text-cfr-earth-600 mx-auto">
           Every element of Corbett Foothills Retreat is crafted to bring you closer to nature without compromising on comfort.
         </p>
       </div>
@@ -87,40 +90,42 @@ import siteData from "../data/site.json";
       <div class="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
         {
           siteData.features.map((feature) => (
-            <div class="rounded-2xl bg-white/80 shadow-premium backdrop-blur-sm transition-all duration-300 hover:shadow-glow group relative overflow-hidden p-8">
-              <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-cfr-green-accent/10 text-cfr-green-accent transition-colors group-hover:bg-cfr-green-accent group-hover:text-white">
+            <div class="flex flex-col items-center rounded-2xl bg-white/80 shadow-premium backdrop-blur-sm transition-all duration-300 hover:shadow-glow group relative overflow-hidden p-8 text-center">
+              <div class="flex h-48 w-48 items-center justify-center overflow-hidden rounded-3xl">
                 {
                   feature.icon === "home" && (
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955a1.126 1.126 0 011.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-                    </svg>
+                    <img src="/images/blog-boutique-hero.jpg" alt="Boutique Farmstay" class="h-full w-full object-cover" loading="lazy" />
                   )
                 }
                 {
-                  feature.icon === "binoculars" && (
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                    </svg>
+                  feature.icon === "tree" && (
+                    <img src="/images/nature-walks-1.jpg" alt="Nature Walks" class="h-full w-full object-cover" loading="lazy" />
                   )
                 }
                 {
                   feature.icon === "leaf" && (
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
-                    </svg>
+                    <img src="/images/organic-farming-1.jpg" alt="Organic Farming" class="h-full w-full object-cover" loading="lazy" />
                   )
                 }
                 {
                   feature.icon === "heart" && (
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" /></svg>
+                    <img src="/images/pet-friendly-1.webp" alt="Pet-Friendly" class="h-full w-full object-cover" loading="lazy" />
                   )
                 }
               </div>
-              <h3 class="text-lg font-semibold text-cfr-green-dark">{feature.title}</h3>
-              <p class="mt-2 text-sm leading-relaxed text-earth-600">{feature.description}</p>
+              <h3 class="mt-6 text-lg font-semibold text-cfr-green-dark">{feature.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-cfr-earth-600" set:html={feature.description}></p>
             </div>
           ))
         }
+      </div>
+      <div class="mt-12 text-center">
+        <a href="/blogs" class="inline-flex items-center gap-2 text-sm font-semibold text-cfr-green-accent hover:text-cfr-green-dark transition-colors">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+          </svg>
+          Read Our Travel Blog
+        </a>
       </div>
     </div>
   </section>
@@ -129,26 +134,11 @@ import siteData from "../data/site.json";
   <section id="accommodation" class="bg-cfr-green-dark py-20 sm:py-28">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="mx-auto max-w-2xl text-center">
-        <p class="text-xs font-semibold uppercase tracking-widest text-sand-300">Accommodation</p>
+        <p class="text-base font-semibold uppercase tracking-widest !text-cfr-sand-200">Accommodation</p>
         <h2 class="mt-3 font-display text-3xl font-bold text-white sm:text-4xl lg:text-5xl">{siteData.accommodationIntro.heading}</h2>
         <p class="mt-4 text-lg text-white">{siteData.accommodationIntro.description}</p>
       </div>
 
-      <!-- Highlights -->
-      <div class="mt-16 grid gap-8 md:grid-cols-3">
-        {
-          siteData.accommodationIntro.highlights.map((highlight) => (
-            <div class="group rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm transition-all duration-500 hover:border-cfr-green-accent/30 hover:bg-white/10 hover:-translate-y-1">
-              <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-cfr-green-accent/20 text-cfr-green-accent">
-                <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
-                </svg>
-              </div>
-              <h3 class="mt-6 font-display text-xl font-bold text-white">{highlight}</h3>
-            </div>
-          ))
-        }
-      </div>
 
       <!-- Room Features -->
       <div class="mt-16">
@@ -165,15 +155,24 @@ import siteData from "../data/site.json";
         </div>
       </div>
 
-      <!-- Who Stays With Us -->
+      <!-- Who Loves Our Retreat -->
       <div class="mt-16">
-        <h3 class="text-center font-display text-2xl font-bold text-white">Who Stays With Us</h3>
-        <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <h3 class="text-center font-display text-2xl font-bold text-white">Who Loves Our Retreat</h3>
+        <div class="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {
-            siteData.guestTypes.map((guest) => (
-              <div class="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-5 py-3">
-                <svg class="h-5 w-5 shrink-0 text-cfr-green-leaf" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
-                <span class="text-sm text-white">{guest}</span>
+            [
+              "/images/safari-1.webp",
+              "/images/family-1.jpg",
+              "/images/couples-retreat.webp",
+              "/images/bird-watching-1.jpg",
+              "/images/remote-worker.jpg",
+              "/images/nature-walks-2.jpg"
+            ].map((imgSrc, i) => (
+              <div class="flex flex-col items-center rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm text-center transition-all duration-500 hover:border-cfr-green-accent/30 hover:bg-white/10 hover:-translate-y-1">
+                <div class="flex h-48 w-48 items-center justify-center overflow-hidden rounded-3xl">
+                  <img src={imgSrc} alt={siteData.guestTypes[i]} class="h-full w-full object-cover" loading="lazy" />
+                </div>
+                <span class="mt-6 text-sm text-white">{siteData.guestTypes[i]}</span>
               </div>
             ))
           }
@@ -181,9 +180,9 @@ import siteData from "../data/site.json";
       </div>
 
       <!-- Pet-friendly -->
-      <div class="mt-16 flex flex-col items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm text-center">
-        <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-cfr-green-accent/20 text-cfr-green-accent">
-          <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" /></svg>
+      <div class="mt-16 flex flex-col items-center gap-6 rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm text-center">
+        <div class="flex h-48 w-48 items-center justify-center overflow-hidden rounded-3xl">
+          <img src="/images/pet-friendly-tile.png" alt="Pet-Friendly Retreat" class="h-full w-full object-scale-down" loading="lazy" />
         </div>
         <div>
           <h3 class="font-display text-xl font-bold text-white">Pet-Friendly Retreat</h3>
@@ -194,12 +193,15 @@ import siteData from "../data/site.json";
       <!-- CTA -->
       <div class="mt-12 text-center">
         <p class="text-lg leading-relaxed text-white max-w-3xl mx-auto">{siteData.accommodationCta}</p>
-        <div class="mt-6">
-          <a href="/accommodation" class="inline-flex items-center justify-center gap-2 rounded-lg border-2 border-cfr-green-accent px-6 py-3 text-sm font-semibold text-cfr-green-accent transition-all duration-300 hover:bg-cfr-green-accent hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2 !border-sand-500 !text-sand-200 hover:!bg-sand-500/20 !rounded-full !px-10 !py-4">
+        <div class="mt-6 flex flex-wrap justify-center gap-4">
+          <a href="/accommodation" class="inline-flex items-center justify-center gap-2 rounded-lg border-2 border-cfr-green-accent px-6 py-3 text-sm font-semibold text-cfr-green-accent transition-all duration-300 hover:bg-cfr-green-accent hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2 !border-cfr-sand-500 !text-cfr-sand-200 hover:!bg-cfr-sand-500/20 !rounded-full !px-10 !py-4">
             View All Accommodations
             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
             </svg>
+          </a>
+          <a href="/tariff" class="inline-flex items-center justify-center gap-2 rounded-full bg-cfr-green-accent px-10 py-4 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark hover:shadow-lg hover:-translate-y-0.5">
+            View Rates & Pricing
           </a>
         </div>
       </div>
@@ -207,41 +209,37 @@ import siteData from "../data/site.json";
   </section>
 
   <!-- ==================== GALLERY ==================== -->
-  <section id="gallery" class="bg-cream-dark py-20 sm:py-28">
+  <section id="gallery" class="bg-cfr-cream-dark py-20 sm:py-28">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="mx-auto max-w-2xl text-center">
-        <p class="text-xs font-semibold uppercase tracking-widest text-cfr-green-accent">Moments</p>
+        <p class="text-base font-semibold uppercase tracking-widest text-cfr-green-accent">Moments</p>
         <h2 class="font-display text-3xl font-bold tracking-tight text-cfr-green-dark sm:text-4xl lg:text-5xl mt-3">Life at the Retreat</h2>
-        <p class="mt-4 max-w-2xl text-lg leading-relaxed text-earth-600 mx-auto">
-          From misty jungle mornings to starlit dinners by the river — every moment at CFR is a memory in the making.
+        <p class="mt-4 max-w-2xl text-lg leading-relaxed text-cfr-earth-600 mx-auto">
+          From misty jungle mornings to starlit dinners under the clear skies — every moment at CFR is a memory in the making.
         </p>
       </div>
 
-      <div class="mt-12 columns-1 gap-4 sm:columns-2 md:columns-3">
+      <div class="mt-12 flex justify-center">
         {
           siteData.images.gallery.slice(0, 3).map((img, index) => (
-            <div class="mb-4 break-inside-avoid overflow-hidden rounded-xl shadow-card transition-all duration-300 hover:shadow-glow">
+            <div class="w-full max-w-4xl overflow-hidden rounded-xl shadow-card transition-all duration-300 hover:shadow-glow">
               <img
                 src={img}
                 alt={`Corbett Foothills Retreat photo ${index + 1}`}
-                class="w-full object-cover"
+                class="w-full aspect-[16/9] object-cover"
                 loading="lazy"
               />
             </div>
           ))
         }
-        {
-          siteData.images.hero.slice(0, 2).map((img, index) => (
-            <div class="mb-4 break-inside-avoid overflow-hidden rounded-xl shadow-card transition-all duration-300 hover:shadow-glow">
-              <img
-                src={img}
-                alt={`Corbett Foothills Retreat scenery ${index + 1}`}
-                class="w-full object-cover"
-                loading="lazy"
-              />
-            </div>
-          ))
-        }
+      </div>
+      <div class="mt-8 text-center">
+        <a href="/gallery" class="inline-flex items-center gap-2 text-sm font-semibold text-cfr-green-accent hover:text-cfr-green-dark transition-colors">
+          View Full Gallery
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+          </svg>
+        </a>
       </div>
     </div>
   </section>
@@ -250,7 +248,7 @@ import siteData from "../data/site.json";
   <section id="experiences" class="bg-cfr-green-dark py-20 sm:py-28">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="mx-auto max-w-2xl text-center">
-        <p class="text-xs font-semibold uppercase tracking-widest text-sand-300">Experiences</p>
+        <a href="/experiences" class="text-base font-semibold uppercase tracking-widest text-cfr-sand-300 hover:text-white transition-colors">Experiences</a>
         <h2 class="mt-3 font-display text-3xl font-bold text-white sm:text-4xl lg:text-5xl">Immersive Encounters</h2>
         <p class="mt-4 text-lg text-white">
           Beyond the retreat, the jungle beckons. Our curated experiences are led by expert naturalists and local guides.
@@ -260,38 +258,23 @@ import siteData from "../data/site.json";
       <div class="mt-16 grid gap-8 md:grid-cols-3">
         {
           siteData.experiences.map((exp) => {
-            const getIcon = (title) => {
-              if (title.includes('Safari')) return 'search';
-              if (title.includes('Nature')) return 'leaf';
-              if (title.includes('Bird')) return 'leaf';
-              if (title.includes('Farming') || title.includes('Organic')) return 'leaf';
-              if (title.includes('Bonfire')) return 'sparkles';
-              return 'sun';
+            const imgMap = {
+              'Jungle Safari': 'Jungle Safari.jpeg',
+              'Nature Walks': 'Nature Walks.webp',
+              'Bird Watching': 'Bird Watching.jpeg',
+              'Organic Farming Experience': 'Organic Farming.webp',
+              'Bonfire Evenings': 'Bonfire Evenings.jpg',
+              'Family Getaways': 'Family Getaways.jpeg',
+              'Forest Stream Picnic': 'stream-picnic-1.webp',
+              'Pet-Friendly Holidays': 'Pet-Friendly Holidays.webp',
+              'Forest Mornings & Sunset Views': 'forest-mornings-sunset-views.webp',
+              'Reconnect & Rejuvenate': 'reconnect-rejuvenate.webp'
             };
-            const icon = getIcon(exp.title);
+            const imgFile = imgMap[exp.title];
             return (
-              <div class="group rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm transition-all duration-500 hover:border-cfr-green-accent/30 hover:bg-white/10 hover:-translate-y-1">
-                <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-cfr-green-accent/20 text-cfr-green-accent">
-                  {icon === 'search' && (
-                    <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                    </svg>
-                  )}
-                  {icon === 'leaf' && (
-                    <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
-                    </svg>
-                  )}
-                  {icon === 'sparkles' && (
-                    <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
-                    </svg>
-                  )}
-                  {icon === 'sun' && (
-                    <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
-                    </svg>
-                  )}
+              <div class="group flex flex-col items-center rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm text-center transition-all duration-500 hover:border-cfr-green-accent/30 hover:bg-white/10 hover:-translate-y-1">
+                <div class="flex h-48 w-48 items-center justify-center overflow-hidden rounded-3xl">
+                  <img src={`/images/${encodeURIComponent(imgFile)}`} alt={exp.title} class="h-full w-full object-cover" loading="lazy" />
                 </div>
                 <h3 class="mt-6 font-display text-xl font-bold text-white">{exp.title}</h3>
                 <p class="mt-3 text-sm leading-relaxed text-white">{exp.description}</p>
@@ -314,10 +297,10 @@ import siteData from "../data/site.json";
   </section>
 
   <!-- ==================== ABOUT ==================== -->
-  <section class="bg-cream-dark py-20 sm:py-28">
+  <section class="bg-cfr-cream-dark py-20 sm:py-28">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="mx-auto max-w-2xl text-center">
-        <p class="text-xs font-semibold uppercase tracking-widest text-cfr-green-accent">About</p>
+        <a href="/about-us" class="text-base font-semibold uppercase tracking-widest text-cfr-green-accent transition-colors hover:text-cfr-green-dark">About</a>
         <h2 class="font-display text-3xl font-bold tracking-tight text-cfr-green-dark sm:text-4xl lg:text-5xl mt-3">{siteData.site.tagline}</h2>
       </div>
 
@@ -326,7 +309,7 @@ import siteData from "../data/site.json";
           <svg class="mb-6 h-10 w-10 text-cfr-green-accent/20" fill="currentColor" viewBox="0 0 24 24">
             <path d="M4.583 17.321C3.553 16.227 3 15 3 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311C9.591 11.69 11 13.167 11 15c0 1.933-1.567 3.5-3.5 3.5-1.271 0-2.402-.642-2.917-1.179zm10 0C13.553 16.227 13 15 13 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311C19.591 11.69 21 13.167 21 15c0 1.933-1.567 3.5-3.5 3.5-1.271 0-2.402-.642-2.917-1.179z" />
           </svg>
-          <p class="text-base leading-relaxed text-earth-700 italic md:text-lg">&ldquo;{siteData.about.paragraphs[0]}&rdquo;</p>
+          <p class="text-base leading-relaxed text-cfr-earth-700 italic md:text-lg">&ldquo;{siteData.about.paragraphs[0]}&rdquo;</p>
         </div>
       </div>
     </div>
@@ -340,7 +323,7 @@ import siteData from "../data/site.json";
         <div class="grid gap-12 lg:grid-cols-2">
           <!-- Left: info -->
           <div>
-            <p class="text-xs font-semibold uppercase tracking-widest text-sand-300">Reserve Your Stay</p>
+            <p class="text-xs font-semibold uppercase tracking-widest text-cfr-sand-300">Reserve Your Stay</p>
             <h2 class="mt-3 font-display text-3xl font-bold text-white sm:text-4xl">Begin Your Journey</h2>
             <p class="mt-4 text-lg text-white">
               Reach out to our concierge team. Whether you're planning a romantic getaway, a family adventure, or a solo retreat, we'll craft the perfect itinerary.
@@ -354,8 +337,8 @@ import siteData from "../data/site.json";
                   </svg>
                 </div>
                 <div>
-                  <p class="text-xs uppercase tracking-widest text-sand-300">Email</p>
-                  <a href={`mailto:${siteData.site.email}`} class="text-sm font-medium text-sand-200 hover:text-white transition-colors">
+                  <p class="text-xs uppercase tracking-widest text-cfr-sand-300">Email</p>
+                  <a href={`mailto:${siteData.site.email}`} class="text-sm font-medium text-cfr-sand-200 hover:text-white transition-colors">
                     {siteData.site.email}
                   </a>
                 </div>
@@ -367,8 +350,8 @@ import siteData from "../data/site.json";
                   </svg>
                 </div>
                 <div>
-                  <p class="text-xs uppercase tracking-widest text-sand-300">Phone</p>
-                  <a href={`tel:${siteData.site.phone}`} class="text-sm font-medium text-sand-200 hover:text-white transition-colors">
+                  <p class="text-xs uppercase tracking-widest text-cfr-sand-300">Phone</p>
+                  <a href={`tel:${siteData.site.phone}`} class="text-sm font-medium text-cfr-sand-200 hover:text-white transition-colors">
                     {siteData.site.phone}
                   </a>
                 </div>
@@ -381,8 +364,8 @@ import siteData from "../data/site.json";
                   </svg>
                 </div>
                 <div>
-                  <p class="text-xs uppercase tracking-widest text-sand-300">Location</p>
-                  <p class="text-sm font-medium text-sand-200">
+                  <p class="text-xs uppercase tracking-widest text-cfr-sand-300">Location</p>
+                  <p class="text-sm font-medium text-cfr-sand-200">
                     {siteData.site.location}
                   </p>
                 </div>
@@ -406,24 +389,24 @@ import siteData from "../data/site.json";
             <form action="#" method="POST" class="space-y-5">
               <div class="grid gap-5 sm:grid-cols-2">
                 <div>
-                  <label for="name" class="block text-sm font-medium text-earth-700">Full Name</label>
+                  <label for="name" class="block text-sm font-medium text-cfr-earth-700">Full Name</label>
                   <input
                     type="text"
                     id="name"
                     name="name"
                     required
-                    class="mt-1 block w-full rounded-lg border-earth-200 bg-cream text-sm text-earth-800 placeholder:text-earth-400 focus:border-cfr-green-accent focus:ring-cfr-green-accent"
+                    class="mt-1 block w-full rounded-lg border-cfr-earth-200 bg-cream text-sm text-cfr-earth-800 placeholder:text-cfr-earth-400 focus:border-cfr-green-accent focus:ring-cfr-green-accent"
                     placeholder="Your name"
                   />
                 </div>
                 <div>
-                  <label for="email" class="block text-sm font-medium text-earth-700">Email</label>
+                  <label for="email" class="block text-sm font-medium text-cfr-earth-700">Email</label>
                   <input
                     type="email"
                     id="email"
                     name="email"
                     required
-                    class="mt-1 block w-full rounded-lg border-earth-200 bg-cream text-sm text-earth-800 placeholder:text-earth-400 focus:border-cfr-green-accent focus:ring-cfr-green-accent"
+                    class="mt-1 block w-full rounded-lg border-cfr-earth-200 bg-cream text-sm text-cfr-earth-800 placeholder:text-cfr-earth-400 focus:border-cfr-green-accent focus:ring-cfr-green-accent"
                     placeholder="you@example.com"
                   />
                 </div>
@@ -431,31 +414,31 @@ import siteData from "../data/site.json";
 
               <div class="grid gap-5 sm:grid-cols-2">
                 <div>
-                  <label for="checkin" class="block text-sm font-medium text-earth-700">Check-in</label>
+                  <label for="checkin" class="block text-sm font-medium text-cfr-earth-700">Check-in</label>
                   <input
                     type="date"
                     id="checkin"
                     name="checkin"
-                    class="mt-1 block w-full rounded-lg border-earth-200 bg-cream text-sm text-earth-800 focus:border-cfr-green-accent focus:ring-cfr-green-accent"
+                    class="mt-1 block w-full rounded-lg border-cfr-earth-200 bg-cream text-sm text-cfr-earth-800 focus:border-cfr-green-accent focus:ring-cfr-green-accent"
                   />
                 </div>
                 <div>
-                  <label for="checkout" class="block text-sm font-medium text-earth-700">Check-out</label>
+                  <label for="checkout" class="block text-sm font-medium text-cfr-earth-700">Check-out</label>
                   <input
                     type="date"
                     id="checkout"
                     name="checkout"
-                    class="mt-1 block w-full rounded-lg border-earth-200 bg-cream text-sm text-earth-800 focus:border-cfr-green-accent focus:ring-cfr-green-accent"
+                    class="mt-1 block w-full rounded-lg border-cfr-earth-200 bg-cream text-sm text-cfr-earth-800 focus:border-cfr-green-accent focus:ring-cfr-green-accent"
                   />
                 </div>
               </div>
 
               <div>
-                <label for="guests" class="block text-sm font-medium text-earth-700">Guests</label>
+                <label for="guests" class="block text-sm font-medium text-cfr-earth-700">Guests</label>
                 <select
                   id="guests"
                   name="guests"
-                  class="mt-1 block w-full rounded-lg border-earth-200 bg-cream text-sm text-earth-800 focus:border-cfr-green-accent focus:ring-cfr-green-accent"
+                  class="mt-1 block w-full rounded-lg border-cfr-earth-200 bg-cream text-sm text-cfr-earth-800 focus:border-cfr-green-accent focus:ring-cfr-green-accent"
                 >
                   <option>1 Adult</option>
                   <option>2 Adults</option>
@@ -466,12 +449,12 @@ import siteData from "../data/site.json";
               </div>
 
               <div>
-                <label for="message" class="block text-sm font-medium text-earth-700">Special Requests</label>
+                <label for="message" class="block text-sm font-medium text-cfr-earth-700">Special Requests</label>
                 <textarea
                   id="message"
                   name="message"
                   rows={3}
-                  class="mt-1 block w-full rounded-lg border-earth-200 bg-cream text-sm text-earth-800 placeholder:text-earth-400 focus:border-cfr-green-accent focus:ring-cfr-green-accent"
+                  class="mt-1 block w-full rounded-lg border-cfr-earth-200 bg-cream text-sm text-cfr-earth-800 placeholder:text-cfr-earth-400 focus:border-cfr-green-accent focus:ring-cfr-green-accent"
                   placeholder="Any preferences or questions..."
                 ></textarea>
               </div>
