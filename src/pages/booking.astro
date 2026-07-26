@@ -1,0 +1,1544 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import BookingSummary from "../components/booking/BookingSummary.astro";
+import GuestDetailsForm from "../components/booking/GuestDetailsForm.astro";
+import ReviewStep from "../components/booking/ReviewStep.astro";
+import SessionCountdown from "../components/booking/SessionCountdown.astro";
+import PaymentMethodSelection from "../components/booking/PaymentMethodSelection.astro";
+import PlaceholderUPIQR from "../components/booking/PlaceholderUPIQR.astro";
+import PlaceholderUPIApp from "../components/booking/PlaceholderUPIApp.astro";
+import PayAtCheckin from "../components/booking/PayAtCheckin.astro";
+import siteData from "../data/site.json";
+import { rooms } from "../data/rooms";
+
+const roomsJson = JSON.stringify(rooms);
+---
+
+<MainLayout
+  title="Book Your Stay"
+  description="Search availability and book your stay at Corbett Foothills Retreat — a boutique farmstay at the edge of Jim Corbett National Park."
+>
+  <Fragment slot="head">
+    <meta name="robots" content="noindex, nofollow" />
+  </Fragment>
+  <Fragment slot="header">
+    <Header />
+  </Fragment>
+
+  <!-- HERO -->
+  <section class="relative flex min-h-[40vh] items-end overflow-hidden pt-56">
+    <div class="absolute inset-0 bg-cfr-green-dark"></div>
+    <div class="absolute inset-0 bg-hero-pattern"></div>
+    <div class="absolute inset-0 bg-leaf-pattern opacity-30"></div>
+    <div class="relative z-10 w-full bg-cfr-green-dark">
+      <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8 lg:pb-16">
+        <div class="mx-auto max-w-3xl text-center">
+          <div class="inline-flex items-center gap-2 rounded-full border border-cfr-sand-500/20 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-cfr-sand-300 backdrop-blur-sm">
+            <span class="flex h-2 w-2 rounded-full bg-cfr-sand-500 animate-pulse"></span>
+            Jim Corbett National Park, Uttarakhand
+          </div>
+          <h1 class="mt-4 font-display text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
+            Find Your Perfect Retreat
+          </h1>
+          <p class="mt-3 text-base text-white sm:text-lg">
+            Your jungle escape begins with a date
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEARCH FORM -->
+  <section id="search-section" class="relative z-20 -mt-6 bg-cfr-green-dark sm:-mt-8" aria-label="Search availability">
+    <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+      <form
+        id="search-form"
+        class="rounded-2xl bg-white p-4 text-center shadow-premium sm:p-6"
+        novalidate
+        aria-describedby="search-instructions"
+      >
+        <p id="search-instructions" class="sr-only">
+          Enter your travel dates and guest count to check availability.
+        </p>
+
+        <!-- Desktop: horizontal layout -->
+        <div class="grid grid-cols-1 gap-3 text-left sm:grid-cols-2 lg:grid-cols-5">
+          <!-- Check-in -->
+          <div class="relative">
+            <label for="checkin" class="block text-xs font-semibold uppercase tracking-wider text-cfr-earth-500">
+              Check-in
+            </label>
+            <input
+              type="date"
+              id="checkin"
+              name="checkin"
+              required
+              autocomplete="off"
+              class="mt-1 block w-full rounded-lg border-cfr-earth-200 bg-cfr-cream text-sm text-cfr-earth-700 focus:border-cfr-green-accent focus:ring-cfr-green-accent"
+            />
+            <p id="checkin-error" class="mt-1 hidden text-xs text-red-600" role="alert"></p>
+          </div>
+
+          <!-- Check-out -->
+          <div class="relative">
+            <label for="checkout" class="block text-xs font-semibold uppercase tracking-wider text-cfr-earth-500">
+              Check-out
+            </label>
+            <input
+              type="date"
+              id="checkout"
+              name="checkout"
+              required
+              autocomplete="off"
+              class="mt-1 block w-full rounded-lg border-cfr-earth-200 bg-cfr-cream text-sm text-cfr-earth-700 focus:border-cfr-green-accent focus:ring-cfr-green-accent"
+            />
+            <p id="checkout-error" class="mt-1 hidden text-xs text-red-600" role="alert"></p>
+          </div>
+
+          <!-- Adults -->
+          <div class="relative">
+            <label for="adults" class="block text-xs font-semibold uppercase tracking-wider text-cfr-earth-500">
+              Adults
+            </label>
+            <select
+              id="adults"
+              name="adults"
+              required
+              class="mt-1 block w-full rounded-lg border-cfr-earth-200 bg-cfr-cream text-sm text-cfr-earth-700 focus:border-cfr-green-accent focus:ring-cfr-green-accent"
+            >
+              <option value="1">1 Adult</option>
+              <option value="2" selected>2 Adults</option>
+              <option value="3">3 Adults</option>
+              <option value="4">4 Adults</option>
+              <option value="5">5 Adults</option>
+              <option value="6">6 Adults</option>
+            </select>
+          </div>
+
+          <!-- Children -->
+          <div class="relative">
+            <label for="children" class="block text-xs font-semibold uppercase tracking-wider text-cfr-earth-500">
+              Children
+            </label>
+            <select
+              id="children"
+              name="children"
+              class="mt-1 block w-full rounded-lg border-cfr-earth-200 bg-cfr-cream text-sm text-cfr-earth-700 focus:border-cfr-green-accent focus:ring-cfr-green-accent"
+            >
+              <option value="0" selected>0 Children</option>
+              <option value="1">1 Child</option>
+              <option value="2">2 Children</option>
+              <option value="3">3 Children</option>
+              <option value="4">4 Children</option>
+            </select>
+          </div>
+
+          <!-- Search Button -->
+          <div class="flex items-end justify-center lg:justify-end">
+            <button
+              type="submit"
+              id="search-btn"
+              class="flex w-full items-center justify-center gap-2 rounded-lg bg-cfr-green-accent px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2 lg:py-3.5"
+            >
+              <svg id="search-icon" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+              </svg>
+              <span id="search-btn-text">Check Availability</span>
+              <svg id="search-spinner" class="hidden h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT AREA -->
+  <section class="bg-cfr-cream py-10 sm:py-16" aria-live="polite" aria-label="Booking flow">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <!-- State: Initial (no search) -->
+      <div id="state-initial" class="py-12 text-center sm:py-20">
+        <div class="mx-auto max-w-lg">
+          <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-cfr-green-accent/10">
+            <svg class="h-8 w-8 text-cfr-green-accent" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3H21m-3.75 3H21" />
+            </svg>
+          </div>
+          <h2 class="mt-4 font-display text-xl font-bold text-cfr-green-dark sm:text-2xl">
+            Ready to Find Your Room?
+          </h2>
+          <p class="mt-2 text-sm text-cfr-earth-500 sm:text-base">
+            Enter your travel dates above to discover available rooms at Corbett Foothills Retreat.
+          </p>
+        </div>
+      </div>
+
+      <!-- State: Loading -->
+      <div id="state-loading" class="hidden" aria-busy="true" aria-label="Loading availability">
+        <p class="mb-6 text-center text-sm font-medium text-cfr-earth-500">
+          Finding available rooms&hellip;
+        </p>
+        <div class="grid gap-6 lg:grid-cols-2">
+          {[1, 2, 3].map(() => (
+            <div class="overflow-hidden rounded-2xl bg-white shadow-card">
+              <div class="skeleton-shimmer h-48 w-full bg-cfr-earth-100"></div>
+              <div class="p-5 space-y-3">
+                <div class="skeleton-shimmer h-6 w-2/3 rounded bg-cfr-earth-100"></div>
+                <div class="skeleton-shimmer h-4 w-full rounded bg-cfr-earth-100"></div>
+                <div class="skeleton-shimmer h-4 w-4/5 rounded bg-cfr-earth-100"></div>
+                <div class="flex gap-2 mt-2">
+                  <div class="skeleton-shimmer h-6 w-16 rounded-full bg-cfr-earth-100"></div>
+                  <div class="skeleton-shimmer h-6 w-20 rounded-full bg-cfr-earth-100"></div>
+                  <div class="skeleton-shimmer h-6 w-14 rounded-full bg-cfr-earth-100"></div>
+                </div>
+                <div class="mt-4 flex items-end justify-between">
+                  <div class="space-y-1">
+                    <div class="skeleton-shimmer h-7 w-24 rounded bg-cfr-earth-100"></div>
+                    <div class="skeleton-shimmer h-4 w-32 rounded bg-cfr-earth-100"></div>
+                  </div>
+                  <div class="skeleton-shimmer h-11 w-32 rounded-lg bg-cfr-earth-100"></div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- State: Error -->
+      <div id="state-error" class="hidden py-12 text-center sm:py-20">
+        <div class="mx-auto max-w-lg">
+          <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-red-50">
+            <svg class="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
+          </div>
+          <h2 class="mt-4 font-display text-xl font-bold text-cfr-green-dark sm:text-2xl">
+            Something Went Wrong
+          </h2>
+          <p id="error-message" class="mt-2 text-sm text-cfr-earth-500 sm:text-base">
+            We couldn't check availability right now. This is temporary.
+          </p>
+          <button
+            id="retry-btn"
+            class="mt-6 inline-flex items-center justify-center gap-2 rounded-full border-2 border-cfr-green-accent px-6 py-3 text-sm font-semibold text-cfr-green-accent transition-all duration-300 hover:bg-cfr-green-accent hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2"
+          >
+            Try Again
+          </button>
+          <p class="mt-4 text-xs text-cfr-earth-400">
+            If this persists, reach us at
+            <a href={`mailto:${siteData.site.email}`} class="text-cfr-green-accent hover:underline">{siteData.site.email}</a>
+          </p>
+        </div>
+      </div>
+
+      <!-- State: Empty -->
+      <div id="state-empty" class="hidden py-12 text-center sm:py-20">
+        <div class="mx-auto max-w-lg">
+          <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-cfr-sand-100">
+            <svg class="h-8 w-8 text-cfr-earth-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+            </svg>
+          </div>
+          <h2 class="mt-4 font-display text-xl font-bold text-cfr-green-dark sm:text-2xl">
+            No Rooms Available
+          </h2>
+          <p class="mt-2 text-sm text-cfr-earth-500 sm:text-base">
+            We couldn't find rooms for these dates. Try adjusting your dates or guest count.
+          </p>
+          <button
+            id="search-again-btn"
+            class="mt-6 inline-flex items-center justify-center gap-2 rounded-full border-2 border-cfr-green-accent px-6 py-3 text-sm font-semibold text-cfr-green-accent transition-all duration-300 hover:bg-cfr-green-accent hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2"
+          >
+            Search Again
+          </button>
+          <div class="mt-6 space-y-1">
+            <p class="text-sm text-cfr-earth-600">Or reach out to us directly:</p>
+            <p class="text-sm font-medium text-cfr-earth-700">
+              <a href={`tel:${siteData.site.phone}`} class="text-cfr-green-accent hover:underline">{siteData.site.phone}</a>
+              {' · '}
+              <a
+                href={`https://wa.me/${siteData.site.whatsapp.replace(/[^0-9]/g, '')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-cfr-green-accent hover:underline"
+              >WhatsApp</a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- State: Results -->
+      <div id="state-results" class="hidden">
+        <div class="mb-6 text-center">
+          <h2 class="font-display text-xl font-bold text-cfr-green-dark sm:text-2xl">
+            Available Rooms
+          </h2>
+          <p id="results-summary" class="mt-1 text-sm text-cfr-earth-500"></p>
+        </div>
+        <div class="grid gap-6 lg:grid-cols-3">
+          <div id="rooms-grid" class="lg:col-span-2"></div>
+          <div class="lg:col-span-1">
+            <BookingSummary />
+          </div>
+        </div>
+      </div>
+
+      <!-- State: Guest Details -->
+      <div id="state-guests" class="hidden">
+        <div class="grid gap-6 lg:grid-cols-3">
+          <div class="lg:col-span-2">
+            <div class="rounded-2xl border border-cfr-earth-100 bg-white p-6 text-center shadow-card">
+              <h2 class="font-display text-xl font-bold text-cfr-green-dark">Guest Details</h2>
+              <p class="mt-2 text-sm text-cfr-earth-500">
+                Just a few details to complete your booking
+              </p>
+              <div class="mt-6">
+                <GuestDetailsForm />
+              </div>
+              <div class="mt-6 flex items-center justify-between">
+                <button
+                  id="back-to-results"
+                  type="button"
+                  class="text-sm font-medium text-cfr-green-accent hover:underline"
+                >
+                  ← Back to rooms
+                </button>
+                <button
+                  id="proceed-to-review"
+                  type="button"
+                  class="inline-flex items-center justify-center gap-2 rounded-lg bg-cfr-green-accent px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2"
+                >
+                  Proceed to Review
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="lg:col-span-1">
+            <BookingSummary step="guests" />
+          </div>
+        </div>
+      </div>
+
+      <!-- State: Review -->
+      <div id="state-review" class="hidden">
+        <div class="grid gap-6 lg:grid-cols-3">
+          <div class="lg:col-span-2">
+            <ReviewStep />
+            <div class="mt-6 flex items-center justify-between">
+              <button
+                id="back-to-guests"
+                type="button"
+                class="text-sm font-medium text-cfr-green-accent hover:underline"
+              >
+                ← Back to guest details
+              </button>
+            </div>
+          </div>
+          <div class="lg:col-span-1">
+            <BookingSummary step="review" />
+          </div>
+        </div>
+      </div>
+
+      <!-- State: Booking Error -->
+      <div id="state-booking-error" class="hidden py-12 text-center sm:py-20">
+        <div class="mx-auto max-w-lg">
+          <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-red-50">
+            <svg class="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
+          </div>
+          <h2 class="mt-4 font-display text-xl font-bold text-cfr-green-dark sm:text-2xl">
+            Booking Unavailable
+          </h2>
+          <p id="booking-error-message" class="mt-2 text-sm text-cfr-earth-500 sm:text-base">
+            We couldn't complete your booking right now. You haven't been charged.
+          </p>
+          <div class="mt-6 space-y-3">
+            <button
+              id="try-booking-again"
+              class="inline-flex items-center justify-center gap-2 rounded-full border-2 border-cfr-green-accent px-6 py-3 text-sm font-semibold text-cfr-green-accent transition-all duration-300 hover:bg-cfr-green-accent hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2"
+            >
+              Try Again
+            </button>
+            <div class="text-sm text-cfr-earth-600">
+              <p>Or contact us directly:</p>
+              <p class="mt-2 font-medium text-cfr-earth-700">
+                <a href="mailto:corbettfoothills@gmail.com" class="text-cfr-green-accent hover:underline">corbettfoothills@gmail.com</a>
+                {' · '}
+                <a href="tel:+919818193314" class="text-cfr-green-accent hover:underline">+91 98181 93314</a>
+                {' · '}
+                <a
+                  href="https://wa.me/919818193314"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-cfr-green-accent hover:underline"
+                >WhatsApp</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- State: Payment -->
+      <div id="state-payment" class="hidden">
+        <div class="grid gap-6 lg:grid-cols-3">
+          <div class="lg:col-span-2">
+            <SessionCountdown />
+            <PaymentMethodSelection />
+            <PlaceholderUPIQR />
+            <PlaceholderUPIApp />
+            <PayAtCheckin />
+            <div class="mt-6 flex items-center justify-between">
+              <button
+                id="back-to-review"
+                type="button"
+                class="text-sm font-medium text-cfr-green-accent hover:underline"
+              >
+                ← Back to review
+              </button>
+            </div>
+          </div>
+          <div class="lg:col-span-1">
+            <BookingSummary step="payment" />
+          </div>
+        </div>
+      </div>
+
+      <!-- State: Session Expired -->
+      <div id="state-session-expired" class="hidden py-12 text-center sm:py-20">
+        <div class="mx-auto max-w-lg">
+          <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-cfr-sand-100">
+            <svg class="h-8 w-8 text-cfr-earth-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h2 class="mt-4 font-display text-xl font-bold text-cfr-green-dark sm:text-2xl">
+            Session Expired
+          </h2>
+          <p class="mt-2 text-sm text-cfr-earth-500 sm:text-base">
+            Your 5-minute reservation window has expired. Room availability is no longer guaranteed. Search again to check current availability.
+          </p>
+          <div class="mt-6 space-y-3">
+            <button
+              id="search-again-expired"
+              class="inline-flex items-center justify-center gap-2 rounded-full border-2 border-cfr-green-accent px-6 py-3 text-sm font-semibold text-cfr-green-accent transition-all duration-300 hover:bg-cfr-green-accent hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2"
+            >
+              Search Again
+            </button>
+            <div class="text-sm text-cfr-earth-600">
+              <p>Or reach out to us directly:</p>
+              <p class="mt-2 font-medium text-cfr-earth-700">
+                <a href="mailto:corbettfoothills@gmail.com" class="text-cfr-green-accent hover:underline">corbettfoothills@gmail.com</a>
+                {' · '}
+                <a href="tel:+919818193314" class="text-cfr-green-accent hover:underline">+91 98181 93314</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST STRIP -->
+  <section class="border-t border-cfr-earth-200 bg-white py-8 sm:py-10" aria-label="Trust signals">
+    <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 gap-6 sm:grid-cols-4">
+        <div class="flex flex-col items-center text-center">
+          <svg class="h-6 w-6 text-cfr-green-accent" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <p class="mt-1.5 text-xs font-bold text-cfr-earth-700">4.9 / 5</p>
+          <p class="text-[10px] uppercase tracking-wider text-cfr-earth-400">Google Reviews</p>
+        </div>
+        <div class="flex flex-col items-center text-center">
+          <svg class="h-6 w-6 text-cfr-green-accent" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+          </svg>
+          <p class="mt-1.5 text-xs font-bold text-cfr-earth-700">Secure</p>
+          <p class="text-[10px] uppercase tracking-wider text-cfr-earth-400">Payment</p>
+        </div>
+        <div class="flex flex-col items-center text-center">
+          <svg class="h-6 w-6 text-cfr-green-accent" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <p class="mt-1.5 text-xs font-bold text-cfr-earth-700">Free Cancel</p>
+          <p class="text-[10px] uppercase tracking-wider text-cfr-earth-400">Up to 48hrs</p>
+        </div>
+        <div class="flex flex-col items-center text-center">
+          <svg class="h-6 w-6 text-cfr-green-accent" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M18.75 4.236c.982.143 1.954.317 2.916.52A6.003 6.003 0 0016.27 9.728M18.75 4.236V4.5c0 2.108-.966 3.99-2.48 5.228m0 0a6.023 6.023 0 01-2.77.665 6.023 6.023 0 01-2.77-.665" />
+          </svg>
+          <p class="mt-1.5 text-xs font-bold text-cfr-earth-700">Best Rate</p>
+          <p class="text-[10px] uppercase tracking-wider text-cfr-earth-400">Guarantee</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Fragment slot="footer">
+    <Footer />
+  </Fragment>
+</MainLayout>
+
+<script define:vars={{ roomsJson }}>
+  (function () {
+    const ROOM_CONTENT = JSON.parse(roomsJson);
+
+    const BFF_BASE = "/api/booking";
+    const TIMEOUT_MS = 15000;
+
+    const form = document.getElementById("search-form");
+    const checkinInput = document.getElementById("checkin");
+    const checkoutInput = document.getElementById("checkout");
+    const adultsInput = document.getElementById("adults");
+    const childrenInput = document.getElementById("children");
+    const searchBtn = document.getElementById("search-btn");
+    const searchBtnText = document.getElementById("search-btn-text");
+    const searchIcon = document.getElementById("search-icon");
+    const searchSpinner = document.getElementById("search-spinner");
+    const retryBtn = document.getElementById("retry-btn");
+    const searchAgainBtn = document.getElementById("search-again-btn");
+    const backToResultsBtn = document.getElementById("back-to-results");
+    const backToGuestsBtn = document.getElementById("back-to-guests");
+    const proceedToReviewBtn = document.getElementById("proceed-to-review");
+    const tryBookingAgainBtn = document.getElementById("try-booking-again");
+
+    const stateInitial = document.getElementById("state-initial");
+    const stateLoading = document.getElementById("state-loading");
+    const stateError = document.getElementById("state-error");
+    const stateEmpty = document.getElementById("state-empty");
+    const stateResults = document.getElementById("state-results");
+    const stateGuests = document.getElementById("state-guests");
+    const stateReview = document.getElementById("state-review");
+    const stateBookingError = document.getElementById("state-booking-error");
+    const statePayment = document.getElementById("state-payment");
+    const stateSessionExpired = document.getElementById("state-session-expired");
+    const errorMessage = document.getElementById("error-message");
+    const bookingErrorMessage = document.getElementById("booking-error-message");
+    const resultsSummary = document.getElementById("results-summary");
+    const roomsGrid = document.getElementById("rooms-grid");
+    const searchSection = document.getElementById("search-section");
+
+    let currentAbortController = null;
+    let lastSearchParams = null;
+    let selectedRoom = null;
+    let quoteData = null;
+    let guestData = null;
+
+    const SESSION_DURATION_MS = 300000;
+    const SESSION_WARNING_MS = 120000;
+    const SESSION_URGENT_MS = 60000;
+    const SESSION_STORAGE_KEY = "cfr_booking_session";
+    let sessionData = null;
+    let countdownInterval = null;
+    let serverTimeOffset = 0;
+
+    function getUrlParams() {
+      const params = new URLSearchParams(window.location.search);
+      return {
+        step: params.get("step") || "search",
+        room: params.get("room") || "",
+        checkin: params.get("checkin") || "",
+        checkout: params.get("checkout") || "",
+        adults: parseInt(params.get("adults") || "2", 10),
+        children: parseInt(params.get("children") || "0", 10),
+      };
+    }
+
+    function updateUrl(step, params = {}) {
+      const url = new URL(window.location);
+      url.searchParams.set("step", step);
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== "") {
+          url.searchParams.set(key, String(value));
+        }
+      });
+      window.history.pushState({}, "", url);
+    }
+
+    function setDefaultDates() {
+      const now = new Date();
+      const tomorrow = new Date(now);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const dayAfter = new Date(now);
+      dayAfter.setDate(dayAfter.getDate() + 2);
+
+      checkinInput.value = formatDateValue(tomorrow);
+      checkoutInput.value = formatDateValue(dayAfter);
+      checkinInput.min = formatDateValue(now);
+    }
+
+    function formatDateValue(d) {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return y + "-" + m + "-" + day;
+    }
+
+    function formatDisplayDate(dateStr) {
+      const d = new Date(dateStr + "T00:00:00");
+      return d.toLocaleDateString("en-IN", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      });
+    }
+
+    function formatCurrency(amount) {
+      return new Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: "INR",
+        maximumFractionDigits: 0,
+      }).format(amount);
+    }
+
+    function showState(state) {
+      [stateInitial, stateLoading, stateError, stateEmpty, stateResults, stateGuests, stateReview, stateBookingError, statePayment, stateSessionExpired].forEach(
+        (el) => el.classList.add("hidden")
+      );
+      state.classList.remove("hidden");
+      
+      if (state === stateResults || state === stateGuests || state === stateReview || state === statePayment) {
+        searchSection.classList.add("hidden");
+      } else {
+        searchSection.classList.remove("hidden");
+      }
+
+      if (state === statePayment) {
+        showCountdown(true);
+      } else {
+        showCountdown(false);
+      }
+    }
+
+    function setLoading(loading) {
+      if (loading) {
+        searchBtn.disabled = true;
+        searchBtnText.textContent = "Searching\u2026";
+        searchIcon.classList.add("hidden");
+        searchSpinner.classList.remove("hidden");
+      } else {
+        searchBtn.disabled = false;
+        searchBtnText.textContent = "Check Availability";
+        searchIcon.classList.remove("hidden");
+        searchSpinner.classList.add("hidden");
+      }
+    }
+
+    function clearErrors() {
+      document.querySelectorAll("[id$=-error]").forEach((el) => {
+        el.classList.add("hidden");
+        el.textContent = "";
+      });
+      document.querySelectorAll("input, select").forEach((el) => {
+        el.classList.remove("!border-red-500");
+      });
+    }
+
+    function showError(fieldId, message) {
+      const errorEl = document.getElementById(fieldId + "-error");
+      const inputEl = document.getElementById(fieldId);
+      if (errorEl) {
+        errorEl.textContent = message;
+        errorEl.classList.remove("hidden");
+      }
+      if (inputEl) {
+        inputEl.classList.add("!border-red-500");
+      }
+    }
+
+    function generateSessionId() {
+      const arr = new Uint8Array(16);
+      crypto.getRandomValues(arr);
+      return Array.from(arr, function (b) { return b.toString(16).padStart(2, "0"); }).join("");
+    }
+
+    function persistSession(session) {
+      try {
+        sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+      } catch (e) { /* ignore */ }
+    }
+
+    function loadSession() {
+      try {
+        var raw = sessionStorage.getItem(SESSION_STORAGE_KEY);
+        if (!raw) return null;
+        var parsed = JSON.parse(raw);
+        if (!parsed.sessionId || !parsed.expiresAt) return null;
+        return parsed;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function clearBookingSession() {
+      try {
+        sessionStorage.removeItem(SESSION_STORAGE_KEY);
+      } catch (e) { /* ignore */ }
+      sessionData = null;
+      stopCountdown();
+    }
+
+    function isSessionExpired(session) {
+      return Date.now() >= session.expiresAt;
+    }
+
+    function getRemainingMs(session) {
+      return Math.max(0, session.expiresAt - Date.now());
+    }
+
+    function formatTimeRemaining(ms) {
+      if (ms <= 0) return "0:00";
+      var totalSec = Math.ceil(ms / 1000);
+      var min = Math.floor(totalSec / 60);
+      var sec = totalSec % 60;
+      return min + ":" + String(sec).padStart(2, "0");
+    }
+
+    function updateCountdownDisplay() {
+      if (!sessionData) return;
+      var remaining = getRemainingMs(sessionData);
+      var timeEl = document.getElementById("countdown-time");
+      var progressEl = document.getElementById("countdown-progress");
+      var countdownEl = document.getElementById("session-countdown");
+      var srAnnounce = document.getElementById("countdown-sr-announce");
+
+      if (timeEl) timeEl.textContent = formatTimeRemaining(remaining);
+
+      if (progressEl) {
+        var pct = Math.max(0, (remaining / SESSION_DURATION_MS) * 100);
+        progressEl.style.width = pct + "%";
+      }
+
+      if (countdownEl) {
+        countdownEl.classList.remove("countdown-state-warning", "countdown-state-urgent");
+        if (remaining <= SESSION_URGENT_MS && remaining > 0) {
+          countdownEl.classList.add("countdown-state-urgent");
+        } else if (remaining <= SESSION_WARNING_MS && remaining > 0) {
+          countdownEl.classList.add("countdown-state-warning");
+        }
+      }
+
+      if (srAnnounce && remaining > 0 && remaining % 30000 < 1100) {
+        var mins = Math.ceil(remaining / 60000);
+        srAnnounce.textContent = mins + " minute" + (mins !== 1 ? "s" : "") + " remaining";
+      }
+
+      if (remaining <= 0) {
+        onSessionExpired();
+      }
+    }
+
+    function startCountdown() {
+      stopCountdown();
+      updateCountdownDisplay();
+      countdownInterval = setInterval(updateCountdownDisplay, 1000);
+    }
+
+    function stopCountdown() {
+      if (countdownInterval) {
+        clearInterval(countdownInterval);
+        countdownInterval = null;
+      }
+    }
+
+    function onSessionExpired() {
+      stopCountdown();
+      clearBookingSession();
+      showState(stateSessionExpired);
+      updateUrl("expired", {
+        room: selectedRoom?.slug,
+        checkin: lastSearchParams?.checkin,
+        checkout: lastSearchParams?.checkout,
+      });
+    }
+
+    function showCountdown(show) {
+      var el = document.getElementById("session-countdown");
+      if (el) {
+        if (show) {
+          el.classList.remove("hidden");
+        } else {
+          el.classList.add("hidden");
+        }
+      }
+    }
+
+    function hidePaymentScreens() {
+      var els = ["placeholder-upi-qr", "placeholder-upi-app", "pay-at-checkin"];
+      els.forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.classList.add("hidden");
+      });
+    }
+
+    function showPaymentScreen(method) {
+      hidePaymentScreens();
+      if (method === "upi-qr") {
+        var el = document.getElementById("placeholder-upi-qr");
+        if (el) el.classList.remove("hidden");
+      } else if (method === "upi-app") {
+        var el = document.getElementById("placeholder-upi-app");
+        if (el) el.classList.remove("hidden");
+      } else if (method === "pay-at-checkin") {
+        var el = document.getElementById("pay-at-checkin");
+        if (el) el.classList.remove("hidden");
+      }
+    }
+
+    function setupPaymentMethodListeners() {
+      var radios = document.querySelectorAll('input[name="payment-method"]');
+      radios.forEach(function (radio) {
+        radio.addEventListener("change", function () {
+          var method = this.value;
+          if (sessionData) {
+            sessionData.paymentMethod = method;
+            sessionData.paymentStatus = "method-selected";
+            persistSession(sessionData);
+          }
+          showPaymentScreen(method);
+        });
+      });
+    }
+
+    async function fetchServerTime() {
+      try {
+        var res = await fetch("/api/booking/session", {
+          method: "GET",
+          headers: { Accept: "application/json" },
+        });
+        if (res.ok) {
+          var data = await res.json();
+          serverTimeOffset = (data.serverTime || Date.now()) - Date.now();
+        }
+      } catch (e) { /* ignore */ }
+    }
+
+    function createBookingSession(roomSlug, roomName, checkin, checkout, adults, children, quote, guest, quoteId) {
+      var now = Date.now();
+      var session = {
+        sessionId: generateSessionId(),
+        createdAt: now,
+        expiresAt: now + SESSION_DURATION_MS,
+        serverTimeAtCreate: now,
+        roomSlug: roomSlug,
+        roomName: roomName,
+        checkin: checkin,
+        checkout: checkout,
+        adults: adults,
+        children: children,
+        quoteId: quoteId || null,
+        guest: guest || {},
+        quote: quote || {},
+        paymentMethod: null,
+        paymentStatus: "pending",
+        currentStep: "payment",
+      };
+      sessionData = session;
+      persistSession(session);
+      return session;
+    }
+
+    function setupNavigationProtection() {
+      window.addEventListener("beforeunload", function (e) {
+        if (sessionData && !isSessionExpired(sessionData) && sessionData.paymentStatus !== "completed") {
+          e.preventDefault();
+          e.returnValue = "";
+          return "";
+        }
+      });
+    }
+
+    function attemptSessionRecovery() {
+      var saved = loadSession();
+      if (saved && !isSessionExpired(saved)) {
+        sessionData = saved;
+        selectedRoom = ROOM_CONTENT.find(function (r) { return r.slug === saved.roomSlug; });
+        lastSearchParams = {
+          checkin: saved.checkin,
+          checkout: saved.checkout,
+          adults: saved.adults,
+          children: saved.children,
+        };
+        quoteData = saved.quote;
+        guestData = saved.guest;
+        updateBookingSummary();
+        showState(statePayment);
+        showCountdown(true);
+        startCountdown();
+        updateUrl("payment", {
+          room: saved.roomSlug,
+          checkin: saved.checkin,
+          checkout: saved.checkout,
+          adults: saved.adults,
+          children: saved.children,
+        });
+        return true;
+      }
+      if (saved && isSessionExpired(saved)) {
+        clearBookingSession();
+      }
+      return false;
+    }
+
+    function validate() {
+      clearErrors();
+      let valid = true;
+
+      const checkin = checkinInput.value;
+      const checkout = checkoutInput.value;
+      const adults = parseInt(adultsInput.value, 10);
+      const today = formatDateValue(new Date());
+
+      if (!checkin) {
+        showError("checkin", "Please select a check-in date");
+        valid = false;
+      } else if (checkin < today) {
+        showError("checkin", "Check-in cannot be in the past");
+        valid = false;
+      }
+
+      if (!checkout) {
+        showError("checkout", "Please select a check-out date");
+        valid = false;
+      } else if (checkin && checkout <= checkin) {
+        showError("checkout", "Check-out must be after check-in");
+        valid = false;
+      }
+
+      if (!adults || adults < 1) {
+        showError("adults", "At least 1 adult is required");
+        valid = false;
+      }
+
+      return valid;
+    }
+
+    async function searchAvailability() {
+      if (!validate()) return;
+
+      const params = {
+        checkin: checkinInput.value,
+        checkout: checkoutInput.value,
+        adults: parseInt(adultsInput.value, 10),
+        children: parseInt(childrenInput.value, 10) || 0,
+      };
+
+      lastSearchParams = params;
+
+      if (currentAbortController) currentAbortController.abort();
+      currentAbortController = new AbortController();
+
+      showState(stateLoading);
+      setLoading(true);
+
+      try {
+        const url =
+          BFF_BASE +
+          "/availability?" +
+          new URLSearchParams({
+            checkin: params.checkin,
+            checkout: params.checkout,
+            adults: String(params.adults),
+            children: String(params.children),
+          }).toString();
+
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+          },
+          signal: currentAbortController.signal,
+        });
+
+        if (!response.ok) {
+          throw { message: "Server error", code: "SERVER_ERROR" };
+        }
+
+        const data = await response.json();
+
+        if (!data.rooms || data.rooms.length === 0) {
+          showState(stateEmpty);
+          return;
+        }
+
+        renderResults(data);
+        showState(stateResults);
+      } catch (err) {
+        if (err?.name === "AbortError") return;
+        showState(stateError);
+        errorMessage.textContent =
+          err?.message || "Something went wrong. Please try again.";
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    async function fetchQuote(roomSlug) {
+      const room = ROOM_CONTENT.find((r) => r.slug === roomSlug);
+      if (!room || !lastSearchParams) return;
+
+      selectedRoom = room;
+
+      const stateLoading = document.createElement("div");
+      stateLoading.id = "quote-loading";
+      stateLoading.className = "fixed inset-0 z-50 flex items-center justify-center bg-black/50";
+      stateLoading.innerHTML = `
+        <div class="rounded-2xl bg-white p-6 text-center shadow-premium">
+          <svg class="mx-auto h-8 w-8 animate-spin text-cfr-green-accent" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <p class="mt-3 text-sm font-medium text-cfr-earth-600">Calculating your rate...</p>
+        </div>
+      `;
+      document.body.appendChild(stateLoading);
+
+      try {
+        const response = await fetch(BFF_BASE + "/quote", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            room_id: roomSlug,
+            checkin: lastSearchParams.checkin,
+            checkout: lastSearchParams.checkout,
+            adults: lastSearchParams.adults,
+            children: lastSearchParams.children,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to get quote");
+        }
+
+        quoteData = data;
+        updateBookingSummary();
+        showState(stateGuests);
+        updateUrl("guests", {
+          room: roomSlug,
+          checkin: lastSearchParams.checkin,
+          checkout: lastSearchParams.checkout,
+          adults: lastSearchParams.adults,
+          children: lastSearchParams.children,
+        });
+      } catch (err) {
+        console.error("Quote error:", err);
+        alert("Unable to get pricing. Please try again.");
+      } finally {
+        stateLoading.remove();
+      }
+    }
+
+    function updateBookingSummary() {
+      if (!quoteData || !selectedRoom) return;
+
+      const summaryElements = document.querySelectorAll("[data-booking-summary]");
+      summaryElements.forEach((el) => {
+        const nights = Math.ceil(
+          (new Date(lastSearchParams.checkout + "T00:00:00") -
+            new Date(lastSearchParams.checkin + "T00:00:00")) /
+            86400000
+        );
+
+        el.innerHTML = `
+          <div class="space-y-4">
+            <div>
+              <h3 class="font-display text-base font-semibold text-cfr-green-dark">${selectedRoom.name}</h3>
+              <p class="mt-1 text-sm text-cfr-earth-500">
+                ${formatDisplayDate(lastSearchParams.checkin)} – ${formatDisplayDate(lastSearchParams.checkout)}
+              </p>
+              <p class="text-sm text-cfr-earth-500">
+                ${nights} night${nights !== 1 ? 's' : ''} · ${lastSearchParams.adults} Adult${lastSearchParams.adults !== 1 ? 's' : ''}${lastSearchParams.children > 0 ? `, ${lastSearchParams.children} Child${lastSearchParams.children !== 1 ? 'ren' : ''}` : ''}
+              </p>
+            </div>
+            
+            <div class="border-t border-cfr-earth-100 pt-4">
+              <div class="flex justify-between text-sm">
+                <span class="text-cfr-earth-600">Room (${nights} night${nights !== 1 ? 's' : ''})</span>
+                <span class="font-medium text-cfr-earth-700">${formatCurrency(quoteData.subtotal || quoteData.total || 0)}</span>
+              </div>
+              
+              ${quoteData.taxes ? `
+                <div class="mt-2 space-y-1">
+                  ${Object.entries(quoteData.taxes).map(([label, amount]) => `
+                    <div class="flex justify-between text-xs text-cfr-earth-500">
+                      <span>${label}</span>
+                      <span>${formatCurrency(amount)}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              ` : ''}
+              
+              <div class="mt-3 border-t border-cfr-earth-100 pt-3">
+                <div class="flex justify-between">
+                  <span class="font-bold text-cfr-earth-700">Total</span>
+                  <span class="text-xl font-bold text-cfr-earth-700">${formatCurrency(quoteData.total || 0)}</span>
+                </div>
+              </div>
+            </div>
+            
+            ${quoteData.cancellation_policy ? `
+              <div class="flex items-start gap-2 text-xs text-cfr-green-leaf">
+                <svg class="mt-0.5 h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>${quoteData.cancellation_policy}</span>
+              </div>
+            ` : ''}
+            
+            <div class="flex items-center justify-center gap-4 text-xs text-cfr-earth-400">
+              <span class="flex items-center gap-1">
+                <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                </svg>
+                Secure
+              </span>
+              <span class="flex items-center gap-1">
+                <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Best Rate
+              </span>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    async function submitBooking() {
+      if (!selectedRoom || !lastSearchParams || !guestData) return;
+
+      const confirmationCheckbox = document.getElementById("booking-confirmation");
+      if (!confirmationCheckbox?.checked) {
+        const errorEl = document.getElementById("confirmation-error");
+        if (errorEl) {
+          errorEl.textContent = "Please confirm the details are correct";
+          errorEl.classList.remove("hidden");
+        }
+        return;
+      }
+
+      await fetchServerTime();
+
+      const session = createBookingSession(
+        selectedRoom.slug,
+        selectedRoom.name,
+        lastSearchParams.checkin,
+        lastSearchParams.checkout,
+        lastSearchParams.adults,
+        lastSearchParams.children,
+        {
+          subtotal: quoteData?.subtotal || 0,
+          totalTaxes: quoteData?.totalTaxes || 0,
+          grandTotal: quoteData?.total || 0,
+          cancellationPolicy: quoteData?.cancellation_policy || "",
+          taxBreakdown: quoteData?.taxes ? Object.entries(quoteData.taxes).map(function (e) { return { label: e[0], amount: e[1] }; }) : [],
+          nightlyRate: quoteData?.nightlyRate || 0,
+          totalStay: quoteData?.total || 0,
+        },
+        guestData,
+        quoteData?.quote_id
+      );
+
+      showState(statePayment);
+      startCountdown();
+      setupPaymentMethodListeners();
+      setupNavigationProtection();
+      updateUrl("payment", {
+        room: selectedRoom.slug,
+        checkin: lastSearchParams.checkin,
+        checkout: lastSearchParams.checkout,
+        adults: lastSearchParams.adults,
+        children: lastSearchParams.children,
+      });
+    }
+
+    function renderResults(data) {
+      roomsGrid.innerHTML = "";
+
+      const nights = Math.ceil(
+        (new Date(data.checkout + "T00:00:00") -
+          new Date(data.checkin + "T00:00:00")) /
+          86400000
+      );
+
+      resultsSummary.textContent =
+        data.rooms.length +
+        " room" +
+        (data.rooms.length !== 1 ? "s" : "") +
+        " available · " +
+        nights +
+        " night" +
+        (nights !== 1 ? "s" : "") +
+        " · " +
+        formatDisplayDate(data.checkin) +
+        " – " +
+        formatDisplayDate(data.checkout);
+
+      data.rooms.forEach((apiRoom) => {
+        const content = ROOM_CONTENT.find((r) => r.slug === apiRoom.slug);
+        const card = createRoomCard(apiRoom, content, nights);
+        roomsGrid.appendChild(card);
+      });
+    }
+
+    function createRoomCard(apiRoom, content, nights) {
+      const card = document.createElement("article");
+      card.className =
+        "overflow-hidden rounded-2xl bg-white shadow-card transition-all duration-300 hover:shadow-glow room-card-enter";
+      card.setAttribute("aria-label", (content || apiRoom).name + " room");
+
+      const name = content ? content.name : apiRoom.name;
+      const description = content ? content.shortDescription : "";
+      const image = content ? content.image : "";
+      const maxOccupancy = content
+        ? content.maxOccupancy.adults +
+          (content.maxOccupancy.children > 0
+            ? " Adults + " + content.maxOccupancy.children + " Children"
+            : " Adults")
+        : "";
+      const bedType = content ? content.bedType : "";
+      const area = content ? content.area : "";
+      const amenities = content ? content.amenities : [];
+      const smoking = content ? content.smoking : false;
+      const accessibility = content ? content.accessibility : false;
+      const cancellationPolicy = content
+        ? content.cancellationPolicy
+        : apiRoom.cancellationPolicy || "";
+
+      const available = apiRoom.available;
+      const roomsLeft = apiRoom.roomsLeft || 0;
+      const nightlyRate = apiRoom.nightlyRate;
+      const originalRate = apiRoom.originalNightlyRate;
+      const totalStay = apiRoom.totalStay;
+      const originalTotal = apiRoom.originalTotal;
+      const grandTotal = apiRoom.grandTotal;
+      const taxBreakdown = apiRoom.taxBreakdown || [];
+      const totalTaxes = apiRoom.totalTaxes || 0;
+
+      let imageHtml = "";
+      if (image) {
+        imageHtml =
+          '<div class="relative aspect-[16/10] overflow-hidden">' +
+          '<img src="' +
+          image +
+          '" alt="' +
+          name +
+          '" class="h-full w-full object-cover transition-transform duration-500 hover:scale-105" loading="lazy" />' +
+          (!available
+            ? '<div class="absolute inset-0 flex items-center justify-center bg-black/50"><span class="rounded-full bg-white/90 px-4 py-1.5 text-sm font-bold text-cfr-earth-700">Not Available</span></div>'
+            : roomsLeft > 0 && roomsLeft <= 3
+            ? '<div class="absolute top-3 right-3 rounded-full bg-cfr-sand-500 px-3 py-1 text-xs font-bold text-cfr-earth-700 shadow-sm">Only ' + roomsLeft + " left</div>"
+            : "") +
+          "</div>";
+      } else {
+        imageHtml =
+          '<div class="flex aspect-[16/10] items-center justify-center bg-cfr-earth-100">' +
+          '<svg class="h-16 w-16 text-cfr-earth-300" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3H21m-3.75 3H21" /></svg>' +
+          "</div>";
+      }
+
+      let infoChips = "";
+      if (maxOccupancy)
+        infoChips +=
+          '<span class="inline-flex items-center gap-1 rounded-full bg-cfr-cream px-2.5 py-1 text-[11px] font-medium text-cfr-earth-600"><svg class="h-3 w-3 text-cfr-green-accent" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>' +
+          maxOccupancy +
+          "</span>";
+      if (bedType)
+        infoChips +=
+          '<span class="inline-flex items-center gap-1 rounded-full bg-cfr-cream px-2.5 py-1 text-[11px] font-medium text-cfr-earth-600"><svg class="h-3 w-3 text-cfr-green-accent" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" /></svg>' +
+          bedType +
+          "</span>";
+      if (area)
+        infoChips +=
+          '<span class="inline-flex items-center gap-1 rounded-full bg-cfr-cream px-2.5 py-1 text-[11px] font-medium text-cfr-earth-600"><svg class="h-3 w-3 text-cfr-green-accent" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" /></svg>' +
+          area +
+          "</span>";
+
+      let amenityHtml = "";
+      if (amenities.length > 0) {
+        const visibleAmenities = amenities.slice(0, 6);
+        const remaining = amenities.length - 6;
+        amenityHtml =
+          '<div class="mt-3 flex flex-wrap gap-1.5">' +
+          visibleAmenities
+            .map(
+              (a) =>
+                '<span class="rounded-full bg-cfr-green-50 px-2 py-0.5 text-[10px] font-medium text-cfr-green-700">' +
+                a +
+                "</span>"
+            )
+            .join("") +
+          (remaining > 0
+            ? '<span class="rounded-full bg-cfr-earth-100 px-2 py-0.5 text-[10px] font-medium text-cfr-earth-500">+' +
+              remaining +
+              " more</span>"
+            : "") +
+          "</div>";
+      }
+
+      let indicators = "";
+      if (smoking)
+        indicators +=
+          '<span class="inline-flex items-center gap-1 rounded-full bg-cfr-sand-100 px-2 py-0.5 text-[10px] font-medium text-cfr-earth-500">Non-Smoking</span>';
+      if (accessibility)
+        indicators +=
+          '<span class="inline-flex items-center gap-1 rounded-full bg-cfr-green-50 px-2 py-0.5 text-[10px] font-medium text-cfr-green-700">Accessible</span>';
+
+      let pricingHtml = "";
+      if (available) {
+        const hasDiscount = originalRate && originalRate > nightlyRate;
+        pricingHtml =
+          '<div class="mt-4 space-y-1">' +
+          '<div class="flex items-baseline gap-2">' +
+          '<span class="text-xl font-bold text-cfr-earth-700">' +
+          formatCurrency(nightlyRate) +
+          ' <span class="text-sm font-normal text-cfr-earth-400">/ night</span></span>' +
+          (hasDiscount
+            ? '<span class="text-sm text-cfr-earth-400 line-through">' +
+              formatCurrency(originalRate) +
+              "</span>"
+            : "") +
+          "</div>" +
+          '<p class="text-sm text-cfr-earth-500">' +
+          formatCurrency(totalStay) +
+          " for " +
+          nights +
+          " night" +
+          (nights !== 1 ? "s" : "") +
+          (hasDiscount && originalTotal
+            ? ' <span class="line-through text-cfr-earth-400">' +
+              formatCurrency(originalTotal) +
+              "</span>"
+            : "") +
+          (hasDiscount
+            ? ' <span class="font-medium text-cfr-green-leaf">Save ' +
+              formatCurrency(originalRate * nights - totalStay) +
+              "</span>"
+            : "") +
+          "</p>" +
+          "</div>";
+
+        if (taxBreakdown.length > 0 || totalTaxes > 0) {
+          pricingHtml +=
+            '<div class="mt-2 border-t border-cfr-earth-100 pt-2">';
+          taxBreakdown.forEach(function (t) {
+            pricingHtml +=
+              '<div class="flex justify-between text-xs text-cfr-earth-400"><span>' +
+              t.label +
+              "</span><span>" +
+              formatCurrency(t.amount) +
+              "</span></div>";
+          });
+          if (totalTaxes > 0 && taxBreakdown.length === 0) {
+            pricingHtml +=
+              '<div class="flex justify-between text-xs text-cfr-earth-400"><span>Taxes</span><span>' +
+              formatCurrency(totalTaxes) +
+              "</span></div>";
+          }
+          pricingHtml +=
+            '<div class="flex justify-between text-sm font-bold text-cfr-earth-700"><span>Total</span><span>' +
+            formatCurrency(grandTotal || totalStay + totalTaxes) +
+            "</span></div></div>";
+        }
+      } else {
+        pricingHtml =
+          '<div class="mt-4"><p class="text-sm font-medium text-cfr-earth-400">Not available for these dates</p></div>';
+      }
+
+      let cancellationHtml = "";
+      if (cancellationPolicy) {
+        cancellationHtml =
+          '<div class="mt-3 flex items-center gap-1.5 text-xs text-cfr-green-leaf">' +
+          '<svg class="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>' +
+          cancellationPolicy +
+          "</div>";
+      }
+
+      card.innerHTML =
+        imageHtml +
+        '<div class="p-5">' +
+        '<h3 class="font-display text-lg font-bold text-cfr-green-dark sm:text-xl">' +
+        name +
+        "</h3>" +
+        (description
+          ? '<p class="mt-1.5 text-sm leading-relaxed text-cfr-earth-600">' +
+            description +
+            "</p>"
+          : "") +
+        (infoChips
+          ? '<div class="mt-3 flex flex-wrap gap-1.5">' + infoChips + "</div>"
+          : "") +
+        amenityHtml +
+        (indicators
+          ? '<div class="mt-2 flex flex-wrap gap-1.5">' + indicators + "</div>"
+          : "") +
+        pricingHtml +
+        cancellationHtml +
+        '<div class="mt-4">' +
+        (available
+          ? '<button class="flex w-full items-center justify-center gap-2 rounded-lg bg-cfr-green-accent px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2 select-room-btn" data-slug="' +
+            apiRoom.slug +
+            '">Select This Room</button>'
+          : '<button disabled class="flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-lg bg-cfr-earth-200 px-6 py-3 text-sm font-semibold text-cfr-earth-400">Unavailable</button>') +
+        "</div>" +
+        "</div>";
+
+      return card;
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      searchAvailability();
+    });
+
+    retryBtn.addEventListener("click", function () {
+      searchAvailability();
+    });
+
+    searchAgainBtn.addEventListener("click", function () {
+      form.scrollIntoView({ behavior: "smooth", block: "center" });
+      checkinInput.focus();
+    });
+
+    backToResultsBtn.addEventListener("click", function () {
+      showState(stateResults);
+      updateUrl("results", {
+        checkin: lastSearchParams?.checkin,
+        checkout: lastSearchParams?.checkout,
+        adults: lastSearchParams?.adults,
+        children: lastSearchParams?.children,
+      });
+    });
+
+    backToGuestsBtn.addEventListener("click", function () {
+      showState(stateGuests);
+      updateUrl("guests", {
+        room: selectedRoom?.slug,
+        checkin: lastSearchParams?.checkin,
+        checkout: lastSearchParams?.checkout,
+        adults: lastSearchParams?.adults,
+        children: lastSearchParams?.children,
+      });
+    });
+
+    proceedToReviewBtn.addEventListener("click", function () {
+      if (typeof window.validateGuestForm === "function" && !window.validateGuestForm()) {
+        return;
+      }
+      guestData = typeof window.getGuestDetails === "function" ? window.getGuestDetails() : {};
+      showState(stateReview);
+      updateUrl("review", {
+        room: selectedRoom?.slug,
+        checkin: lastSearchParams?.checkin,
+        checkout: lastSearchParams?.checkout,
+        adults: lastSearchParams?.adults,
+        children: lastSearchParams?.children,
+      });
+    });
+
+    tryBookingAgainBtn.addEventListener("click", function () {
+      showState(stateReview);
+    });
+
+    const backToReviewBtn = document.getElementById("back-to-review");
+    if (backToReviewBtn) {
+      backToReviewBtn.addEventListener("click", function () {
+        stopCountdown();
+        showCountdown(false);
+        showState(stateReview);
+        updateUrl("review", {
+          room: selectedRoom?.slug,
+          checkin: lastSearchParams?.checkin,
+          checkout: lastSearchParams?.checkout,
+          adults: lastSearchParams?.adults,
+          children: lastSearchParams?.children,
+        });
+      });
+    }
+
+    const searchAgainExpiredBtn = document.getElementById("search-again-expired");
+    if (searchAgainExpiredBtn) {
+      searchAgainExpiredBtn.addEventListener("click", function () {
+        clearBookingSession();
+        showState(stateInitial);
+        form.scrollIntoView({ behavior: "smooth", block: "center" });
+        checkinInput.focus();
+      });
+    }
+
+    document.addEventListener("click", function (e) {
+      const target = e.target;
+      if (target.classList.contains("select-room-btn")) {
+        const slug = target.getAttribute("data-slug");
+        if (slug) {
+          fetchQuote(slug);
+        }
+      }
+    });
+
+    const completeBookingBtns = document.querySelectorAll("#complete-booking-btn, #mobile-complete-booking-btn");
+    completeBookingBtns.forEach((btn) => {
+      btn.addEventListener("click", function (e) {
+        e.preventDefault();
+        submitBooking();
+      });
+    });
+
+    checkinInput.addEventListener("change", function () {
+      if (checkinInput.value) {
+        const nextDay = new Date(checkinInput.value + "T00:00:00");
+        nextDay.setDate(nextDay.getDate() + 1);
+        checkoutInput.min = formatDateValue(nextDay);
+        if (checkoutInput.value && checkoutInput.value <= checkinInput.value) {
+          checkoutInput.value = formatDateValue(nextDay);
+        }
+      }
+    });
+
+    setDefaultDates();
+
+    var recovered = attemptSessionRecovery();
+    if (!recovered) {
+      const urlParams = getUrlParams();
+      if (urlParams.step === "guests" && urlParams.room) {
+        showState(stateGuests);
+        selectedRoom = ROOM_CONTENT.find((r) => r.slug === urlParams.room);
+        lastSearchParams = {
+          checkin: urlParams.checkin,
+          checkout: urlParams.checkout,
+          adults: urlParams.adults,
+          children: urlParams.children,
+        };
+        fetchQuote(urlParams.room);
+      } else if (urlParams.step === "review" && urlParams.room) {
+        showState(stateReview);
+        selectedRoom = ROOM_CONTENT.find((r) => r.slug === urlParams.room);
+        lastSearchParams = {
+          checkin: urlParams.checkin,
+          checkout: urlParams.checkout,
+          adults: urlParams.adults,
+          children: urlParams.children,
+        };
+        fetchQuote(urlParams.room);
+      } else if (urlParams.step === "payment" && urlParams.room) {
+        var saved = loadSession();
+        if (saved && !isSessionExpired(saved)) {
+          attemptSessionRecovery();
+        } else {
+          showState(stateInitial);
+        }
+      }
+    }
+  })();
+</script>
