@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "typecheck": "tsc --noEmit",
     "preview": "astro preview",
     "cf:deploy": "astro build && wrangler pages deploy ./dist"
   },

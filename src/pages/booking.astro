@@ -7,8 +7,6 @@ import GuestDetailsForm from "../components/booking/GuestDetailsForm.astro";
 import ReviewStep from "../components/booking/ReviewStep.astro";
 import SessionCountdown from "../components/booking/SessionCountdown.astro";
 import PaymentMethodSelection from "../components/booking/PaymentMethodSelection.astro";
-import PlaceholderUPIQR from "../components/booking/PlaceholderUPIQR.astro";
-import PlaceholderUPIApp from "../components/booking/PlaceholderUPIApp.astro";
 import PayAtCheckin from "../components/booking/PayAtCheckin.astro";
 import siteData from "../data/site.json";
 import { rooms } from "../data/rooms";
@@ -280,7 +278,7 @@ const roomsJson = JSON.stringify(rooms);
           <p id="results-summary" class="mt-1 text-sm text-cfr-earth-500"></p>
         </div>
         <div class="grid gap-6 lg:grid-cols-3">
-          <div id="rooms-grid" class="lg:col-span-2"></div>
+          <div id="rooms-grid" class="min-w-0 lg:col-span-2"></div>
           <div class="lg:col-span-1">
             <BookingSummary />
           </div>
@@ -390,8 +388,23 @@ const roomsJson = JSON.stringify(rooms);
           <div class="lg:col-span-2">
             <SessionCountdown />
             <PaymentMethodSelection />
-            <PlaceholderUPIQR />
-            <PlaceholderUPIApp />
+            <div id="razorpay-button-container" class="mt-6">
+              <button
+                id="pay-now-btn"
+                type="button"
+                class="flex w-full items-center justify-center gap-2 rounded-lg bg-cfr-green-accent px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2"
+              >
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                </svg>
+                <span id="pay-now-text">Pay Now</span>
+                <svg id="pay-now-spinner" class="hidden h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+              </button>
+              <p id="razorpay-error" class="mt-2 hidden text-center text-xs text-red-600" role="alert"></p>
+            </div>
             <PayAtCheckin />
             <div class="mt-6 flex items-center justify-between">
               <button
@@ -444,6 +457,52 @@ const roomsJson = JSON.stringify(rooms);
     </div>
   </section>
 
+  <!-- LIGHTBOX -->
+  <div
+    id="cfr-lightbox"
+    class="cfr-lightbox"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Room photo viewer"
+    hidden
+  >
+    <div id="cfr-lightbox-backdrop" class="cfr-lightbox__backdrop" data-lightbox-backdrop></div>
+    <div id="cfr-lightbox-viewport" class="cfr-lightbox__viewport" tabindex="-1">
+      <div id="cfr-lightbox-track" class="cfr-lightbox__track"></div>
+    </div>
+    <button
+      type="button"
+      id="cfr-lightbox-close"
+      class="cfr-lightbox__btn cfr-lightbox__btn--close"
+      aria-label="Close photo viewer"
+    >
+      <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+    <button
+      type="button"
+      id="cfr-lightbox-prev"
+      class="cfr-lightbox__btn cfr-lightbox__btn--prev"
+      aria-label="Previous photo"
+    >
+      <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+      </svg>
+    </button>
+    <button
+      type="button"
+      id="cfr-lightbox-next"
+      class="cfr-lightbox__btn cfr-lightbox__btn--next"
+      aria-label="Next photo"
+    >
+      <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+      </svg>
+    </button>
+    <p id="cfr-lightbox-counter" class="cfr-lightbox__counter" role="status"></p>
+  </div>
+
   <!-- TRUST STRIP -->
   <section class="border-t border-cfr-earth-200 bg-white py-8 sm:py-10" aria-label="Trust signals">
     <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
@@ -485,9 +544,332 @@ const roomsJson = JSON.stringify(rooms);
   </Fragment>
 </MainLayout>
 
+<style is:global>
+  .cfr-carousel-wrap {
+    aspect-ratio: 16 / 10;
+  }
+  @media (min-width: 640px) {
+    .cfr-carousel-wrap {
+      aspect-ratio: 16 / 7;
+    }
+  }
+  .cfr-carousel {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    background-color: #f0e8d8;
+    touch-action: pan-y;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .cfr-carousel:focus-visible {
+    outline: 2px solid #c4a882;
+    outline-offset: 2px;
+  }
+  .cfr-carousel__viewport {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  .cfr-carousel__track {
+    display: flex;
+    height: 100%;
+    transition: transform 550ms cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+  }
+  .cfr-carousel__slide {
+    flex: 0 0 100%;
+    min-width: 0;
+    height: 100%;
+  }
+  .cfr-carousel__img-btn {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+  .cfr-carousel__img-btn:focus-visible {
+    outline: 2px solid #c4a882;
+    outline-offset: -2px;
+  }
+  .cfr-carousel__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .cfr-carousel__btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 9999px;
+    background: rgba(0, 0, 0, 0.45);
+    color: #ffffff;
+    border: 0;
+    cursor: pointer;
+    transition: background-color 200ms ease, transform 200ms ease;
+    opacity: 0.9;
+  }
+  .cfr-carousel__btn--prev {
+    left: 0.625rem;
+  }
+  .cfr-carousel__btn--next {
+    right: 0.625rem;
+  }
+  .cfr-carousel__btn:hover {
+    background: rgba(0, 0, 0, 0.65);
+    transform: translateY(-50%) scale(1.08);
+  }
+  .cfr-carousel__btn:focus-visible {
+    outline: 2px solid #c4a882;
+    outline-offset: 2px;
+  }
+  .cfr-carousel__btn svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  .cfr-carousel__dots {
+    position: absolute;
+    bottom: 0.625rem;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    display: flex;
+    justify-content: center;
+    gap: 0.375rem;
+  }
+  .cfr-carousel__dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.55);
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    transition: width 250ms ease, background-color 250ms ease;
+  }
+  .cfr-carousel__dot.is-active {
+    width: 1.375rem;
+    background: #ffffff;
+  }
+  .cfr-carousel__dot:hover {
+    background: rgba(255, 255, 255, 0.95);
+  }
+  .cfr-carousel__dot:focus-visible {
+    outline: 2px solid #c4a882;
+    outline-offset: 2px;
+  }
+
+  .cfr-thumbs {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding: 0.875rem 1.25rem 0;
+    scrollbar-width: none;
+  }
+  .cfr-thumbs::-webkit-scrollbar {
+    display: none;
+  }
+  .cfr-thumb {
+    position: relative;
+    flex: 0 0 auto;
+    width: 4rem;
+    height: 3rem;
+    padding: 0;
+    overflow: hidden;
+    border: 2px solid rgba(13, 92, 70, 0);
+    border-radius: 0.5rem;
+    background: #f0e8d8;
+    cursor: pointer;
+    transition: border-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+  }
+  .cfr-thumb__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .cfr-thumb:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+  }
+  .cfr-thumb.is-active {
+    border-color: #0d5c46;
+    box-shadow: 0 0 0 1px #0d5c46;
+  }
+  .cfr-thumb:focus-visible {
+    outline: 2px solid #c4a882;
+    outline-offset: 2px;
+  }
+  @media (min-width: 640px) {
+    .cfr-thumbs {
+      padding: 1rem 1.5rem 0;
+    }
+    .cfr-thumb {
+      width: 4.5rem;
+      height: 3.375rem;
+    }
+  }
+
+  .cfr-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cfr-lightbox[hidden] {
+    display: none;
+  }
+  .cfr-lightbox__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(13, 43, 36, 0.93);
+    animation: cfrFadeIn 200ms ease both;
+  }
+  .cfr-lightbox__viewport {
+    position: relative;
+    z-index: 1;
+    width: min(100% - 2rem, 1200px);
+    max-height: calc(100vh - 8rem);
+    overflow: hidden;
+    touch-action: pan-y;
+    outline: none;
+  }
+  .cfr-lightbox__track {
+    display: flex;
+    align-items: center;
+    transition: transform 450ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .cfr-lightbox__slide {
+    flex: 0 0 100%;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cfr-lightbox__img {
+    display: block;
+    max-width: 100%;
+    max-height: calc(100vh - 8rem);
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 0.5rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  }
+  .cfr-lightbox__btn {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    cursor: pointer;
+    transition: background-color 200ms ease, transform 200ms ease;
+  }
+  .cfr-lightbox__btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+  }
+  .cfr-lightbox__btn:focus-visible {
+    outline: 2px solid #c4a882;
+    outline-offset: 2px;
+  }
+  .cfr-lightbox__btn svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  .cfr-lightbox__btn--close {
+    top: 1rem;
+    right: 1rem;
+  }
+  .cfr-lightbox__btn--prev {
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .cfr-lightbox__btn--next {
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .cfr-lightbox__btn--prev:hover,
+  .cfr-lightbox__btn--next:hover {
+    transform: translateY(-50%) scale(1.08);
+  }
+  .cfr-lightbox__counter {
+    position: absolute;
+    bottom: 1rem;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    text-align: center;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  @keyframes cfrFadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .cfr-carousel__btn {
+      width: 2rem;
+      height: 2rem;
+    }
+    .cfr-carousel__btn svg {
+      width: 1.125rem;
+      height: 1.125rem;
+    }
+    .cfr-lightbox__btn--prev {
+      left: 0.5rem;
+    }
+    .cfr-lightbox__btn--next {
+      right: 0.5rem;
+    }
+    .cfr-lightbox__btn--close {
+      top: 0.5rem;
+      right: 0.5rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cfr-carousel__track,
+    .cfr-lightbox__track,
+    .cfr-thumb {
+      transition-duration: 1ms !important;
+    }
+  }
+</style>
+
 <script define:vars={{ roomsJson }}>
   (function () {
     const ROOM_CONTENT = JSON.parse(roomsJson);
+
+    // Reverse map: content slug → InnPilot room_type
+    // Mirrors the ROOM_TYPE_MAP in functions/api/booking/availability.js
+    const SLUG_TO_ROOM_TYPE = { "forest-suite": "Deluxe Room" };
 
     const BFF_BASE = "/api/booking";
     const TIMEOUT_MS = 15000;
@@ -527,6 +909,7 @@ const roomsJson = JSON.stringify(rooms);
     let currentAbortController = null;
     let lastSearchParams = null;
     let selectedRoom = null;
+    let selectedRoomType = null;
     let quoteData = null;
     let guestData = null;
 
@@ -543,6 +926,7 @@ const roomsJson = JSON.stringify(rooms);
       return {
         step: params.get("step") || "search",
         room: params.get("room") || "",
+        rt: params.get("rt") || "",
         checkin: params.get("checkin") || "",
         checkout: params.get("checkout") || "",
         adults: parseInt(params.get("adults") || "2", 10),
@@ -602,12 +986,6 @@ const roomsJson = JSON.stringify(rooms);
         (el) => el.classList.add("hidden")
       );
       state.classList.remove("hidden");
-      
-      if (state === stateResults || state === stateGuests || state === stateReview || state === statePayment) {
-        searchSection.classList.add("hidden");
-      } else {
-        searchSection.classList.remove("hidden");
-      }
 
       if (state === statePayment) {
         showCountdown(true);
@@ -753,6 +1131,7 @@ const roomsJson = JSON.stringify(rooms);
       showState(stateSessionExpired);
       updateUrl("expired", {
         room: selectedRoom?.slug,
+        rt: selectedRoomType || selectedRoom?.slug,
         checkin: lastSearchParams?.checkin,
         checkout: lastSearchParams?.checkout,
       });
@@ -769,41 +1148,163 @@ const roomsJson = JSON.stringify(rooms);
       }
     }
 
-    function hidePaymentScreens() {
-      var els = ["placeholder-upi-qr", "placeholder-upi-app", "pay-at-checkin"];
-      els.forEach(function (id) {
-        var el = document.getElementById(id);
-        if (el) el.classList.add("hidden");
+    function loadRazorpayScript() {
+      return new Promise(function (resolve, reject) {
+        if (window.Razorpay) {
+          resolve();
+          return;
+        }
+        var script = document.createElement("script");
+        script.src = "https://checkout.razorpay.com/v1/checkout.js";
+        script.async = true;
+        script.defer = true;
+        script.onload = resolve;
+        script.onerror = function () { reject(new Error("Failed to load Razorpay SDK")); };
+        document.head.appendChild(script);
       });
     }
 
-    function showPaymentScreen(method) {
-      hidePaymentScreens();
-      if (method === "upi-qr") {
-        var el = document.getElementById("placeholder-upi-qr");
-        if (el) el.classList.remove("hidden");
-      } else if (method === "upi-app") {
-        var el = document.getElementById("placeholder-upi-app");
-        if (el) el.classList.remove("hidden");
-      } else if (method === "pay-at-checkin") {
-        var el = document.getElementById("pay-at-checkin");
-        if (el) el.classList.remove("hidden");
+    async function processRazorpayPayment() {
+      if (!selectedRoom || !lastSearchParams || !guestData || !quoteData) return;
+
+      if (sessionData && sessionData.paymentReceived) {
+        showState(stateBookingError);
+        if (document.getElementById("booking-error-message")) {
+          document.getElementById("booking-error-message").textContent =
+            "Your payment was received but could not be confirmed. Please contact support to complete your booking.";
+        }
+        return;
       }
-    }
 
-    function setupPaymentMethodListeners() {
-      var radios = document.querySelectorAll('input[name="payment-method"]');
-      radios.forEach(function (radio) {
-        radio.addEventListener("change", function () {
-          var method = this.value;
-          if (sessionData) {
-            sessionData.paymentMethod = method;
-            sessionData.paymentStatus = "method-selected";
-            persistSession(sessionData);
-          }
-          showPaymentScreen(method);
+      var payBtn = document.getElementById("pay-now-btn");
+      var payText = document.getElementById("pay-now-text");
+      var paySpinner = document.getElementById("pay-now-spinner");
+      var errorEl = document.getElementById("razorpay-error");
+
+      if (payBtn) payBtn.disabled = true;
+      if (payText) payText.textContent = "Creating order…";
+      if (paySpinner) paySpinner.classList.remove("hidden");
+      if (errorEl) { errorEl.classList.add("hidden"); errorEl.textContent = ""; }
+
+      try {
+        await loadRazorpayScript();
+
+        var submitRes = await fetch("/api/booking/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({
+            room_id: selectedRoomType || selectedRoom.slug,
+            checkin: lastSearchParams.checkin,
+            checkout: lastSearchParams.checkout,
+            adults: lastSearchParams.adults,
+            children: lastSearchParams.children || 0,
+            guest: guestData,
+            quote_id: quoteData.quote_id || null,
+          }),
         });
-      });
+
+        var submitData = await submitRes.json();
+
+        if (!submitRes.ok || !submitData.success) {
+          throw new Error(submitData.error || "Failed to create booking order");
+        }
+
+        var options = {
+          key: submitData.razorpay_key_id,
+          amount: submitData.amount,
+          currency: submitData.currency || "INR",
+          order_id: submitData.razorpay_order_id,
+          name: "Corbett Foothills Retreat",
+          description: selectedRoom.name + " — " + formatDisplayDate(lastSearchParams.checkin) + " to " + formatDisplayDate(lastSearchParams.checkout),
+          prefill: {
+            name: guestData.firstName + " " + guestData.lastName,
+            email: guestData.email,
+            contact: guestData.phone,
+          },
+          theme: { color: "#1a4a3f" },
+          modal: {
+            ondismiss: function () {
+              if (payBtn) payBtn.disabled = false;
+              if (payText) payText.textContent = "Pay Now";
+              if (paySpinner) paySpinner.classList.add("hidden");
+              if (errorEl) {
+                errorEl.textContent = "Payment was cancelled. You can try again.";
+                errorEl.classList.remove("hidden");
+              }
+            },
+          },
+          handler: async function (response) {
+            if (response.error || !response.razorpay_payment_id) {
+              if (payBtn) payBtn.disabled = false;
+              if (payText) payText.textContent = "Pay Now";
+              if (paySpinner) paySpinner.classList.add("hidden");
+              if (errorEl) {
+                errorEl.textContent = response.error?.description || "Payment failed. Please try again.";
+                errorEl.classList.remove("hidden");
+              }
+              return;
+            }
+
+            if (sessionData) {
+              sessionData.paymentReceived = true;
+              persistSession(sessionData);
+            }
+
+            if (payBtn) payBtn.disabled = true;
+            if (payText) payText.textContent = "Verifying payment…";
+            if (paySpinner) paySpinner.classList.remove("hidden");
+
+            try {
+              var verifyRes = await fetch("/api/booking/verify-payment", {
+                method: "POST",
+                headers: { "Content-Type": "application/json", Accept: "application/json" },
+                body: JSON.stringify({
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_signature: response.razorpay_signature,
+                }),
+              });
+
+              var verifyData = await verifyRes.json();
+
+              if (!verifyRes.ok || !verifyData.verified) {
+                throw new Error(verifyData.error || "Payment verification failed");
+              }
+
+              if (sessionData) {
+                sessionData.paymentStatus = "completed";
+                persistSession(sessionData);
+              }
+
+              var params = new URLSearchParams({
+                booking_id: submitData.booking_id || "",
+                payment_id: response.razorpay_payment_id,
+                status: "confirmed",
+              });
+              window.location.href = "/booking/confirmation?" + params.toString();
+            } catch (verifyErr) {
+              if (payBtn) payBtn.disabled = false;
+              if (payText) payText.textContent = "Pay Now";
+              if (paySpinner) paySpinner.classList.add("hidden");
+              if (errorEl) {
+                errorEl.textContent = "Payment received but could not be verified. Please contact support with your booking ID: " + (submitData.booking_id || "unknown");
+                errorEl.classList.remove("hidden");
+              }
+            }
+          },
+        };
+
+        var rzp = new Razorpay(options);
+        rzp.open();
+      } catch (err) {
+        if (payBtn) payBtn.disabled = false;
+        if (payText) payText.textContent = "Pay Now";
+        if (paySpinner) paySpinner.classList.add("hidden");
+        if (errorEl) {
+          errorEl.textContent = err.message || "Something went wrong. Please try again.";
+          errorEl.classList.remove("hidden");
+        }
+      }
     }
 
     async function fetchServerTime() {
@@ -819,7 +1320,7 @@ const roomsJson = JSON.stringify(rooms);
       } catch (e) { /* ignore */ }
     }
 
-    function createBookingSession(roomSlug, roomName, checkin, checkout, adults, children, quote, guest, quoteId) {
+    function createBookingSession(roomSlug, roomName, checkin, checkout, adults, children, quote, guest, quoteId, roomType) {
       var now = Date.now();
       var session = {
         sessionId: generateSessionId(),
@@ -828,6 +1329,7 @@ const roomsJson = JSON.stringify(rooms);
         serverTimeAtCreate: now,
         roomSlug: roomSlug,
         roomName: roomName,
+        roomType: roomType,
         checkin: checkin,
         checkout: checkout,
         adults: adults,
@@ -859,6 +1361,7 @@ const roomsJson = JSON.stringify(rooms);
       if (saved && !isSessionExpired(saved)) {
         sessionData = saved;
         selectedRoom = ROOM_CONTENT.find(function (r) { return r.slug === saved.roomSlug; });
+        selectedRoomType = saved.roomType || SLUG_TO_ROOM_TYPE[saved.roomSlug] || null;
         lastSearchParams = {
           checkin: saved.checkin,
           checkout: saved.checkout,
@@ -873,6 +1376,7 @@ const roomsJson = JSON.stringify(rooms);
         startCountdown();
         updateUrl("payment", {
           room: saved.roomSlug,
+          rt: saved.roomType || saved.roomSlug,
           checkin: saved.checkin,
           checkout: saved.checkout,
           adults: saved.adults,
@@ -969,6 +1473,7 @@ const roomsJson = JSON.stringify(rooms);
 
         renderResults(data);
         showState(stateResults);
+        scrollResultsIntoView();
       } catch (err) {
         if (err?.name === "AbortError") return;
         showState(stateError);
@@ -979,11 +1484,12 @@ const roomsJson = JSON.stringify(rooms);
       }
     }
 
-    async function fetchQuote(roomSlug) {
+    async function fetchQuote(roomSlug, roomType) {
       const room = ROOM_CONTENT.find((r) => r.slug === roomSlug);
       if (!room || !lastSearchParams) return;
 
       selectedRoom = room;
+      selectedRoomType = roomType || null;
 
       const stateLoading = document.createElement("div");
       stateLoading.id = "quote-loading";
@@ -1007,7 +1513,7 @@ const roomsJson = JSON.stringify(rooms);
             Accept: "application/json",
           },
           body: JSON.stringify({
-            room_id: roomSlug,
+            room_id: roomType || roomSlug,
             checkin: lastSearchParams.checkin,
             checkout: lastSearchParams.checkout,
             adults: lastSearchParams.adults,
@@ -1026,6 +1532,7 @@ const roomsJson = JSON.stringify(rooms);
         showState(stateGuests);
         updateUrl("guests", {
           room: roomSlug,
+          rt: roomType || roomSlug,
           checkin: lastSearchParams.checkin,
           checkout: lastSearchParams.checkout,
           adults: lastSearchParams.adults,
@@ -1147,19 +1654,514 @@ const roomsJson = JSON.stringify(rooms);
           totalStay: quoteData?.total || 0,
         },
         guestData,
-        quoteData?.quote_id
+        quoteData?.quote_id,
+        selectedRoomType
       );
 
       showState(statePayment);
       startCountdown();
-      setupPaymentMethodListeners();
       setupNavigationProtection();
       updateUrl("payment", {
         room: selectedRoom.slug,
+        rt: selectedRoomType || selectedRoom.slug,
         checkin: lastSearchParams.checkin,
         checkout: lastSearchParams.checkout,
         adults: lastSearchParams.adults,
         children: lastSearchParams.children,
+      });
+    }
+
+    function scrollResultsIntoView() {
+      requestAnimationFrame(function () {
+        var header = document.getElementById("site-header");
+        var headerH = header ? header.offsetHeight : 0;
+        var top = searchSection.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({
+          top: Math.max(0, top - headerH - 12),
+          behavior: "smooth",
+        });
+      });
+    }
+
+    var AMENITY_ICONS = {
+      "Free Parking":
+        '<svg class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3.5"></rect><path stroke-linecap="round" stroke-linejoin="round" d="M10 17V8h3.5a2.5 2.5 0 010 5H10"></path></svg>',
+      "Room Service":
+        '<svg class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.3 21a1.94 1.94 0 003.4 0"></path></svg>',
+      "Non-smoking Rooms":
+        '<svg class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path stroke-linecap="round" stroke-linejoin="round" d="M5.3 18.7 18.7 5.3"></path><path stroke-linecap="round" stroke-linejoin="round" d="M8 11.5v3"></path><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v5.5"></path><path stroke-linecap="round" stroke-linejoin="round" d="M16 11.5v3"></path></svg>',
+      "Free WiFi":
+        '<svg class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12.55a11 11 0 0114.08 0"></path><path stroke-linecap="round" stroke-linejoin="round" d="M8.53 16.11a6 6 0 016.95 0"></path><path stroke-linecap="round" stroke-linejoin="round" d="M12 20h.01"></path></svg>',
+      "Family Rooms":
+        '<svg class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><circle cx="9" cy="7" r="4"></circle><path stroke-linecap="round" stroke-linejoin="round" d="M17 21v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2"></path><path stroke-linecap="round" stroke-linejoin="round" d="M23 21v-2a4 4 0 00-3-3.87"></path><path stroke-linecap="round" stroke-linejoin="round" d="M16 3.13a4 4 0 010 7.75"></path></svg>',
+      Lawn:
+        '<svg class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10"></path><path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-9"></path><path stroke-linecap="round" stroke-linejoin="round" d="M12 12c0-4 2.5-6.5 6.5-6.5.3 3.5-2.2 6.5-6.5 6.5Z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M12 12c0-4-2.5-6.5-6.5-6.5C5.2 9 7.7 12 12 12Z"></path></svg>',
+    };
+    var FEATURED_AMENITIES = ["Free Parking", "Room Service", "Non-smoking Rooms", "Free WiFi", "Family Rooms", "Lawn"];
+
+    function buildCarouselHtml(images, name) {
+      var total = images.length;
+      var order = [total - 1]
+        .concat(images.map(function (_, i) { return i; }))
+        .concat([0]);
+      var slides = order
+        .map(function (imgIdx, pos) {
+          var labelNum = ((pos - 1 + total) % total) + 1;
+          return (
+            '<div class="cfr-carousel__slide" role="group" aria-roledescription="slide" aria-label="Photo ' +
+            labelNum +
+            " of " +
+            total +
+            '"' +
+            (pos === 1 ? "" : ' aria-hidden="true"') +
+            ">" +
+            '<button type="button" class="cfr-carousel__img-btn" data-slide-btn tabindex="' +
+            (pos === 1 ? "0" : "-1") +
+            '" aria-label="View photo ' +
+            labelNum +
+            " of " +
+            total +
+            " of " +
+            name +
+            '">' +
+            '<img class="cfr-carousel__img" alt="' +
+            name +
+            " photo " +
+            labelNum +
+            '" data-src="' +
+            images[imgIdx] +
+            '" decoding="async" draggable="false" />' +
+            "</button>" +
+            "</div>"
+          );
+        })
+        .join("");
+      var dots = images
+        .map(function (_, i) {
+          return (
+            '<button type="button" class="cfr-carousel__dot' +
+            (i === 0 ? " is-active" : "") +
+            '" data-dot aria-label="Go to photo ' +
+            (i + 1) +
+            '"' +
+            (i === 0 ? ' aria-current="true"' : "") +
+            "></button>"
+          );
+        })
+        .join("");
+      var chevronLeft =
+        '<svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"></path></svg>';
+      var chevronRight =
+        '<svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"></path></svg>';
+      return (
+        '<div class="cfr-carousel" data-carousel role="region" aria-roledescription="carousel" aria-label="Photos of ' +
+        name +
+        '" tabindex="0">' +
+        '<div class="cfr-carousel__viewport"><div class="cfr-carousel__track">' +
+        slides +
+        "</div></div>" +
+        '<button type="button" class="cfr-carousel__btn cfr-carousel__btn--prev" data-carousel-prev aria-label="Previous photo">' +
+        chevronLeft +
+        "</button>" +
+        '<button type="button" class="cfr-carousel__btn cfr-carousel__btn--next" data-carousel-next aria-label="Next photo">' +
+        chevronRight +
+        "</button>" +
+        '<div class="cfr-carousel__dots">' +
+        dots +
+        "</div>" +
+        '<span class="sr-only" data-carousel-live aria-live="polite"></span>' +
+        "</div>"
+      );
+    }
+
+    function buildThumbsHtml(images, name) {
+      return (
+        '<div class="cfr-thumbs" data-thumbs role="group" aria-label="Photo thumbnails of ' +
+        name +
+        '">' +
+        images
+          .map(function (src, i) {
+            return (
+              '<button type="button" class="cfr-thumb' +
+              (i === 0 ? " is-active" : "") +
+              '" data-thumb aria-label="View photo ' +
+              (i + 1) +
+              " of " +
+              images.length +
+              " of " +
+              name +
+              '"' +
+              (i === 0 ? ' aria-current="true"' : "") +
+              '><img class="cfr-thumb__img" src="' +
+              src +
+              '" alt="Photo ' +
+              (i + 1) +
+              '" loading="lazy" decoding="async" width="72" height="54" draggable="false" /></button>'
+            );
+          })
+          .join("") +
+        "</div>"
+      );
+    }
+
+    function initRoomCarousel(root, name) {
+      var track = root.querySelector(".cfr-carousel__track");
+      var prevBtn = root.querySelector("[data-carousel-prev]");
+      var nextBtn = root.querySelector("[data-carousel-next]");
+      var dots = Array.prototype.slice.call(root.querySelectorAll("[data-dot]"));
+      var slides = Array.prototype.slice.call(track.children);
+      var slideBtns = slides.map(function (s) { return s.querySelector("[data-slide-btn]"); });
+      var imgs = slides.map(function (s) { return s.querySelector("img"); });
+      var live = root.querySelector("[data-carousel-live]");
+      var cardEl = root.closest("article");
+      var thumbsEl = cardEl ? cardEl.querySelector("[data-thumbs]") : null;
+      var thumbs = thumbsEl
+        ? Array.prototype.slice.call(thumbsEl.querySelectorAll("[data-thumb]"))
+        : [];
+      var total = dots.length;
+      var pos = 1;
+      var isAnimating = false;
+      var animTimer = null;
+      var suppressClick = false;
+      var pointer = { down: false, startX: 0, deltaX: 0, dragging: false };
+
+      function setTransition(on) {
+        track.style.transition = on ? "" : "none";
+      }
+
+      function render(animate) {
+        if (animate === false) setTransition(false);
+        track.style.transform = "translateX(-" + pos * 100 + "%)";
+        if (animate === false) {
+          void track.offsetWidth;
+          setTransition(true);
+        }
+        var real = ((pos - 1) % total + total) % total;
+        dots.forEach(function (d, i) {
+          d.classList.toggle("is-active", i === real);
+          if (i === real) d.setAttribute("aria-current", "true");
+          else d.removeAttribute("aria-current");
+        });
+        thumbs.forEach(function (t, i) {
+          t.classList.toggle("is-active", i === real);
+          if (i === real) t.setAttribute("aria-current", "true");
+          else t.removeAttribute("aria-current");
+        });
+        var neighbors = [real, (real + 1) % total, ((real - 1 + total) % total)];
+        slides.forEach(function (s, i) {
+          var realIdx = ((i - 1) % total + total) % total;
+          if (neighbors.indexOf(realIdx) === -1) return;
+          var img = imgs[i];
+          if (img && !img.getAttribute("src") && img.getAttribute("data-src")) {
+            img.setAttribute("src", img.getAttribute("data-src"));
+          }
+        });
+        slides.forEach(function (s, i) {
+          if (i === pos) s.removeAttribute("aria-hidden");
+          else s.setAttribute("aria-hidden", "true");
+        });
+        slideBtns.forEach(function (b, i) {
+          b.setAttribute("tabindex", i === pos ? "0" : "-1");
+        });
+        if (live) live.textContent = "Photo " + (real + 1) + " of " + total + " of " + name;
+      }
+
+      function revealThumb(i) {
+        if (!thumbsEl || !thumbs.length) return;
+        var t = thumbs[i];
+        if (!t) return;
+        var left = t.offsetLeft - 0.5 * (thumbsEl.clientWidth - t.offsetWidth);
+        var max = thumbsEl.scrollWidth - thumbsEl.clientWidth;
+        thumbsEl.scrollLeft = Math.max(0, Math.min(left, max));
+      }
+
+      function finishMove() {
+        if (!isAnimating) return;
+        isAnimating = false;
+        if (animTimer) {
+          clearTimeout(animTimer);
+          animTimer = null;
+        }
+        snapToReal();
+        revealThumb(((pos - 1) % total + total) % total);
+      }
+
+      function beginMove() {
+        isAnimating = true;
+        if (animTimer) clearTimeout(animTimer);
+        animTimer = setTimeout(finishMove, 700);
+      }
+
+      function snapToReal() {
+        if (pos === total + 1) pos = 1;
+        else if (pos === 0) pos = total;
+        render(false);
+      }
+
+      function next() {
+        if (isAnimating) return;
+        beginMove();
+        pos++;
+        render(true);
+      }
+
+      function prev() {
+        if (isAnimating) return;
+        beginMove();
+        pos--;
+        render(true);
+      }
+
+      function goTo(i) {
+        if (isAnimating) return;
+        var target = i + 1;
+        if (target === pos) {
+          render(false);
+          return;
+        }
+        beginMove();
+        pos = target;
+        render(true);
+      }
+
+      track.addEventListener("transitionend", function (e) {
+        if (e.target !== track || e.propertyName !== "transform") return;
+        finishMove();
+      });
+
+      prevBtn.addEventListener("click", function (e) { e.preventDefault(); prev(); });
+      nextBtn.addEventListener("click", function (e) { e.preventDefault(); next(); });
+      dots.forEach(function (d, i) {
+        d.addEventListener("click", function (e) { e.preventDefault(); goTo(i); });
+      });
+      thumbs.forEach(function (t, i) {
+        t.addEventListener("click", function (e) { e.preventDefault(); goTo(i); });
+      });
+
+      root.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowLeft") { e.preventDefault(); prev(); }
+        else if (e.key === "ArrowRight") { e.preventDefault(); next(); }
+      });
+
+      root.addEventListener("pointerdown", function (e) {
+        pointer.down = true;
+        pointer.startX = e.clientX;
+        pointer.deltaX = 0;
+        pointer.dragging = false;
+      });
+      root.addEventListener("pointermove", function (e) {
+        if (!pointer.down) return;
+        pointer.deltaX = e.clientX - pointer.startX;
+        if (Math.abs(pointer.deltaX) > 8) pointer.dragging = true;
+      });
+      root.addEventListener("pointerup", function () {
+        if (!pointer.down) return;
+        pointer.down = false;
+        if (pointer.dragging) {
+          suppressClick = true;
+          if (pointer.deltaX < -40) next();
+          else if (pointer.deltaX > 40) prev();
+          pointer.dragging = false;
+          setTimeout(function () { suppressClick = false; }, 60);
+        }
+      });
+      root.addEventListener("pointercancel", function () {
+        pointer.down = false;
+        pointer.dragging = false;
+      });
+
+      root.addEventListener("click", function (e) {
+        var btn = e.target.closest("[data-slide-btn]");
+        if (!btn) return;
+        if (suppressClick) { e.preventDefault(); return; }
+        var idx = slides.indexOf(btn.parentNode);
+        var startIndex = ((idx - 1) % total + total) % total;
+        openLightbox(root, name, startIndex);
+      });
+
+      render(false);
+    }
+
+    var lightboxData = null;
+
+    function openLightbox(carouselRoot, name, startIndex) {
+      var lb = document.getElementById("cfr-lightbox");
+      var track = document.getElementById("cfr-lightbox-track");
+      var carouselImgs = Array.prototype.slice.call(
+        carouselRoot.querySelectorAll(".cfr-carousel__slide > .cfr-carousel__img-btn > img")
+      );
+      var total = carouselImgs.length - 2;
+      var restore = carouselImgs.map(function (img) { return { img: img, parent: img.parentNode }; });
+      track.innerHTML = "";
+      carouselImgs.forEach(function (img) {
+        img.parentNode.removeChild(img);
+        var slide = document.createElement("div");
+        slide.className = "cfr-lightbox__slide";
+        slide.appendChild(img);
+        track.appendChild(slide);
+      });
+      lightboxData = {
+        total: total,
+        pos: startIndex + 1,
+        isAnimating: false,
+        timer: null,
+        restore: restore,
+        name: name,
+        lastFocused: document.activeElement,
+      };
+      lb.hidden = false;
+      document.body.style.overflow = "hidden";
+      renderLightbox(false);
+      var closeBtn = document.getElementById("cfr-lightbox-close");
+      if (closeBtn) closeBtn.focus();
+    }
+
+    function renderLightbox(animate) {
+      if (!lightboxData) return;
+      var track = document.getElementById("cfr-lightbox-track");
+      if (animate === false) track.style.transition = "none";
+      track.style.transform = "translateX(-" + lightboxData.pos * 100 + "%)";
+      if (animate === false) {
+        void track.offsetWidth;
+        track.style.transition = "";
+      }
+      var real = ((lightboxData.pos - 1) % lightboxData.total + lightboxData.total) % lightboxData.total;
+      var counter = document.getElementById("cfr-lightbox-counter");
+      if (counter) counter.textContent = real + 1 + " of " + lightboxData.total;
+      var slides = Array.prototype.slice.call(track.children);
+      [real, (real + 1) % lightboxData.total, ((real - 1 + lightboxData.total) % lightboxData.total)].forEach(function (i) {
+        var img = slides[i + 1] && slides[i + 1].firstChild;
+        if (img && !img.getAttribute("src") && img.getAttribute("data-src")) {
+          img.setAttribute("src", img.getAttribute("data-src"));
+        }
+      });
+    }
+
+    function lightboxNext() {
+      if (!lightboxData || lightboxData.isAnimating) return;
+      lightboxBeginMove();
+      lightboxData.pos++;
+      renderLightbox(true);
+    }
+
+    function lightboxPrev() {
+      if (!lightboxData || lightboxData.isAnimating) return;
+      lightboxBeginMove();
+      lightboxData.pos--;
+      renderLightbox(true);
+    }
+
+    function lightboxFinishMove() {
+      if (!lightboxData || !lightboxData.isAnimating) return;
+      lightboxData.isAnimating = false;
+      if (lightboxData.timer) {
+        clearTimeout(lightboxData.timer);
+        lightboxData.timer = null;
+      }
+      if (lightboxData.pos === lightboxData.total + 1) lightboxData.pos = 1;
+      else if (lightboxData.pos === 0) lightboxData.pos = lightboxData.total;
+      renderLightbox(false);
+    }
+
+    function lightboxBeginMove() {
+      lightboxData.isAnimating = true;
+      if (lightboxData.timer) clearTimeout(lightboxData.timer);
+      lightboxData.timer = setTimeout(lightboxFinishMove, 600);
+    }
+
+    function closeLightbox() {
+      if (!lightboxData) return;
+      var track = document.getElementById("cfr-lightbox-track");
+      Array.prototype.slice.call(track.children).forEach(function (slide, idx) {
+        var img = slide.firstChild;
+        var restore = lightboxData.restore[idx];
+        if (img && restore) restore.parent.appendChild(img);
+      });
+      track.innerHTML = "";
+      var lb = document.getElementById("cfr-lightbox");
+      lb.hidden = true;
+      document.body.style.overflow = "";
+      var lastFocused = lightboxData.lastFocused;
+      lightboxData = null;
+      if (lastFocused && typeof lastFocused.focus === "function") lastFocused.focus();
+    }
+
+    function onLightboxKeydown(e) {
+      if (!lightboxData) return;
+      if (e.key === "Escape") {
+        e.preventDefault();
+        closeLightbox();
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        lightboxPrev();
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        lightboxNext();
+      } else if (e.key === "Tab") {
+        var focusables = Array.prototype.slice.call(document.querySelectorAll("#cfr-lightbox button"));
+        if (focusables.length === 0) return;
+        var first = focusables[0];
+        var last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    }
+
+    function initLightbox() {
+      var lb = document.getElementById("cfr-lightbox");
+      if (!lb) return;
+      var track = document.getElementById("cfr-lightbox-track");
+      var closeBtn = document.getElementById("cfr-lightbox-close");
+      var prevBtn = document.getElementById("cfr-lightbox-prev");
+      var nextBtn = document.getElementById("cfr-lightbox-next");
+      var backdrop = document.getElementById("cfr-lightbox-backdrop");
+
+      if (closeBtn) closeBtn.addEventListener("click", function () { closeLightbox(); });
+      if (prevBtn) prevBtn.addEventListener("click", function (e) { e.preventDefault(); lightboxPrev(); });
+      if (nextBtn) nextBtn.addEventListener("click", function (e) { e.preventDefault(); lightboxNext(); });
+
+      lb.addEventListener("click", function (e) {
+        if (e.target === lb || (backdrop && e.target === backdrop)) closeLightbox();
+      });
+
+      track.addEventListener("transitionend", function (e) {
+        if (e.target !== track || e.propertyName !== "transform") return;
+        lightboxFinishMove();
+      });
+
+      document.addEventListener("keydown", onLightboxKeydown);
+
+      var viewport = document.getElementById("cfr-lightbox-viewport");
+      var pointer = { down: false, startX: 0, deltaX: 0, dragging: false };
+      var suppress = false;
+      viewport.addEventListener("pointerdown", function (e) {
+        pointer.down = true;
+        pointer.startX = e.clientX;
+        pointer.deltaX = 0;
+        pointer.dragging = false;
+      });
+      viewport.addEventListener("pointermove", function (e) {
+        if (!pointer.down) return;
+        pointer.deltaX = e.clientX - pointer.startX;
+        if (Math.abs(pointer.deltaX) > 8) pointer.dragging = true;
+      });
+      viewport.addEventListener("pointerup", function () {
+        if (!pointer.down) return;
+        pointer.down = false;
+        if (pointer.dragging) {
+          suppress = true;
+          if (pointer.deltaX < -40) lightboxNext();
+          else if (pointer.deltaX > 40) lightboxPrev();
+          pointer.dragging = false;
+          setTimeout(function () { suppress = false; }, 60);
+        }
+      });
+      viewport.addEventListener("pointercancel", function () {
+        pointer.down = false;
+        pointer.dragging = false;
+      });
+      viewport.addEventListener("click", function (e) {
+        if (suppress) e.preventDefault();
       });
     }
 
@@ -1189,13 +2191,15 @@ const roomsJson = JSON.stringify(rooms);
         const content = ROOM_CONTENT.find((r) => r.slug === apiRoom.slug);
         const card = createRoomCard(apiRoom, content, nights);
         roomsGrid.appendChild(card);
+        const carousel = card.querySelector("[data-carousel]");
+        if (carousel) initRoomCarousel(carousel, (content || apiRoom).name);
       });
     }
 
     function createRoomCard(apiRoom, content, nights) {
       const card = document.createElement("article");
       card.className =
-        "overflow-hidden rounded-2xl bg-white shadow-card transition-all duration-300 hover:shadow-glow room-card-enter";
+        "overflow-hidden rounded-2xl bg-white shadow-card transition-all duration-300 hover:shadow-glow hover:-translate-y-1 room-card-enter";
       card.setAttribute("aria-label", (content || apiRoom).name + " room");
 
       const name = content ? content.name : apiRoom.name;
@@ -1209,7 +2213,6 @@ const roomsJson = JSON.stringify(rooms);
         : "";
       const bedType = content ? content.bedType : "";
       const area = content ? content.area : "";
-      const amenities = content ? content.amenities : [];
       const smoking = content ? content.smoking : false;
       const accessibility = content ? content.accessibility : false;
       const cancellationPolicy = content
@@ -1227,25 +2230,23 @@ const roomsJson = JSON.stringify(rooms);
       const totalTaxes = apiRoom.totalTaxes || 0;
 
       let imageHtml = "";
-      if (image) {
+      const gallery =
+        content && content.gallery && content.gallery.length > 0
+          ? content.gallery
+          : image
+          ? [image]
+          : [];
+      if (gallery.length > 0) {
         imageHtml =
-          '<div class="relative aspect-[16/10] overflow-hidden">' +
-          '<img src="' +
-          image +
-          '" alt="' +
-          name +
-          '" class="h-full w-full object-cover transition-transform duration-500 hover:scale-105" loading="lazy" />' +
+          '<div class="relative cfr-carousel-wrap aspect-[16/10] sm:aspect-[16/7]">' +
+          buildCarouselHtml(gallery, name) +
           (!available
-            ? '<div class="absolute inset-0 flex items-center justify-center bg-black/50"><span class="rounded-full bg-white/90 px-4 py-1.5 text-sm font-bold text-cfr-earth-700">Not Available</span></div>'
+            ? '<div class="absolute inset-0 z-10 flex items-center justify-center bg-black/45"><span class="rounded-full bg-white/95 px-4 py-1.5 text-sm font-bold text-cfr-earth-700">Not Available</span></div>'
             : roomsLeft > 0 && roomsLeft <= 3
-            ? '<div class="absolute top-3 right-3 rounded-full bg-cfr-sand-500 px-3 py-1 text-xs font-bold text-cfr-earth-700 shadow-sm">Only ' + roomsLeft + " left</div>"
+            ? '<div class="absolute top-3 right-3 z-10 rounded-full bg-cfr-sand-500 px-3 py-1 text-xs font-bold text-cfr-earth-700 shadow-sm">Only ' + roomsLeft + " left</div>"
             : "") +
-          "</div>";
-      } else {
-        imageHtml =
-          '<div class="flex aspect-[16/10] items-center justify-center bg-cfr-earth-100">' +
-          '<svg class="h-16 w-16 text-cfr-earth-300" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3H21m-3.75 3H21" /></svg>' +
-          "</div>";
+          "</div>" +
+          buildThumbsHtml(gallery, name);
       }
 
       let infoChips = "";
@@ -1266,24 +2267,24 @@ const roomsJson = JSON.stringify(rooms);
           "</span>";
 
       let amenityHtml = "";
-      if (amenities.length > 0) {
-        const visibleAmenities = amenities.slice(0, 6);
-        const remaining = amenities.length - 6;
+      if (FEATURED_AMENITIES.length > 0) {
         amenityHtml =
-          '<div class="mt-3 flex flex-wrap gap-1.5">' +
-          visibleAmenities
-            .map(
-              (a) =>
-                '<span class="rounded-full bg-cfr-green-50 px-2 py-0.5 text-[10px] font-medium text-cfr-green-700">' +
-                a +
-                "</span>"
-            )
-            .join("") +
-          (remaining > 0
-            ? '<span class="rounded-full bg-cfr-earth-100 px-2 py-0.5 text-[10px] font-medium text-cfr-earth-500">+' +
-              remaining +
-              " more</span>"
-            : "") +
+          '<div class="mt-5 border-t border-cfr-earth-100 pt-4">' +
+          '<h4 class="text-[11px] font-semibold uppercase tracking-wider text-cfr-earth-400">Amenities</h4>' +
+          '<ul class="mt-3 grid grid-cols-1 gap-x-4 gap-y-2.5 sm:grid-cols-2">' +
+          FEATURED_AMENITIES.map(function (a) {
+            return (
+              '<li class="flex items-center gap-2.5 text-xs text-cfr-earth-600">' +
+              '<span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-cfr-green-50 text-cfr-green-accent">' +
+              (AMENITY_ICONS[a] || "") +
+              "</span>" +
+              "<span>" +
+              a +
+              "</span>" +
+              "</li>"
+            );
+          }).join("") +
+          "</ul>" +
           "</div>";
       }
 
@@ -1367,10 +2368,15 @@ const roomsJson = JSON.stringify(rooms);
 
       card.innerHTML =
         imageHtml +
-        '<div class="p-5">' +
+        '<div class="p-5 sm:p-6">' +
+        '<div class="flex items-start justify-between gap-3">' +
         '<h3 class="font-display text-lg font-bold text-cfr-green-dark sm:text-xl">' +
         name +
         "</h3>" +
+        (available
+          ? '<span class="inline-flex items-center gap-1 rounded-full bg-cfr-green-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-cfr-green-700"><svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>Available</span>'
+          : '<span class="inline-flex items-center rounded-full bg-cfr-earth-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-cfr-earth-500">Unavailable</span>') +
+        "</div>" +
         (description
           ? '<p class="mt-1.5 text-sm leading-relaxed text-cfr-earth-600">' +
             description +
@@ -1379,16 +2385,18 @@ const roomsJson = JSON.stringify(rooms);
         (infoChips
           ? '<div class="mt-3 flex flex-wrap gap-1.5">' + infoChips + "</div>"
           : "") +
+        pricingHtml +
         amenityHtml +
         (indicators
-          ? '<div class="mt-2 flex flex-wrap gap-1.5">' + indicators + "</div>"
+          ? '<div class="mt-3 flex flex-wrap gap-1.5">' + indicators + "</div>"
           : "") +
-        pricingHtml +
         cancellationHtml +
-        '<div class="mt-4">' +
+        '<div class="mt-5">' +
         (available
           ? '<button class="flex w-full items-center justify-center gap-2 rounded-lg bg-cfr-green-accent px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2 select-room-btn" data-slug="' +
             apiRoom.slug +
+            '" data-room-type="' +
+            apiRoom.room_type +
             '">Select This Room</button>'
           : '<button disabled class="flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-lg bg-cfr-earth-200 px-6 py-3 text-sm font-semibold text-cfr-earth-400">Unavailable</button>') +
         "</div>" +
@@ -1425,6 +2433,7 @@ const roomsJson = JSON.stringify(rooms);
       showState(stateGuests);
       updateUrl("guests", {
         room: selectedRoom?.slug,
+        rt: selectedRoomType || selectedRoom?.slug,
         checkin: lastSearchParams?.checkin,
         checkout: lastSearchParams?.checkout,
         adults: lastSearchParams?.adults,
@@ -1440,6 +2449,7 @@ const roomsJson = JSON.stringify(rooms);
       showState(stateReview);
       updateUrl("review", {
         room: selectedRoom?.slug,
+        rt: selectedRoomType || selectedRoom?.slug,
         checkin: lastSearchParams?.checkin,
         checkout: lastSearchParams?.checkout,
         adults: lastSearchParams?.adults,
@@ -1459,6 +2469,7 @@ const roomsJson = JSON.stringify(rooms);
         showState(stateReview);
         updateUrl("review", {
           room: selectedRoom?.slug,
+          rt: selectedRoomType || selectedRoom?.slug,
           checkin: lastSearchParams?.checkin,
           checkout: lastSearchParams?.checkout,
           adults: lastSearchParams?.adults,
@@ -1481,8 +2492,9 @@ const roomsJson = JSON.stringify(rooms);
       const target = e.target;
       if (target.classList.contains("select-room-btn")) {
         const slug = target.getAttribute("data-slug");
+        const roomType = target.getAttribute("data-room-type");
         if (slug) {
-          fetchQuote(slug);
+          fetchQuote(slug, roomType || slug);
         }
       }
     });
@@ -1494,6 +2506,14 @@ const roomsJson = JSON.stringify(rooms);
         submitBooking();
       });
     });
+
+    var payNowBtn = document.getElementById("pay-now-btn");
+    if (payNowBtn) {
+      payNowBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        processRazorpayPayment();
+      });
+    }
 
     checkinInput.addEventListener("change", function () {
       if (checkinInput.value) {
@@ -1507,6 +2527,7 @@ const roomsJson = JSON.stringify(rooms);
     });
 
     setDefaultDates();
+    initLightbox();
 
     var recovered = attemptSessionRecovery();
     if (!recovered) {
@@ -1514,23 +2535,25 @@ const roomsJson = JSON.stringify(rooms);
       if (urlParams.step === "guests" && urlParams.room) {
         showState(stateGuests);
         selectedRoom = ROOM_CONTENT.find((r) => r.slug === urlParams.room);
+        selectedRoomType = urlParams.rt || SLUG_TO_ROOM_TYPE[urlParams.room] || null;
         lastSearchParams = {
           checkin: urlParams.checkin,
           checkout: urlParams.checkout,
           adults: urlParams.adults,
           children: urlParams.children,
         };
-        fetchQuote(urlParams.room);
+        fetchQuote(urlParams.room, selectedRoomType);
       } else if (urlParams.step === "review" && urlParams.room) {
         showState(stateReview);
         selectedRoom = ROOM_CONTENT.find((r) => r.slug === urlParams.room);
+        selectedRoomType = urlParams.rt || SLUG_TO_ROOM_TYPE[urlParams.room] || null;
         lastSearchParams = {
           checkin: urlParams.checkin,
           checkout: urlParams.checkout,
           adults: urlParams.adults,
           children: urlParams.children,
         };
-        fetchQuote(urlParams.room);
+        fetchQuote(urlParams.room, selectedRoomType);
       } else if (urlParams.step === "payment" && urlParams.room) {
         var saved = loadSession();
         if (saved && !isSessionExpired(saved)) {
