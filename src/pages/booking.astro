@@ -10,8 +10,12 @@ import PaymentMethodSelection from "../components/booking/PaymentMethodSelection
 import PayAtCheckin from "../components/booking/PayAtCheckin.astro";
 import siteData from "../data/site.json";
 import { rooms } from "../data/rooms";
+import { ROOM_MAPPING, DEFAULT_ROOM } from "../data/roomMapping";
 
 const roomsJson = JSON.stringify(rooms);
+const roomMappingJson = JSON.stringify(ROOM_MAPPING);
+const defaultRoomJson = JSON.stringify(DEFAULT_ROOM);
+const isDev = import.meta.env.DEV;
 ---
 
 <MainLayout
@@ -863,13 +867,42 @@ const roomsJson = JSON.stringify(rooms);
   }
 </style>
 
-<script define:vars={{ roomsJson }}>
+<script define:vars={{ roomsJson, roomMappingJson, defaultRoomJson, isDev }}>
   (function () {
     const ROOM_CONTENT = JSON.parse(roomsJson);
+    const ROOM_MAPPING = JSON.parse(roomMappingJson);
+    const DEFAULT_ROOM = JSON.parse(defaultRoomJson);
 
-    // Reverse map: content slug → InnPilot room_type
-    // Mirrors the ROOM_TYPE_MAP in functions/api/booking/availability.js
-    const SLUG_TO_ROOM_TYPE = { "forest-suite": "Deluxe Room" };
+    const SLUG_TO_ROOM_TYPE = {};
+    for (const pmsType in ROOM_MAPPING) {
+      SLUG_TO_ROOM_TYPE[ROOM_MAPPING[pmsType]] = pmsType;
+    }
+
+    function normalizeRoomKey(k) {
+      return String(k || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, "");
+    }
+
+    function resolveRoomContent(identifier, contentList) {
+      const key = normalizeRoomKey(identifier);
+      if (!key) return DEFAULT_ROOM;
+      const direct = contentList.find((r) => normalizeRoomKey(r.slug) === key);
+      if (direct) return direct;
+      for (const pmsType in ROOM_MAPPING) {
+        if (normalizeRoomKey(pmsType) === key) {
+          const mapped = contentList.find(
+            (r) => normalizeRoomKey(r.slug) === normalizeRoomKey(ROOM_MAPPING[pmsType])
+          );
+          if (mapped) return mapped;
+        }
+      }
+      if (isDev) {
+        console.warn("[roomMapping] Unknown room: " + identifier + " — using default content");
+      }
+      return DEFAULT_ROOM;
+    }
 
     const BFF_BASE = "/api/booking";
     const TIMEOUT_MS = 15000;
@@ -1360,7 +1393,7 @@ const roomsJson = JSON.stringify(rooms);
       var saved = loadSession();
       if (saved && !isSessionExpired(saved)) {
         sessionData = saved;
-        selectedRoom = ROOM_CONTENT.find(function (r) { return r.slug === saved.roomSlug; });
+        selectedRoom = resolveRoomContent(saved.roomSlug, ROOM_CONTENT);
         selectedRoomType = saved.roomType || SLUG_TO_ROOM_TYPE[saved.roomSlug] || null;
         lastSearchParams = {
           checkin: saved.checkin,
@@ -1485,10 +1518,11 @@ const roomsJson = JSON.stringify(rooms);
     }
 
     async function fetchQuote(roomSlug, roomType) {
-      const room = ROOM_CONTENT.find((r) => r.slug === roomSlug);
-      if (!room || !lastSearchParams) return;
+      const room = resolveRoomContent(roomSlug, ROOM_CONTENT);
+      if (!lastSearchParams) return;
 
-      selectedRoom = room;
+      selectedRoom =
+        room === DEFAULT_ROOM ? Object.assign({}, room, { name: roomType || roomSlug }) : room;
       selectedRoomType = roomType || null;
 
       const stateLoading = document.createElement("div");
@@ -2188,11 +2222,11 @@ const roomsJson = JSON.stringify(rooms);
         formatDisplayDate(data.checkout);
 
       data.rooms.forEach((apiRoom) => {
-        const content = ROOM_CONTENT.find((r) => r.slug === apiRoom.slug);
+        const content = resolveRoomContent(apiRoom.slug, ROOM_CONTENT);
         const card = createRoomCard(apiRoom, content, nights);
         roomsGrid.appendChild(card);
         const carousel = card.querySelector("[data-carousel]");
-        if (carousel) initRoomCarousel(carousel, (content || apiRoom).name);
+        if (carousel) initRoomCarousel(carousel, (content && content.name ? content.name : apiRoom.name));
       });
     }
 
@@ -2200,9 +2234,12 @@ const roomsJson = JSON.stringify(rooms);
       const card = document.createElement("article");
       card.className =
         "overflow-hidden rounded-2xl bg-white shadow-card transition-all duration-300 hover:shadow-glow hover:-translate-y-1 room-card-enter";
-      card.setAttribute("aria-label", (content || apiRoom).name + " room");
+      card.setAttribute(
+        "aria-label",
+        (content && content.name ? content.name : apiRoom.name) + " room"
+      );
 
-      const name = content ? content.name : apiRoom.name;
+      const name = content && content.name ? content.name : apiRoom.name;
       const description = content ? content.shortDescription : "";
       const image = content ? content.image : "";
       const maxOccupancy = content
@@ -2534,7 +2571,7 @@ const roomsJson = JSON.stringify(rooms);
       const urlParams = getUrlParams();
       if (urlParams.step === "guests" && urlParams.room) {
         showState(stateGuests);
-        selectedRoom = ROOM_CONTENT.find((r) => r.slug === urlParams.room);
+        selectedRoom = resolveRoomContent(urlParams.room, ROOM_CONTENT);
         selectedRoomType = urlParams.rt || SLUG_TO_ROOM_TYPE[urlParams.room] || null;
         lastSearchParams = {
           checkin: urlParams.checkin,
@@ -2545,7 +2582,7 @@ const roomsJson = JSON.stringify(rooms);
         fetchQuote(urlParams.room, selectedRoomType);
       } else if (urlParams.step === "review" && urlParams.room) {
         showState(stateReview);
-        selectedRoom = ROOM_CONTENT.find((r) => r.slug === urlParams.room);
+        selectedRoom = resolveRoomContent(urlParams.room, ROOM_CONTENT);
         selectedRoomType = urlParams.rt || SLUG_TO_ROOM_TYPE[urlParams.room] || null;
         lastSearchParams = {
           checkin: urlParams.checkin,

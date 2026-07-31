@@ -5,9 +5,9 @@ const BASE = "http://localhost:8788";
 const MOCK_AVAILABILITY = {
   rooms: [
     {
-      slug: "forest-suite",
-      room_type: "Deluxe Room",
-      name: "Deluxe Room",
+      slug: "Family Room",
+      room_type: "Family Room",
+      name: "Family Room",
       available: true,
       roomsLeft: 2,
       nightlyRate: 3500,
@@ -20,9 +20,9 @@ const MOCK_AVAILABILITY = {
       cancellationPolicy: "Free cancellation up to 48 hours before check-in",
     },
     {
-      slug: "river-cottage",
-      room_type: "River Cottage",
-      name: "River Cottage",
+      slug: "Deluxe Room",
+      room_type: "Deluxe Room",
+      name: "Deluxe Room",
       available: false,
       roomsLeft: 0,
       nightlyRate: 3200,
@@ -56,6 +56,22 @@ page.on("console", (msg) => {
 
 await page.route("**/api/booking/availability**", (route) =>
   route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(MOCK_AVAILABILITY) })
+);
+
+await page.route("**/api/booking/quote**", (route) =>
+  route.fulfill({
+    status: 200,
+    contentType: "application/json",
+    body: JSON.stringify({
+      subtotal: 7000,
+      total: 7000,
+      totalTaxes: 840,
+      nightlyRate: 3500,
+      cancellation_policy: "Free cancellation up to 48 hours before check-in",
+      quote_id: "quote-test-1",
+      currency: "INR",
+    }),
+  })
 );
 
 await page.goto(`${BASE}/booking/`, { waitUntil: "networkidle" });
@@ -269,6 +285,25 @@ check("desktop carousel ratio ~16/7 (0.44)", Math.abs(dRatio - 0.4375) < 0.12, `
 
 // Search panel still visible after all interaction
 check("search panel visible at end", await page.locator("#search-section").isVisible());
+
+// Select This Room -> guest details step (mapping resolved "Family Room" -> family-lodge)
+await page.locator("#state-results .select-room-btn").first().click();
+await page.waitForTimeout(1200);
+check("Select This Room navigates to guest details", await page.locator("#state-guests:not(.hidden)").isVisible());
+check("URL step = guests", (page.url().includes("step=guests")), page.url());
+const guestsVisible = await page.locator("#guest-details-form, #state-guests input").count();
+check("guest form rendered", guestsVisible > 0, String(guestsVisible));
+
+// Guest details -> review step
+await page.fill("#guest-firstName", "Rahul");
+await page.fill("#guest-lastName", "Sharma");
+await page.fill("#guest-email", "rahul@test.com");
+await page.fill("#guest-phone", "+91 98765 43210");
+await page.click("#proceed-to-review");
+await page.waitForTimeout(800);
+check("review step visible", await page.locator("#state-review:not(.hidden)").isVisible());
+const confirmBox = page.locator("#booking-confirmation");
+check("confirmation checkbox present", await confirmBox.count() > 0, String(await confirmBox.count()));
 
 // No console errors
 check("no console/page errors", errors.length === 0, errors.slice(0, 3).join(" | "));
