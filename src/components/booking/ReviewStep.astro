@@ -1,89 +1,11 @@
 ---
-interface Props {
-  roomName?: string;
-  checkin?: string;
-  checkout?: string;
-  adults?: number;
-  children?: number;
-  nights?: number;
-  nightlyRate?: number;
-  totalStay?: number;
-  packages?: Array<{ name: string; price: number; included: boolean }>;
-  subtotal?: number;
-  taxBreakdown?: Array<{ label: string; amount: number }>;
-  totalTaxes?: number;
-  grandTotal?: number;
-  cancellationPolicy?: string;
-  quoteExpiry?: string;
-  guest?: {
-    firstName?: string;
-    lastName?: string;
-    email?: string;
-    phone?: string;
-    country?: string;
-    specialRequests?: string;
-  };
-}
-
-const {
-  roomName,
-  checkin,
-  checkout,
-  adults = 2,
-  children = 0,
-  nights = 1,
-  nightlyRate,
-  totalStay,
-  packages = [],
-  subtotal,
-  taxBreakdown = [],
-  totalTaxes,
-  grandTotal,
-  cancellationPolicy,
-  quoteExpiry,
-  guest = {},
-} = Astro.props;
-
-function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency: 'INR',
-    maximumFractionDigits: 0,
-  }).format(amount);
-}
-
-function formatDisplayDate(dateStr: string): string {
-  const d = new Date(dateStr + 'T00:00:00');
-  return d.toLocaleDateString('en-IN', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  });
-}
-
-function getCountryName(code: string): string {
-  const countries: Record<string, string> = {
-    IN: 'India',
-    US: 'United States',
-    GB: 'United Kingdom',
-    CA: 'Canada',
-    AU: 'Australia',
-    DE: 'Germany',
-    FR: 'France',
-    SG: 'Singapore',
-    AE: 'United Arab Emirates',
-    JP: 'Japan',
-    OTHER: 'Other',
-  };
-  return countries[code] || code;
-}
 ---
 
 <div class="space-y-8">
   <!-- Booking Details Review -->
   <div class="rounded-2xl border border-cfr-earth-100 bg-white p-6 text-center shadow-card">
     <h2 class="font-display text-lg font-bold text-cfr-green-dark">Review Your Booking</h2>
-    
+
     <div class="mt-4 space-y-4">
       <!-- Room Info -->
       <div class="flex items-start gap-4">
@@ -93,11 +15,8 @@ function getCountryName(code: string): string {
           </svg>
         </div>
         <div>
-          <h3 class="font-semibold text-cfr-earth-700">{roomName || 'Room'}</h3>
-          <p class="mt-1 text-sm text-cfr-earth-500">
-            {checkin && checkout ? `${formatDisplayDate(checkin)} – ${formatDisplayDate(checkout)}` : ''}
-            {nights ? ` · ${nights} night${nights !== 1 ? 's' : ''}` : ''}
-          </p>
+          <h3 id="review-room-name" class="font-semibold text-cfr-earth-700">Room</h3>
+          <p id="review-stay-info" class="mt-1 text-sm text-cfr-earth-500"></p>
         </div>
       </div>
 
@@ -110,151 +29,66 @@ function getCountryName(code: string): string {
         </div>
         <div>
           <h3 class="font-semibold text-cfr-earth-700">Guests</h3>
-          <p class="mt-1 text-sm text-cfr-earth-500">
-            {adults} Adult{adults !== 1 ? 's' : ''}{children > 0 ? `, ${children} Child${children !== 1 ? 'ren' : ''}` : ''}
-          </p>
+          <p id="review-guests-info" class="mt-1 text-sm text-cfr-earth-500"></p>
         </div>
       </div>
-
-      <!-- Packages -->
-      {packages.length > 0 && (
-        <div class="flex items-start gap-4">
-          <div class="flex h-10 w-10 items-center justify-center rounded-full bg-cfr-green-accent/10">
-            <svg class="h-5 w-5 text-cfr-green-accent" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
-            </svg>
-          </div>
-          <div>
-            <h3 class="font-semibold text-cfr-earth-700">Packages</h3>
-            <ul class="mt-1 space-y-1 text-sm text-cfr-earth-500">
-              {packages.map(pkg => (
-                <li class="flex items-center gap-2">
-                  <span class={`h-1.5 w-1.5 rounded-full ${pkg.included ? 'bg-cfr-green-leaf' : 'bg-cfr-sand-500'}`}></span>
-                  {pkg.name}
-                  {!pkg.included && <span class="text-cfr-earth-400">(+{formatCurrency(pkg.price)})</span>}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      )}
     </div>
   </div>
 
   <!-- Guest Details Review -->
-  {guest.firstName && (
-    <div class="rounded-2xl border border-cfr-earth-100 bg-white p-6 shadow-card">
-      <div class="flex items-center justify-between">
-        <h2 class="font-display text-lg font-bold text-cfr-green-dark">Guest Details</h2>
-        <a
-          href={`/booking?step=guests&room=${encodeURIComponent(roomName || '')}&checkin=${checkin}&checkout=${checkout}&adults=${adults}&children=${children}`}
-          class="text-sm font-medium text-cfr-green-accent hover:underline"
-        >
-          Edit
-        </a>
-      </div>
-      
-      <div class="mt-4 space-y-3">
-        <div class="flex items-start gap-4">
-          <div class="flex h-10 w-10 items-center justify-center rounded-full bg-cfr-green-accent/10">
-            <svg class="h-5 w-5 text-cfr-green-accent" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-            </svg>
-          </div>
-          <div>
-            <p class="font-semibold text-cfr-earth-700">{guest.firstName} {guest.lastName}</p>
-            <p class="mt-1 text-sm text-cfr-earth-500">{guest.email}</p>
-            <p class="text-sm text-cfr-earth-500">{guest.phone}</p>
-            {guest.country && (
-              <p class="text-sm text-cfr-earth-500">{getCountryName(guest.country)}</p>
-            )}
-            {guest.specialRequests && (
-              <p class="mt-2 text-sm text-cfr-earth-500">
-                <span class="font-medium">Special Requests:</span> {guest.specialRequests}
-              </p>
-            )}
-          </div>
+  <div id="review-guest-card" class="hidden rounded-2xl border border-cfr-earth-100 bg-white p-6 shadow-card">
+    <div class="flex items-center justify-between">
+      <h2 class="font-display text-lg font-bold text-cfr-green-dark">Guest Details</h2>
+      <button
+        type="button"
+        data-action="back-to-guests"
+        class="text-sm font-medium text-cfr-green-accent hover:underline"
+      >
+        Edit
+      </button>
+    </div>
+
+    <div class="mt-4 space-y-3">
+      <div class="flex items-start gap-4">
+        <div class="flex h-10 w-10 items-center justify-center rounded-full bg-cfr-green-accent/10">
+          <svg class="h-5 w-5 text-cfr-green-accent" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+          </svg>
+        </div>
+        <div>
+          <p id="review-guest-name" class="font-semibold text-cfr-earth-700"></p>
+          <p id="review-guest-email" class="mt-1 text-sm text-cfr-earth-500"></p>
+          <p id="review-guest-phone" class="text-sm text-cfr-earth-500"></p>
+          <p id="review-guest-country" class="text-sm text-cfr-earth-500"></p>
+          <p id="review-guest-special" class="mt-2 hidden text-sm text-cfr-earth-500">
+            <span class="font-medium">Special Requests:</span>
+            <span id="review-guest-special-text"></span>
+          </p>
         </div>
       </div>
     </div>
-  )}
+  </div>
 
   <!-- Pricing Summary -->
   <div class="rounded-2xl border border-cfr-earth-100 bg-white p-6 text-center shadow-card">
     <h2 class="font-display text-lg font-bold text-cfr-green-dark">Pricing Summary</h2>
-    
-    <div class="mt-4 space-y-3">
-      {nightlyRate && (
-        <div class="flex justify-between text-sm">
-          <span class="text-cfr-earth-600">Room ({nights} night{nights !== 1 ? 's' : ''})</span>
-          <span class="font-medium text-cfr-earth-700">{formatCurrency(totalStay || nightlyRate * nights)}</span>
-        </div>
-      )}
-      
-      {packages.filter(p => !p.included).map(pkg => (
-        <div class="flex justify-between text-sm">
-          <span class="text-cfr-earth-600">{pkg.name}</span>
-          <span class="font-medium text-cfr-earth-700">+{formatCurrency(pkg.price)}</span>
-        </div>
-      ))}
-      
-      {(subtotal !== undefined || totalTaxes !== undefined) && (
-        <div class="border-t border-cfr-earth-100 pt-3">
-          {subtotal !== undefined && (
-            <div class="flex justify-between text-sm">
-              <span class="text-cfr-earth-600">Subtotal</span>
-              <span class="text-cfr-earth-700">{formatCurrency(subtotal)}</span>
-            </div>
-          )}
-          
-          {taxBreakdown.map(tax => (
-            <div class="mt-1 flex justify-between text-xs text-cfr-earth-500">
-              <span>{tax.label}</span>
-              <span>{formatCurrency(tax.amount)}</span>
-            </div>
-          ))}
-          
-          {totalTaxes !== undefined && taxBreakdown.length === 0 && (
-            <div class="mt-1 flex justify-between text-xs text-cfr-earth-500">
-              <span>Taxes</span>
-              <span>{formatCurrency(totalTaxes)}</span>
-            </div>
-          )}
-        </div>
-      )}
-      
-      {grandTotal !== undefined && (
-        <div class="border-t border-cfr-earth-100 pt-3">
-          <div class="flex justify-between">
-            <span class="font-bold text-cfr-earth-700">Total</span>
-            <span class="text-xl font-bold text-cfr-earth-700">{formatCurrency(grandTotal)}</span>
-          </div>
-        </div>
-      )}
-    </div>
+    <div id="review-pricing" class="mt-4 space-y-3"></div>
   </div>
 
   <!-- Cancellation Policy -->
-  {cancellationPolicy && (
-    <div class="rounded-2xl border border-cfr-earth-100 bg-white p-6 text-center shadow-card">
-      <h2 class="font-display text-lg font-bold text-cfr-green-dark">Cancellation Policy</h2>
-      
-      <div class="mt-4 flex items-start gap-3">
-        <svg class="mt-0.5 h-5 w-5 shrink-0 text-cfr-green-leaf" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        <div>
-          <p class="text-sm text-cfr-earth-600">{cancellationPolicy}</p>
-          {quoteExpiry && (
-            <p class="mt-2 text-xs text-cfr-earth-400">
-              This quote is valid until {new Date(quoteExpiry).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}. 
-              Pricing may change after this time.
-            </p>
-          )}
-        </div>
+  <div id="review-cancellation" class="hidden rounded-2xl border border-cfr-earth-100 bg-white p-6 text-center shadow-card">
+    <h2 class="font-display text-lg font-bold text-cfr-green-dark">Cancellation Policy</h2>
+
+    <div class="mt-4 flex items-start gap-3">
+      <svg class="mt-0.5 h-5 w-5 shrink-0 text-cfr-green-leaf" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <div>
+        <p id="review-cancellation-policy" class="text-sm text-cfr-earth-600"></p>
+        <p id="review-cancellation-expiry" class="mt-2 text-xs text-cfr-earth-400"></p>
       </div>
     </div>
-  )}
+  </div>
 
   <!-- Confirmation Checkbox -->
   <div class="rounded-2xl border border-cfr-earth-100 bg-white p-6 text-center shadow-card">

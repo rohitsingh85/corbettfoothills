@@ -326,7 +326,7 @@ const isDev = import.meta.env.DEV;
       </div>
 
       <!-- State: Review -->
-      <div id="state-review" class="hidden">
+      <div id="state-review" class="hidden pb-24 lg:pb-0">
         <div class="grid gap-6 lg:grid-cols-3">
           <div class="lg:col-span-2">
             <ReviewStep />
@@ -460,6 +460,30 @@ const isDev = import.meta.env.DEV;
       </div>
     </div>
   </section>
+
+  <!-- Mobile / Tablet: Sticky Booking Bar -->
+  <div id="mobile-booking-bar" class="fixed inset-x-0 bottom-0 z-40 hidden lg:hidden">
+    <div class="border-t border-cfr-earth-200 bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.12)]">
+      <div class="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
+        <div class="min-w-0">
+          <p class="text-[10px] font-semibold uppercase tracking-wider text-cfr-earth-400">Total</p>
+          <p data-mobile-total class="truncate font-display text-base font-bold text-cfr-green-dark">—</p>
+        </div>
+        <button
+          type="submit"
+          id="mobile-complete-booking-btn"
+          class="flex shrink-0 items-center justify-center gap-2 rounded-lg bg-cfr-green-accent px-5 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          disabled
+        >
+          <span id="mobile-booking-btn-text">Complete Booking</span>
+          <svg id="mobile-booking-spinner" class="hidden h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- LIGHTBOX -->
   <div
@@ -938,6 +962,7 @@ const isDev = import.meta.env.DEV;
     const resultsSummary = document.getElementById("results-summary");
     const roomsGrid = document.getElementById("rooms-grid");
     const searchSection = document.getElementById("search-section");
+    const mobileBookingBar = document.getElementById("mobile-booking-bar");
 
     let currentAbortController = null;
     let lastSearchParams = null;
@@ -950,6 +975,7 @@ const isDev = import.meta.env.DEV;
     const SESSION_WARNING_MS = 120000;
     const SESSION_URGENT_MS = 60000;
     const SESSION_STORAGE_KEY = "cfr_booking_session";
+    const DRAFT_STORAGE_KEY = "cfr_booking_draft";
     let sessionData = null;
     let countdownInterval = null;
     let serverTimeOffset = 0;
@@ -1020,10 +1046,46 @@ const isDev = import.meta.env.DEV;
       );
       state.classList.remove("hidden");
 
+      if (mobileBookingBar) {
+        if (state === stateReview) {
+          mobileBookingBar.classList.remove("hidden");
+        } else {
+          mobileBookingBar.classList.add("hidden");
+        }
+      }
+
       if (state === statePayment) {
         showCountdown(true);
       } else {
         showCountdown(false);
+      }
+
+      if (state === stateGuests) {
+        populateGuestForm();
+      }
+
+      if (quoteData && selectedRoom && lastSearchParams) {
+        renderBookingState();
+      }
+    }
+
+    function populateGuestForm() {
+      var g = guestData || {};
+      var firstName = document.getElementById("guest-firstName");
+      var lastName = document.getElementById("guest-lastName");
+      var email = document.getElementById("guest-email");
+      var phone = document.getElementById("guest-phone");
+      var country = document.getElementById("guest-country");
+      var specialRequests = document.getElementById("guest-specialRequests");
+      if (firstName && g.firstName) firstName.value = g.firstName;
+      if (lastName && g.lastName) lastName.value = g.lastName;
+      if (email && g.email) email.value = g.email;
+      if (phone && g.phone) phone.value = g.phone;
+      if (country && g.country) country.value = g.country;
+      if (specialRequests && g.specialRequests) {
+        specialRequests.value = g.specialRequests;
+        var countEl = document.getElementById("specialRequests-count");
+        if (countEl) countEl.textContent = String(specialRequests.value.length);
       }
     }
 
@@ -1093,6 +1155,31 @@ const isDev = import.meta.env.DEV;
       } catch (e) { /* ignore */ }
       sessionData = null;
       stopCountdown();
+    }
+
+    function persistDraft(patch) {
+      try {
+        var draft = Object.assign({}, loadDraft(), patch);
+        sessionStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft));
+      } catch (e) { /* ignore */ }
+    }
+
+    function loadDraft() {
+      try {
+        var raw = sessionStorage.getItem(DRAFT_STORAGE_KEY);
+        if (!raw) return null;
+        var parsed = JSON.parse(raw);
+        if (!parsed.roomSlug || !parsed.checkin || !parsed.checkout) return null;
+        return parsed;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function clearDraft() {
+      try {
+        sessionStorage.removeItem(DRAFT_STORAGE_KEY);
+      } catch (e) { /* ignore */ }
     }
 
     function isSessionExpired(session) {
@@ -1403,24 +1490,99 @@ const isDev = import.meta.env.DEV;
         };
         quoteData = saved.quote;
         guestData = saved.guest;
-        updateBookingSummary();
         showState(statePayment);
         showCountdown(true);
         startCountdown();
-        updateUrl("payment", {
-          room: saved.roomSlug,
-          rt: saved.roomType || saved.roomSlug,
-          checkin: saved.checkin,
-          checkout: saved.checkout,
-          adults: saved.adults,
-          children: saved.children,
-        });
         return true;
       }
       if (saved && isSessionExpired(saved)) {
         clearBookingSession();
       }
       return false;
+    }
+
+    function hydrateFromSource(source) {
+      if (!source) return;
+      selectedRoom = resolveRoomContent(source.roomSlug, ROOM_CONTENT);
+      if (selectedRoom === DEFAULT_ROOM) {
+        selectedRoom = Object.assign({}, selectedRoom, { name: source.roomType || source.roomSlug });
+      }
+      selectedRoomType = source.roomType || SLUG_TO_ROOM_TYPE[source.roomSlug] || null;
+      lastSearchParams = {
+        checkin: source.checkin,
+        checkout: source.checkout,
+        adults: source.adults,
+        children: source.children || 0,
+      };
+      quoteData = source.quote || null;
+      guestData = source.guest || {};
+    }
+
+    function restoreStepFromUrl(navigating) {
+      var urlParams = getUrlParams();
+      var step = urlParams.step || "search";
+
+      if (step === "search" || step === "expired") {
+        if (step === "expired") {
+          showState(stateSessionExpired);
+        } else {
+          showState(stateInitial);
+        }
+        return;
+      }
+
+      if (step === "results") {
+        if (roomsGrid.children.length > 0) {
+          showState(stateResults);
+        } else if (urlParams.checkin) {
+          checkinInput.value = urlParams.checkin;
+          checkoutInput.value = urlParams.checkout;
+          adultsInput.value = String(urlParams.adults || 2);
+          childrenInput.value = String(urlParams.children || 0);
+          searchAvailability();
+        }
+        return;
+      }
+
+      if (step === "guests" || step === "review") {
+        var source = loadDraft();
+        if (!source) {
+          var saved = loadSession();
+          if (saved && !isSessionExpired(saved)) {
+            source = saved;
+          }
+        }
+        if (source) {
+          hydrateFromSource(source);
+          if (step === "guests" || !(guestData && (guestData.firstName || guestData.email || guestData.phone))) {
+            showState(stateGuests);
+          } else {
+            showState(stateReview);
+          }
+        } else if (urlParams.room) {
+          var roomSlug = urlParams.room;
+          selectedRoom = resolveRoomContent(roomSlug, ROOM_CONTENT);
+          selectedRoomType = urlParams.rt || SLUG_TO_ROOM_TYPE[roomSlug] || null;
+          lastSearchParams = {
+            checkin: urlParams.checkin,
+            checkout: urlParams.checkout,
+            adults: urlParams.adults,
+            children: urlParams.children,
+          };
+          fetchQuote(roomSlug, selectedRoomType);
+        }
+        return;
+      }
+
+      if (step === "payment") {
+        var session = loadSession();
+        if (session && !isSessionExpired(session)) {
+          attemptSessionRecovery();
+        } else {
+          showState(stateInitial);
+        }
+        return;
+      }
     }
 
     function validate() {
@@ -1506,6 +1668,12 @@ const isDev = import.meta.env.DEV;
 
         renderResults(data);
         showState(stateResults);
+        updateUrl("results", {
+          checkin: params.checkin,
+          checkout: params.checkout,
+          adults: params.adults,
+          children: params.children,
+        });
         scrollResultsIntoView();
       } catch (err) {
         if (err?.name === "AbortError") return;
@@ -1562,7 +1730,17 @@ const isDev = import.meta.env.DEV;
         }
 
         quoteData = data;
-        updateBookingSummary();
+        persistDraft({
+          roomSlug: roomSlug,
+          roomType: roomType || null,
+          checkin: lastSearchParams.checkin,
+          checkout: lastSearchParams.checkout,
+          adults: lastSearchParams.adults,
+          children: lastSearchParams.children,
+          quote: data,
+          guest: guestData || {},
+          step: "guests",
+        });
         showState(stateGuests);
         updateUrl("guests", {
           room: roomSlug,
@@ -1580,80 +1758,193 @@ const isDev = import.meta.env.DEV;
       }
     }
 
-    function updateBookingSummary() {
-      if (!quoteData || !selectedRoom) return;
+    function esc(s) {
+      return String(s == null ? "" : s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
 
-      const summaryElements = document.querySelectorAll("[data-booking-summary]");
-      summaryElements.forEach((el) => {
-        const nights = Math.ceil(
-          (new Date(lastSearchParams.checkout + "T00:00:00") -
-            new Date(lastSearchParams.checkin + "T00:00:00")) /
-            86400000
-        );
+    function buildPricingRowsHtml(nights) {
+      var taxes = [];
+      if (Array.isArray(quoteData.taxBreakdown)) {
+        taxes = quoteData.taxBreakdown;
+      } else if (quoteData.totalTaxes > 0) {
+        taxes = [{ label: "Taxes", amount: quoteData.totalTaxes }];
+      }
 
-        el.innerHTML = `
-          <div class="space-y-4">
-            <div>
-              <h3 class="font-display text-base font-semibold text-cfr-green-dark">${selectedRoom.name}</h3>
-              <p class="mt-1 text-sm text-cfr-earth-500">
-                ${formatDisplayDate(lastSearchParams.checkin)} – ${formatDisplayDate(lastSearchParams.checkout)}
-              </p>
-              <p class="text-sm text-cfr-earth-500">
-                ${nights} night${nights !== 1 ? 's' : ''} · ${lastSearchParams.adults} Adult${lastSearchParams.adults !== 1 ? 's' : ''}${lastSearchParams.children > 0 ? `, ${lastSearchParams.children} Child${lastSearchParams.children !== 1 ? 'ren' : ''}` : ''}
-              </p>
-            </div>
-            
-            <div class="border-t border-cfr-earth-100 pt-4">
-              <div class="flex justify-between text-sm">
-                <span class="text-cfr-earth-600">Room (${nights} night${nights !== 1 ? 's' : ''})</span>
-                <span class="font-medium text-cfr-earth-700">${formatCurrency(quoteData.subtotal || quoteData.total || 0)}</span>
-              </div>
-              
-              ${quoteData.taxes ? `
-                <div class="mt-2 space-y-1">
-                  ${Object.entries(quoteData.taxes).map(([label, amount]) => `
-                    <div class="flex justify-between text-xs text-cfr-earth-500">
-                      <span>${label}</span>
-                      <span>${formatCurrency(amount)}</span>
-                    </div>
-                  `).join('')}
-                </div>
-              ` : ''}
-              
-              <div class="mt-3 border-t border-cfr-earth-100 pt-3">
-                <div class="flex justify-between">
-                  <span class="font-bold text-cfr-earth-700">Total</span>
-                  <span class="text-xl font-bold text-cfr-earth-700">${formatCurrency(quoteData.total || 0)}</span>
-                </div>
-              </div>
-            </div>
-            
-            ${quoteData.cancellation_policy ? `
-              <div class="flex items-start gap-2 text-xs text-cfr-green-leaf">
-                <svg class="mt-0.5 h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span>${quoteData.cancellation_policy}</span>
-              </div>
-            ` : ''}
-            
-            <div class="flex items-center justify-center gap-4 text-xs text-cfr-earth-400">
-              <span class="flex items-center gap-1">
-                <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-                </svg>
-                Secure
-              </span>
-              <span class="flex items-center gap-1">
-                <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                Best Rate
-              </span>
-            </div>
-          </div>
-        `;
+      var rows =
+        '<div class="flex justify-between text-sm">' +
+        '<span class="text-cfr-earth-600">Room (' +
+        nights +
+        " night" +
+        (nights !== 1 ? "s" : "") +
+        ")</span>" +
+        '<span class="font-medium text-cfr-earth-700">' +
+        formatCurrency(quoteData.subtotal || quoteData.total || 0) +
+        "</span></div>";
+
+      taxes.forEach(function (t) {
+        rows +=
+          '<div class="flex justify-between text-xs text-cfr-earth-500">' +
+          "<span>" +
+          esc(t.label) +
+          "</span><span>" +
+          formatCurrency(t.amount) +
+          "</span></div>";
       });
+
+      rows +=
+        '<div class="mt-1 flex justify-between border-t border-cfr-earth-100 pt-2">' +
+        '<span class="font-bold text-cfr-earth-700">Total</span>' +
+        '<span class="text-xl font-bold text-cfr-earth-700">' +
+        formatCurrency(quoteData.total || quoteData.grandTotal || quoteData.subtotal || 0) +
+        "</span></div>";
+
+      return rows;
+    }
+
+    function renderBookingState() {
+      if (!quoteData || !selectedRoom || !lastSearchParams) return;
+
+      var nights = Math.ceil(
+        (new Date(lastSearchParams.checkout + "T00:00:00") -
+          new Date(lastSearchParams.checkin + "T00:00:00")) /
+          86400000
+      );
+      var pricingRows = buildPricingRowsHtml(nights);
+      var cancellationPolicy = quoteData.cancellation_policy || selectedRoom.cancellationPolicy || "";
+      var quoteExpiry = quoteData.quote_expires_at || "";
+
+      var summaryHtml =
+        '<div class="space-y-4">' +
+        "<div>" +
+        '<h3 class="font-display text-base font-semibold text-cfr-green-dark">' +
+        esc(selectedRoom.name) +
+        "</h3>" +
+        '<p class="mt-1 text-sm text-cfr-earth-500">' +
+        formatDisplayDate(lastSearchParams.checkin) +
+        " – " +
+        formatDisplayDate(lastSearchParams.checkout) +
+        "</p>" +
+        '<p class="text-sm text-cfr-earth-500">' +
+        nights +
+        " night" +
+        (nights !== 1 ? "s" : "") +
+        " · " +
+        lastSearchParams.adults +
+        " Adult" +
+        (lastSearchParams.adults !== 1 ? "s" : "") +
+        (lastSearchParams.children > 0
+          ? ", " + lastSearchParams.children + " Child" + (lastSearchParams.children !== 1 ? "ren" : "")
+          : "") +
+        "</p>" +
+        "</div>" +
+        '<div class="border-t border-cfr-earth-100 pt-4">' +
+        pricingRows +
+        "</div>" +
+        (cancellationPolicy
+          ? '<div class="flex items-start gap-2 text-xs text-cfr-green-leaf">' +
+            '<svg class="mt-0.5 h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>' +
+            "<span>" +
+            esc(cancellationPolicy) +
+            "</span></div>"
+          : "") +
+        "</div>";
+
+      document.querySelectorAll("[data-booking-summary]").forEach(function (el) {
+        el.innerHTML = summaryHtml;
+      });
+
+      var mobileTotal = document.querySelector("[data-mobile-total]");
+      if (mobileTotal) mobileTotal.textContent = formatCurrency(quoteData.total || quoteData.grandTotal || quoteData.subtotal || 0);
+
+      var roomNameEl = document.getElementById("review-room-name");
+      if (roomNameEl) roomNameEl.textContent = selectedRoom.name;
+
+      var stayInfoEl = document.getElementById("review-stay-info");
+      if (stayInfoEl) {
+        stayInfoEl.textContent =
+          formatDisplayDate(lastSearchParams.checkin) +
+          " – " +
+          formatDisplayDate(lastSearchParams.checkout) +
+          " · " +
+          nights +
+          " night" +
+          (nights !== 1 ? "s" : "") +
+          " · " +
+          lastSearchParams.adults +
+          " Adult" +
+          (lastSearchParams.adults !== 1 ? "s" : "") +
+          (lastSearchParams.children > 0
+            ? ", " + lastSearchParams.children + " Child" + (lastSearchParams.children !== 1 ? "ren" : "")
+            : "");
+      }
+
+      var guestsInfoEl = document.getElementById("review-guests-info");
+      if (guestsInfoEl) {
+        guestsInfoEl.textContent =
+          lastSearchParams.adults +
+          " Adult" +
+          (lastSearchParams.adults !== 1 ? "s" : "") +
+          (lastSearchParams.children > 0
+            ? ", " + lastSearchParams.children + " Child" + (lastSearchParams.children !== 1 ? "ren" : "")
+            : "");
+      }
+
+      var pricingEl = document.getElementById("review-pricing");
+      if (pricingEl) pricingEl.innerHTML = pricingRows;
+
+      var guestCard = document.getElementById("review-guest-card");
+      if (guestCard) {
+        var g = guestData || {};
+        var hasGuest = g.firstName || g.email || g.phone;
+        guestCard.classList.toggle("hidden", !hasGuest);
+        if (hasGuest) {
+          var nameEl = document.getElementById("review-guest-name");
+          if (nameEl) nameEl.textContent = [g.firstName, g.lastName].filter(Boolean).join(" ");
+          var emailEl = document.getElementById("review-guest-email");
+          if (emailEl) emailEl.textContent = g.email || "";
+          var phoneEl = document.getElementById("review-guest-phone");
+          if (phoneEl) phoneEl.textContent = g.phone || "";
+          var countryEl = document.getElementById("review-guest-country");
+          if (countryEl) countryEl.textContent = g.country || "";
+          var specialEl = document.getElementById("review-guest-special");
+          var specialTextEl = document.getElementById("review-guest-special-text");
+          if (specialEl && specialTextEl) {
+            if (g.specialRequests) {
+              specialTextEl.textContent = g.specialRequests;
+              specialEl.classList.remove("hidden");
+            } else {
+              specialEl.classList.add("hidden");
+            }
+          }
+        }
+      }
+
+      var cancellationEl = document.getElementById("review-cancellation");
+      if (cancellationEl) {
+        cancellationEl.classList.toggle("hidden", !cancellationPolicy);
+        var policyEl = document.getElementById("review-cancellation-policy");
+        if (policyEl) policyEl.textContent = cancellationPolicy;
+        var expiryEl = document.getElementById("review-cancellation-expiry");
+        if (expiryEl) {
+          if (quoteExpiry) {
+            var expDate = new Date(quoteExpiry);
+            if (!isNaN(expDate.getTime())) {
+              expiryEl.textContent =
+                "Quote valid until " +
+                expDate.toLocaleDateString("en-IN", { month: "short", day: "numeric", year: "numeric" });
+            } else {
+              expiryEl.textContent = "";
+            }
+          } else {
+            expiryEl.textContent = "";
+          }
+        }
+      }
     }
 
     async function submitBooking() {
@@ -1678,19 +1969,13 @@ const isDev = import.meta.env.DEV;
         lastSearchParams.checkout,
         lastSearchParams.adults,
         lastSearchParams.children,
-        {
-          subtotal: quoteData?.subtotal || 0,
-          totalTaxes: quoteData?.totalTaxes || 0,
-          grandTotal: quoteData?.total || 0,
-          cancellationPolicy: quoteData?.cancellation_policy || "",
-          taxBreakdown: quoteData?.taxes ? Object.entries(quoteData.taxes).map(function (e) { return { label: e[0], amount: e[1] }; }) : [],
-          nightlyRate: quoteData?.nightlyRate || 0,
-          totalStay: quoteData?.total || 0,
-        },
+        quoteData || {},
         guestData,
         quoteData?.quote_id,
         selectedRoomType
       );
+
+      clearDraft();
 
       showState(statePayment);
       startCountdown();
@@ -2483,6 +2768,17 @@ const isDev = import.meta.env.DEV;
         return;
       }
       guestData = typeof window.getGuestDetails === "function" ? window.getGuestDetails() : {};
+      persistDraft({
+        roomSlug: selectedRoom?.slug,
+        roomType: selectedRoomType || null,
+        checkin: lastSearchParams?.checkin,
+        checkout: lastSearchParams?.checkout,
+        adults: lastSearchParams?.adults,
+        children: lastSearchParams?.children,
+        quote: quoteData || {},
+        guest: guestData,
+        step: "review",
+      });
       showState(stateReview);
       updateUrl("review", {
         room: selectedRoom?.slug,
@@ -2533,6 +2829,22 @@ const isDev = import.meta.env.DEV;
         if (slug) {
           fetchQuote(slug, roomType || slug);
         }
+        return;
+      }
+      const actionBtn = target.closest ? target.closest("[data-action]") : null;
+      if (actionBtn) {
+        const action = actionBtn.getAttribute("data-action");
+        if (action === "back-to-guests") {
+          showState(stateGuests);
+          updateUrl("guests", {
+            room: selectedRoom?.slug,
+            rt: selectedRoomType || selectedRoom?.slug,
+            checkin: lastSearchParams?.checkin,
+            checkout: lastSearchParams?.checkout,
+            adults: lastSearchParams?.adults,
+            children: lastSearchParams?.children,
+          });
+        }
       }
     });
 
@@ -2566,39 +2878,10 @@ const isDev = import.meta.env.DEV;
     setDefaultDates();
     initLightbox();
 
-    var recovered = attemptSessionRecovery();
-    if (!recovered) {
-      const urlParams = getUrlParams();
-      if (urlParams.step === "guests" && urlParams.room) {
-        showState(stateGuests);
-        selectedRoom = resolveRoomContent(urlParams.room, ROOM_CONTENT);
-        selectedRoomType = urlParams.rt || SLUG_TO_ROOM_TYPE[urlParams.room] || null;
-        lastSearchParams = {
-          checkin: urlParams.checkin,
-          checkout: urlParams.checkout,
-          adults: urlParams.adults,
-          children: urlParams.children,
-        };
-        fetchQuote(urlParams.room, selectedRoomType);
-      } else if (urlParams.step === "review" && urlParams.room) {
-        showState(stateReview);
-        selectedRoom = resolveRoomContent(urlParams.room, ROOM_CONTENT);
-        selectedRoomType = urlParams.rt || SLUG_TO_ROOM_TYPE[urlParams.room] || null;
-        lastSearchParams = {
-          checkin: urlParams.checkin,
-          checkout: urlParams.checkout,
-          adults: urlParams.adults,
-          children: urlParams.children,
-        };
-        fetchQuote(urlParams.room, selectedRoomType);
-      } else if (urlParams.step === "payment" && urlParams.room) {
-        var saved = loadSession();
-        if (saved && !isSessionExpired(saved)) {
-          attemptSessionRecovery();
-        } else {
-          showState(stateInitial);
-        }
-      }
-    }
+    window.addEventListener("popstate", function () {
+      restoreStepFromUrl(true);
+    });
+
+    restoreStepFromUrl(false);
   })();
 </script>

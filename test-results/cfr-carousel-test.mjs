@@ -74,6 +74,14 @@ await page.route("**/api/booking/quote**", (route) =>
   })
 );
 
+await page.route("**/api/booking/session**", (route) =>
+  route.fulfill({
+    status: 200,
+    contentType: "application/json",
+    body: JSON.stringify({ serverTime: Date.now() }),
+  })
+);
+
 await page.goto(`${BASE}/booking/`, { waitUntil: "networkidle" });
 
 check("search panel visible on load", await page.locator("#search-section").isVisible());
@@ -304,6 +312,62 @@ await page.waitForTimeout(800);
 check("review step visible", await page.locator("#state-review:not(.hidden)").isVisible());
 const confirmBox = page.locator("#booking-confirmation");
 check("confirmation checkbox present", await confirmBox.count() > 0, String(await confirmBox.count()));
+
+// ---- Booking flow: review -> complete -> payment ----
+
+const summaryText = (await page.locator("[data-booking-summary]").first().textContent()) || "";
+check("summary shows room + total", summaryText.includes("7,000") && summaryText.length > 20, summaryText.slice(0, 60));
+
+const desktopBtn = page.locator("#complete-booking-btn");
+check("desktop Complete button present", (await desktopBtn.count()) === 1);
+check("desktop Complete button disabled until confirmed", await desktopBtn.isDisabled());
+check("mobile bar hidden on desktop", await page.locator("#mobile-booking-bar").isHidden());
+
+await confirmBox.check();
+await page.waitForTimeout(200);
+check("Complete button enabled after confirmation", !(await desktopBtn.isDisabled()));
+
+await desktopBtn.click();
+await page.waitForTimeout(600);
+check("Complete -> payment step", await page.locator("#state-payment:not(.hidden)").isVisible());
+check("payment URL step", page.url().includes("step=payment"), page.url());
+check("session persisted", await page.evaluate(() => !!sessionStorage.getItem("cfr_booking_session")));
+
+// Refresh at payment -> session recovery restores payment
+await page.reload({ waitUntil: "networkidle" });
+await page.waitForTimeout(600);
+check("refresh at payment restores payment step", await page.locator("#state-payment:not(.hidden)").isVisible());
+
+// Back -> review restored from session
+await page.goBack();
+await page.waitForTimeout(600);
+check("back from payment -> review", await page.locator("#state-review:not(.hidden)").isVisible());
+check("review summary restored", ((await page.locator("[data-booking-summary]").first().textContent()) || "").includes("7,000"));
+check("guest details restored in review", ((await page.locator("#review-guest-name").textContent()) || "").includes("Rahul"));
+
+// Forward -> payment again
+await page.goForward();
+await page.waitForTimeout(600);
+check("forward -> payment restored", await page.locator("#state-payment:not(.hidden)").isVisible());
+
+// Mobile: go back to review, mobile bar button completes booking
+await page.setViewportSize({ width: 390, height: 844 });
+await page.waitForTimeout(400);
+await page.goBack();
+await page.waitForTimeout(600);
+check("mobile bar visible on review", await page.locator("#mobile-booking-bar").isVisible());
+const mobileBtn = page.locator("#mobile-complete-booking-btn");
+check("mobile Complete button present", (await mobileBtn.count()) === 1);
+check("mobile Complete button disabled until confirmed", await mobileBtn.isDisabled());
+await page.locator("#booking-confirmation").check();
+await page.waitForTimeout(200);
+check("mobile Complete button enabled after confirmation", !(await mobileBtn.isDisabled()));
+await mobileBtn.click();
+await page.waitForTimeout(600);
+check("mobile Complete -> payment step", await page.locator("#state-payment:not(.hidden)").isVisible());
+
+await page.setViewportSize({ width: 1280, height: 900 });
+await page.waitForTimeout(400);
 
 // No console errors
 check("no console/page errors", errors.length === 0, errors.slice(0, 3).join(" | "));
