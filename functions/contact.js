@@ -1,4 +1,5 @@
 const BREVO_API = "https://api.brevo.com/v3";
+const rateLimitMap = new Map();
 
 export async function onRequest(context) {
   const { request, env } = context;
@@ -15,6 +16,28 @@ export async function onRequest(context) {
 
   if (request.method !== "POST") {
     return env.ASSETS.fetch(request);
+  }
+
+  const ip =
+    request.headers.get("cf-connecting-ip") ||
+    request.headers.get("x-real-ip") ||
+    "unknown";
+  const now = Date.now();
+  const windowMs = 60000;
+  const maxReqs = 5;
+  const entry = rateLimitMap.get(ip);
+  if (entry) {
+    const recent = entry.filter((t) => now - t < windowMs);
+    if (recent.length >= maxReqs) {
+      return new Response(
+        JSON.stringify({ error: "Too many requests. Try again later." }),
+        { status: 429, headers }
+      );
+    }
+    recent.push(now);
+    rateLimitMap.set(ip, recent);
+  } else {
+    rateLimitMap.set(ip, [now]);
   }
 
   let body;
