@@ -162,6 +162,13 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"children-remember-nature-retreats-longer.md": {
+	id: "children-remember-nature-retreats-longer.md";
+  slug: "children-remember-nature-retreats-longer";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "farmstay-vs-resort.md": {
 	id: "farmstay-vs-resort.md";
   slug: "farmstay-vs-resort";
@@ -169,9 +176,58 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"freshly-cooked-food-vs-resort-buffets.md": {
+	id: "freshly-cooked-food-vs-resort-buffets.md";
+  slug: "freshly-cooked-food-vs-resort-buffets";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"hidden-cost-mass-tourism-jim-corbett.md": {
+	id: "hidden-cost-mass-tourism-jim-corbett.md";
+  slug: "hidden-cost-mass-tourism-jim-corbett";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "how-to-reach.md": {
 	id: "how-to-reach.md";
   slug: "how-to-reach";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"long-weekends-in-2026.md": {
+	id: "long-weekends-in-2026.md";
+  slug: "long-weekends-in-2026";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"mysterious-side-of-kumaon-legends-haunted-places.md": {
+	id: "mysterious-side-of-kumaon-legends-haunted-places.md";
+  slug: "mysterious-side-of-kumaon-legends-haunted-places";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"organic-farm-experience.md": {
+	id: "organic-farm-experience.md";
+  slug: "organic-farm-experience";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"pet-friendly-stay-near-jim-corbett.md": {
+	id: "pet-friendly-stay-near-jim-corbett.md";
+  slug: "pet-friendly-stay-near-jim-corbett";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"smaller-stays-better-hospitality.md": {
+	id: "smaller-stays-better-hospitality.md";
+  slug: "smaller-stays-better-hospitality";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">
@@ -190,9 +246,23 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"what-guests-dont-realize-about-jim-corbett.md": {
+	id: "what-guests-dont-realize-about-jim-corbett.md";
+  slug: "what-guests-dont-realize-about-jim-corbett";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "why-choose-a-boutique-stay-near-jim-corbett.md": {
 	id: "why-choose-a-boutique-stay-near-jim-corbett.md";
   slug: "why-choose-a-boutique-stay-near-jim-corbett";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"why-some-visitors-leave-jim-corbett-disappointed.md": {
+	id: "why-some-visitors-leave-jim-corbett-disappointed.md";
+  slug: "why-some-visitors-leave-jim-corbett-disappointed";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">
