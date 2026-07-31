@@ -1,0 +1,1399 @@
+Corbett Foothills Retreat — Booking Page Design Specification
+Version: 4.0
+Date: 25 July 2026
+Status: Design Specification (Pre-Implementation)
+Page: https://corbett.life/booking/
+1. Content & Data Architecture
+Why This Separation Exists
+A booking page is not a monolith. It is a merger of two distinct concerns:
+Storytelling — the emotional, visual, and editorial layer that convinces a guest to book. This is the website's job.
+Operations — the real-time availability, pricing, inventory, and transactional layer that completes a booking. This is the PMS's job.
+These are fundamentally different domains with different lifecycles, different authors, and different technical requirements.
+Room photographs change when the interior designer refreshes a suite. Marketing copy evolves as the brand voice matures. SEO content is tuned seasonally. None of this should require a PMS update.
+Conversely, nightly rates change daily. Availability shifts with every reservation. Tax rules update with government policy. None of this should require a website redeploy.
+InnPilot is a PMS and Booking Engine. It is not a CMS. It should never be asked to store, serve, or manage website presentation content. Its responsibility is operational: availability, pricing, packages, taxes, occupancy rules, booking transactions, and reservation management.
+Corbett.life is the marketing website. It owns all presentation content: room photography, marketing copy, amenity lists, descriptions, hero imagery, testimonials, trust content, SEO metadata, and brand presentation.
+The booking page sits at the intersection. It renders website content (what a room looks like, what it offers, why it's special) alongside InnPilot data (whether it's available, what it costs, what packages are offered).
+This is not a design preference. It is a sound engineering principle.
+Why InnPilot Remains CMS-Agnostic
+InnPilot is designed to serve many properties. Each property has a different website, a different CMS, a different design system, and different content needs. If InnPilot owned presentation content, every property would need to:
+- Upload images through the PMS interface (poor image management)
+- Write marketing copy in a PMS text field (no rich editing)
+- Manage SEO metadata in a booking engine (wrong tool)
+- Redeploy their website when room copy changes (unnecessary coupling)
+By keeping InnPilot focused on operations, any property can use any CMS — WordPress, Contentful, Sanity, Astro content collections, even static markdown files — and merge that content with InnPilot's booking data at the frontend layer.
+InnPilot's API returns operational data. Presentation data comes from the website's own content layer.
+Why This Makes InnPilot Reusable Across Hotels
+A PMS that also functions as a CMS is a PMS that is tightly coupled to a single website implementation. By remaining operationally focused, InnPilot can be integrated into:
+- A luxury resort's custom-built Astro site
+- A boutique hotel's WordPress theme
+- A chain's Next.js platform
+- A property's simple static page
+The integration contract is simple: Give me availability and pricing for these room slugs. I'll handle the rest.
+How Websites Remain Completely Independent
+The website has full control over:
+- When and how room content is updated
+- Which rooms are displayed and in what order
+- How room cards are designed and laid out
+- What imagery, copy, and SEO content appears
+- How the booking flow is presented
+- What trust signals, testimonials, and policies are shown
+The website can be redesigned, rebranded, or migrated to a new framework without touching InnPilot. The only contract is the room slug and the API endpoints.
+How Room Slugs Join Both Datasets
+The room slug is the single join key between the website's content layer and InnPilot's operational layer.
+Website Content (corbett.life)          InnPilot API
+┌─────────────────────────────┐         ┌─────────────────────────────┐
+│ slug: "forest-suite"        │         │ room_type_id: "fs-001"      │
+│ photos: [...]               │         │ slug: "forest-suite"        │
+│ description: "..."          │   ←→    │ available: true             │
+│ amenities: [...]            │  slug   │ nightly_rate: 7000          │
+│ bed_type: "King"            │         │ packages: [...]             │
+│ area: "450 sq ft"           │         │ total: 21000                │
+│ highlights: [...]           │         │ taxes: 2520                 │
+│ seo: { ... }                │         │                             │
+└─────────────────────────────┘         └─────────────────────────────┘
+The frontend:
+1. Loads website content for all rooms (from the site's content layer — markdown files, CMS API, or static data)
+2. Calls GET /availability with dates and guests
+3. Matches API response to website content using the slug field
+4. Renders merged data: website content for presentation, API data for operations
+5. If a slug from the API has no matching website content, it is rendered with API data only (graceful degradation)
+6. If a slug from the website content has no matching API availability, it is shown as unavailable or hidden
+How Future Headless CMS Support Would Work
+Today, the website uses Astro content collections (markdown files in src/content/rooms/). This is the simplest approach for a static site.
+If the website later migrates to a headless CMS (Contentful, Sanity, Strapi, etc.), the integration does not change:
+1. The CMS serves room content via its own API
+2. The frontend fetches CMS content and InnPilot availability
+3. The slug join remains the same
+4. No InnPilot changes required
+The architecture is CMS-agnostic by design. The website's content source is an implementation detail that is invisible to the booking flow.
+Why This Reduces Coupling
+With Coupling Without Coupling
+Changing room copy requires PMS update  Changing room copy requires website update only
+Redesigning room cards requires PMS API changes Redesigning room cards requires frontend changes only
+Adding a new room requires PMS + CMS + frontend Adding a new room requires website content + InnPilot inventory
+Switching PMS requires rebuilding content layer Switching PMS requires only new API integration
+PMS downtime affects content rendering  PMS downtime shows "check availability" but content remains visible
+The booking page degrades gracefully: if InnPilot is temporarily unreachable, the website content still renders. The user sees room information and descriptions. They simply cannot check availability or complete a booking until the API responds.
+Presentation Assets Are Progressive Enhancements
+This is a foundational architectural principle of the booking page.
+The booking page does not depend on any presentation assets being supplied by InnPilot. If corbett.life chooses to display room photographs, galleries, videos, or other marketing media, they are sourced exclusively from the website content layer.
+The booking UI must function correctly regardless of whether presentation assets exist.
+A room card without a photograph is still a room card. It shows the room name, description, amenities, pricing, and a select button. A missing image does not break the layout, does not hide the price, and does not prevent booking.
+Presentation assets should be treated as progressive enhancements rather than operational dependencies. This means:
+- The page renders fully functional room cards with or without images
+- The booking flow completes successfully with or without gallery views
+- Video content is optional enrichment, not a prerequisite for understanding the room
+- Marketing photography enhances emotional engagement but does not gate operational access
+- The layout adapts gracefully to whatever presentation content exists
+Operational dependency: If absent, the feature is broken. Example: pricing, availability, the select button.
+Progressive enhancement: If absent, the feature still works but is less rich. Example: room photograph, gallery carousel, video tour.
+The booking page has zero presentation dependencies. Every piece of marketing media is an enhancement layered on top of a fully functional booking interface.
+Data Ownership Matrix
+Data  Owner Source at Render  Dependency Level
+Room photographs  corbett.life  Website content layer Progressive enhancement
+Room galleries  corbett.life  Website content layer Progressive enhancement
+Marketing copy  corbett.life  Website content layer Progressive enhancement
+Long descriptions corbett.life  Website content layer Progressive enhancement
+Amenity lists corbett.life  Website content layer Progressive enhancement
+Room highlights corbett.life  Website content layer Progressive enhancement
+Bed configuration corbett.life  Website content layer Progressive enhancement
+Room area corbett.life  Website content layer Progressive enhancement
+Videos  corbett.life  Website content layer Progressive enhancement
+SEO metadata  corbett.life  Website content layer Progressive enhancement
+Hero imagery  corbett.life  Website content layer Progressive enhancement
+Trust content corbett.life  Website content layer Progressive enhancement
+Testimonials  corbett.life  Website content layer Progressive enhancement
+Nearby attractions  corbett.life  Website content layer Progressive enhancement
+Static FAQs corbett.life  Website content layer Progressive enhancement
+Brand presentation  corbett.life  Website content layer Progressive enhancement
+Room name corbett.life (primary) / InnPilot (fallback)  Merged  Operational (displayed)
+Availability  InnPilot  API response  Operational (critical)
+Pricing InnPilot  API response  Operational (critical)
+Taxes InnPilot  API response  Operational (critical)
+Discounts InnPilot  API response  Operational (critical)
+Packages  InnPilot  API response  Operational (critical)
+Occupancy rules InnPilot  API response  Operational (critical)
+Booking rules InnPilot  API response  Operational (critical)
+Cancellation rules  InnPilot  API response  Operational (critical)
+Booking status  InnPilot  API response  Operational (critical)
+Reservation data  InnPilot  API response  Operational (critical)
+Payments  InnPilot  API response  Operational (critical)
+Inventory InnPilot  API response  Operational (critical)
+Promo code validation InnPilot  API response  Operational (critical)
+Critical means: if absent, the booking cannot proceed.
+Progressive enhancement means: if absent, the booking still works but the experience is less rich.
+2. Overall UX Philosophy
+The Single-Screen Booking Experience
+The booking page is not a multi-step wizard. It is a single, scrollable page where every stage of the booking journey is visible or reachable without page transitions. The user progresses through the journey by scrolling, with each section collapsing and expanding naturally as decisions are made.
+This approach is chosen because:
+- It eliminates "step anxiety." Users always know where they are and how much is left.
+- It allows non-linear browsing. A guest can compare rooms before entering dates, or check policies before selecting a room.
+- It builds trust through transparency. Nothing is hidden behind "Next" buttons.
+- It mirrors how people actually book. They scan, compare, decide, then commit.
+The mental model is: Search → Discover → Compare → Decide → Confirm.
+The page is designed so that a returning guest who already knows what they want can complete a booking in under 60 seconds with minimal scrolling. A first-time explorer can take their time, absorb trust signals, and feel confident at every step.
+Brand Translation to UX
+Brand Trait UX Expression
+Peaceful  Generous whitespace, no urgency tactics, no flashing countdown timers
+Premium Restrained colour palette, elegant typography, no visual noise
+Nature  Warm earth tones, organic shapes in subtle decorative elements
+Trustworthy Transparent pricing, no hidden fees, prominent trust signals
+Family Friendly Clear occupancy info, family room emphasis, welcoming language
+Modern  Clean layout, smooth transitions, intuitive interactions
+Minimal Only essential UI elements, every element earns its place
+Elegant Typography-driven hierarchy, subtle shadows, refined spacing
+The Two-Layer Rendering Model
+The booking page renders in two layers:
+Layer 1: Website Content (static or CMS-sourced)
+Room descriptions, amenities, highlights, policies, testimonials, FAQs, and any presentation assets the website chooses to provide. This content is loaded from the website's own data layer and is independent of InnPilot. All presentation assets in this layer are progressive enhancements. The page functions fully without them.
+Layer 2: Operational Data (API-sourced)
+Availability, pricing, taxes, packages, discounts. This data is fetched from InnPilot in real time and merged with Layer 1 using the room slug as the join key. All data in this layer is operationally critical.
+When the page loads, Layer 1 renders immediately (it is part of the website's build or is fetched from the CMS). Layer 2 populates after the API responds. The user sees room content instantly, with pricing and availability filling in moments later.
+This means:
+- The page is never "blank" while waiting for the API
+- Room content is always visible, even if the API is slow
+- The experience degrades gracefully: if the API fails, the user still sees the property's rooms, they just can't check availability
+- If presentation assets are missing (no photos uploaded, CMS unreachable), the page still shows room names, pricing, and a functional booking flow
+3. Complete Page Hierarchy
+The page is structured as a vertical sequence of sections. Each section has a clear purpose and a single primary action.
+1.  HERO                          — Emotional anchor, search entry point
+2.  SEARCH BAR                    — Availability query (sticky on scroll)
+3.  AVAILABLE ROOMS               — Merged: website content + API availability
+4.  ROOM COMPARISON               — Side-by-side comparison (optional overlay)
+5.  PACKAGE SELECTION              — Expandable within selected room card
+6.  BOOKING SUMMARY               — Running total, sticky on desktop / bottom sheet on mobile
+7.  GUEST DETAILS                 — Minimal form
+8.  PAYMENT CTA                   — Final commitment
+9.  TRUST BUILDERS               — Confidence reinforcement (website content)
+10. POLICIES                      — Transparency (website content + API cancellation rules)
+11. FAQ                           — Objection handling (website content)
+12. FOOTER CTA                    — Last-chance reassurance
+Section Purpose Matrix
+Section Purpose Data Source Dependency Level  User State  Primary Action
+Hero  Set emotional tone, orient user Website Enhancement Arriving / Exploring  None (passive)
+Search  Collect dates and guests  User input  Critical  Ready to search Tap "Check Availability"
+Rooms Present options Website + InnPilot  Critical (availability) Evaluating  Select a room
+Packages  Upsell within chosen room InnPilot  Critical  Deciding  Add/remove packages
+Summary Confirm pricing InnPilot  Critical  Committing  Review total
+Guest Details Collect info  User input  Critical  Committing  Fill form
+Payment CTA Convert InnPilot  Critical  Ready Tap "Complete Booking"
+Trust Reassure  Website Enhancement Hesitating  Absorb signals
+Policies  Inform  Website + InnPilot  Enhancement (editorial) / Critical (rules)  Evaluating  Read
+FAQ Resolve doubts  Website Enhancement Hesitating  Expand answers
+Footer CTA  Re-engage Website Enhancement Leaving Call / WhatsApp
+4. Wireframe-Level Layout
+Desktop (1280px+)
+┌─────────────────────────────────────────────────────────────┐
+│                      HEADER (existing)                       │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│                     HERO SECTION                            │
+│         Full-width, visual or solid colour background       │
+│         (presentation layer decides what renders here)      │
+│         "Find Your Perfect Retreat"                         │
+│         Subtitle: warm, inviting                            │
+│                                                             │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │              SEARCH BAR (horizontal)                 │    │
+│  │  [Check-in] [Check-out] [Adults] [Children] [Code]  │    │
+│  │                  [ Check Availability ]              │    │
+│  └─────────────────────────────────────────────────────┘    │
+│                                                             │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  AVAILABLE ROOMS                              [Compare □]  │
+│                                                             │
+│  ┌──────────────────────────────────┐                      │
+│  │  ROOM CARD 1                     │   BOOKING SUMMARY   │
+│  │  [presentation area]             │   (sticky sidebar)  │
+│  │  Name                            │                      │
+│  │  Description                     │   Your Selection     │
+│  │  Occupancy · Bed · Area          │   Room: —           │
+│  │  Amenities                       │   Dates: —          │
+│  │  ────────────────                │   Guests: —         │
+│  │  ₹X,XXX / night                  │   Packages: —       │
+│  │  ₹XX,XXX total (3 nights)        │   ─────────         │
+│  │  [ Select Room ]                 │   Subtotal: —       │
+│  │  Packages ▾                      │   Taxes: —          │
+│  └──────────────────────────────────┘   Total: —           │
+│                                         [ Proceed to       │
+│  ┌──────────────────────────────────┐     Booking ]       │
+│  │  ROOM CARD 2                     │                      │
+│  │  ...                             │                      │
+│  └──────────────────────────────────┘                      │
+│                                                             │
+│  ┌──────────────────────────────────┐                      │
+│  │  ROOM CARD 3                     │                      │
+│  │  ...                             │                      │
+│  └──────────────────────────────────┘                      │
+│                                                             │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  GUEST DETAILS                                             │
+│                                                             │
+│  ┌────────────────────┐  ┌────────────────────┐            │
+│  │ First Name         │  │ Last Name          │            │
+│  └────────────────────┘  └────────────────────┘            │
+│  ┌──────────────────────────────────────────┐              │
+│  │ Email                                    │              │
+│  └──────────────────────────────────────────┘              │
+│  ┌──────────────────────────────────────────┐              │
+│  │ Phone                                    │              │
+│  └──────────────────────────────────────────┘              │
+│  ┌──────────────────────────────────────────┐              │
+│  │ Special Requests (optional)              │              │
+│  └──────────────────────────────────────────┘              │
+│                                                             │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  TRUST BUILDERS (horizontal strip)                         │
+│  ⭐ 4.9 Google Reviews  ·  🔒 Secure  ·  ✓ Free Cancel   │
+│                                                             │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  POLICIES / FAQ / FOOTER CTA                               │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+The Two-Column Relationship
+On desktop, the rooms section and the booking summary exist in a two-column layout:
+- Left column (65%): Room cards, scrollable — renders website content merged with API data
+- Right column (35%): Booking summary, sticky — renders API data (pricing, totals)
+This is the single most important layout decision on the page. It ensures:
+- The user always sees their selection and total
+- Price transparency is maintained at every scroll position
+- The "Proceed to Booking" CTA is always accessible
+- The cognitive gap between "selecting" and "seeing the price" is zero
+5. Desktop Layout Specification
+Breakpoint: 1280px and above
+Element Width Max-width Margin  Notes
+Page container  100%  1200px  0 auto  Content area
+Hero  100vw none  none  Bleeds full width
+Search bar  100% of container 960px centered  Horizontal layout
+Rooms grid  65% of container  ~780px  — Left column
+Booking summary 35% of container  ~420px  — Sticky sidebar
+Guest details 100% of container 640px centered  Below rooms
+Trust strip 100% of container 960px centered  Horizontal, even spacing
+Policies/FAQ  100% of container 720px centered  Single column
+Desktop Grid
+The page uses a 12-column grid at 1280px+:
+- Hero: spans all 12 columns
+- Search bar: columns 2–11 (narrower, focused)
+- Room cards: columns 1–8
+- Booking summary: columns 9–12
+- Guest details: columns 3–10
+- Trust strip: columns 2–11
+6. Tablet Layout Specification
+Breakpoint: 768px – 1279px
+Change from Desktop Detail
+Search bar  Stacks vertically: dates on row 1, guests on row 2, promo + button on row 3
+Rooms section Still two-column, but summary narrows to 30%
+Room cards  Full width within left column
+Guest details Full width, 2-column name fields
+Trust strip Wraps to 2 rows if needed
+7. Mobile Layout Specification
+Breakpoint: Below 768px
+Mobile is the primary design target. Every decision starts here.
+Key mobile patterns:
+7a. Hero
+- Reduced height (40vh max)
+- Search bar moves below hero, full width
+- Search fields stack vertically
+- Hero area is rendered entirely by the presentation layer — the booking page imposes no constraints on what appears here
+7b. Search Bar (Mobile)
+┌─────────────────────────────┐
+│  Check-in                   │
+│  Select date                │
+├─────────────────────────────┤
+│  Check-out                  │
+│  Select date                │
+├──────────────┬──────────────┤
+│  Adults      │  Children    │
+│  2           │  0           │
+├──────────────┴──────────────┤
+│  Promo Code (optional)      │
+├─────────────────────────────┤
+│    [ Check Availability ]   │
+└─────────────────────────────┘
+7c. Room Cards (Mobile)
+- Full width
+- Presentation area at top (if the website provides one)
+- Content below
+- Price and select button at bottom of card
+7d. Booking Summary (Mobile)
+- Bottom sheet pattern
+- Collapsed by default: thin bar at bottom showing "₹XX,XXX · 3 nights · View"
+- Taps to expand as full-screen overlay
+- Contains room details, packages, guest details, and CTA
+- Close button to collapse back
+┌─────────────────────────────┐
+│  ₹24,900 · 3 nights    ▲  │  ← collapsed sticky bar
+└─────────────────────────────┘
+
+(expanded)
+
+┌─────────────────────────────┐
+│  ✕  Booking Summary         │
+├─────────────────────────────┤
+│  The Forest Suite           │
+│  Jul 25 – Jul 28, 2026     │
+│  2 Adults, 1 Child          │
+│  ─────────────────────      │
+│  Room: ₹21,000             │
+│  Jungle Safari: +₹3,000    │
+│  ─────────────────────      │
+│  Subtotal: ₹24,000         │
+│  Taxes: ₹900               │
+│  ─────────────────────      │
+│  Total: ₹24,900            │
+│                             │
+│  [ Complete Booking ]       │
+└─────────────────────────────┘
+7e. Guest Details (Mobile)
+- Full width fields
+- Name fields stacked (not side by side)
+- Large touch targets (minimum 48px height)
+7f. Sticky Elements on Mobile
+Two sticky elements, layered:
+1. Bottom sticky bar: "₹24,900 · 3 nights · Book Now" — always visible after a room is selected
+2. Booking summary expand: Tapping the bar opens the full summary
+The sticky bar should have a subtle shadow and not obscure content.
+8. Room Card Design
+The Merged Room Card
+Each room card is a composite of two data sources:
+Website content (Layer 1): Presentation content, descriptions, amenities, highlights, bed type, area, and any media the website provides
+InnPilot data (Layer 2): Availability, nightly rate, stay total, packages, available room count
+The card renders Layer 1 immediately. Layer 2 populates after the API responds. If the API is slow, the card shows the room's content with a "Checking availability…" state in the pricing area.
+Progressive Enhancement: Presentation Assets
+The room card is designed to be fully functional without any presentation assets. Every visual element — images, galleries, videos, decorative photography — is a progressive enhancement layered on top of a complete, bookable room card.
+Without presentation assets, a room card shows:
+- Room name (from website content, or from API as fallback)
+- Short description (from website content)
+- Occupancy, bed type, area (from website content)
+- Amenities (from website content)
+- Pricing and availability (from InnPilot API)
+- Package options (from InnPilot API)
+- Select button (functional)
+- All of the above are operational and complete
+With presentation assets, a room card additionally shows:
+- Whatever media the website's presentation layer provides
+The absence of presentation assets does not leave a broken placeholder. The card adapts its layout to accommodate the missing content gracefully. This is not a degraded experience — it is a different, equally valid layout.
+Data Source Labels
+For implementation clarity, every element in the room card is tagged with its source:
+Element Source  Dependency  Notes
+Presentation area Website content Enhancement Absent → card adapts to compact layout
+Room name Website content (primary) / InnPilot API (fallback) Critical  Always displayed; source varies
+Short description Website content Enhancement Absent → card omits description, remains functional
+Occupancy (max) Website content Enhancement Absent → omitted from info grid
+Bed type  Website content Enhancement Absent → omitted from info grid
+Room area Website content Enhancement Absent → omitted from info grid
+Amenities Website content Enhancement Absent → amenities section omitted
+Highlights  Website content Enhancement Absent → highlights omitted
+Nightly rate  InnPilot API  Critical  Always displayed after API response
+Stay total  InnPilot API  Critical  Always displayed after API response
+Original total (if discounted)  InnPilot API  Critical  For strikethrough display
+Available rooms count InnPilot API  Critical  Always displayed after API response
+Packages  InnPilot API  Critical  Always displayed after API response
+Package pricing InnPilot API  Critical  Always displayed after API response
+Select button Functional  Critical  Always rendered; disabled if unavailable
+Room Card States
+State Visual Treatment
+Content loaded, API pending Full content visible (or compact if no presentation assets), pricing area shows skeleton shimmer with "Checking availability…"
+Available Full colour, normal shadow, standard border, pricing populated
+Selected  Green accent border (2px), subtle green background tint, "Selected ✓" badge replaces Select button
+Unavailable Content still visible (description, amenities), pricing area shows "Not available for these dates", select button disabled and grey
+Sold out  Content visible, "Sold Out" overlay or badge (if presentation area exists), greyed-out select button, opacity 0.6
+Hover Slight elevation increase (shadow-glow), border brightens
+Comparing Checkbox in top-right checked, subtle highlight
+The Graceful Degradation Principle
+The room card has three possible degradation scenarios. In every case, the booking flow remains functional.
+Scenario 1: InnPilot API unreachable
+- Room content still renders (website content)
+- Pricing area shows "Unable to check availability. Please try again."
+- The "Check Availability" button in the search bar retries the API call
+- The page is never blank. Content is always visible.
+Scenario 2: No presentation assets (no images, no galleries, no videos)
+- Room name displayed (from website content, or from API as fallback)
+- Pricing and availability from API still function
+- Select button works normally
+- The card layout adapts to be compact (no presentation area)
+- The booking flow is fully functional. The experience is less visually rich but operationally complete.
+Scenario 3: Both degraded (no API + no presentation assets)
+- Room names displayed (from API if available, otherwise from website content)
+- Pricing shows "Unable to check availability"
+- Select button is disabled
+- The page shows room names and structure but cannot complete bookings
+- This is an extreme edge case. The retry mechanism and error states guide the user.
+Room Info Grid
+A compact 3–4 column info strip below the description. Each element is independently optional:
+Icon  Field Source  Example If Missing
+Occupancy Adults + Children Website content "2 Adults + 1 Child"  Chip omitted
+Bed Bed type  Website content "King Bed"  Chip omitted
+Area  Room area Website content "450 sq ft" Chip omitted
+Highlight Best included package InnPilot API  "Jungle Safari Included"  Chip omitted (or API not yet loaded)
+The info grid only renders chips for data that exists. It never shows empty or placeholder chips.
+Amenities Display
+- Source: Website content layer
+- Shown as pill/chip elements
+- Max 6 visible, "+X more" overflow
+- Tap to expand full list
+- Progressive enhancement: If no amenities are defined for a room, the amenities section is entirely omitted from the card. No "No amenities listed" placeholder.
+Pricing Display
+- Source: InnPilot API exclusively
+Two lines:
+1. Per night: ₹7,000 / night — large, bold
+2. Stay total: ₹21,000 for 3 nights (Jul 25 – Jul 28) — smaller, lighter
+If a discount applies:
+3. Original: ₹25,000 — strikethrough
+4. Discounted: ₹21,000 — green, with "Save ₹4,000" badge
+The total is what the API returns for the given dates. The frontend does not calculate.
+9. Package Selection Design
+Source: InnPilot API
+Packages appear within the room card after the user taps "Select This Room" or expands the packages section. Package data comes entirely from InnPilot. The website does not define or override packages.
+Package Tiers
+The API returns packages with tier/status information. The frontend renders them with clear visual differentiation:
+Tier  Visual  Badge
+Included  Checkbox checked, green, disabled (cannot uncheck)  "Included" — green pill
+Optional  Checkbox unchecked, tappable  Price shown as "+₹X,XXX"
+Recommended Checkbox unchecked, highlighted with subtle border, "Recommended" badge "Recommended" — gold pill
+Unavailable Greyed out, strikethrough, "Sold Out" label "Sold Out" — grey pill
+Package Layout
+┌──────────────────────────────────────────────┐
+│  Enhance Your Stay                            │
+│                                              │
+│  ┌────────────────────────────────────────┐  │
+│  │ ✓  Jungle Safari                        │  │
+│  │    Included in your stay       Included │  │
+│  └────────────────────────────────────────┘  │
+│  ┌────────────────────────────────────────┐  │
+│  │ ☐  Nature Photography Walk             │  │
+│  │    3-hour guided session      +₹1,500  │  │
+│  │                        ★ Recommended   │  │
+│  └────────────────────────────────────────┘  │
+│  ┌────────────────────────────────────────┐  │
+│  │ ☐  Bird Watching Tour                  │  │
+│  │    Early morning walk            +₹800  │  │
+│  └────────────────────────────────────────┘  │
+│  ┌────────────────────────────────────────┐  │
+│  │ ☐  Bonfire Evening                     │  │
+│  │    Private setup              +₹1,200  │  │
+│  └────────────────────────────────────────┘  │
+└──────────────────────────────────────────────┘
+Package Interaction
+- Tapping a package toggles it
+- The booking summary updates immediately (no lag) — calls POST /quote with updated selection
+- Included packages cannot be deselected
+- Maximum 4–5 packages per room (API constraint)
+10. Booking Summary Design
+Source: InnPilot API (pricing) + User Selection (dates, guests, packages)
+Desktop: Sticky Sidebar
+The booking summary is the most persistent element on the page. It is always visible once a room is selected.
+┌──────────────────────────────────────┐
+│                                      │
+│  BOOKING SUMMARY                     │
+│                                      │
+│  ─────────────────────               │
+│                                      │
+│  The Forest Suite                    │
+│  (website content — room name)       │
+│                                      │
+│  Jul 25 – Jul 28, 2026              │
+│  (user selection)                    │
+│                                      │
+│  3 nights · 2 Adults, 1 Child       │
+│  (user selection + calculation)      │
+│                                      │
+│  ─────────────────────               │
+│                                      │
+│  Room                    ₹21,000    │
+│  (innpilot)                         │
+│                                      │
+│  Nature Photo Walk       +₹1,500    │
+│  (innpilot)                         │
+│                                      │
+│  ─────────────────────               │
+│                                      │
+│  Subtotal               ₹22,500    │
+│  (innpilot)                         │
+│                                      │
+│  Taxes (12%)             ₹2,700    │
+│  (innpilot)                         │
+│                                      │
+│  ─────────────────────               │
+│                                      │
+│  Total                  ₹25,200    │
+│  (innpilot)                         │
+│                                      │
+│  ─────────────────────               │
+│                                      │
+│  ┌──────────────────────────────┐    │
+│  │    [ Proceed to Booking ]    │    │
+│  └──────────────────────────────┘    │
+│                                      │
+│  🔒 Secure · ✓ Free Cancellation    │
+│  (website content)                   │
+│                                      │
+│  Best Rate Guarantee                 │
+│  (website content)                   │
+│                                      │
+└──────────────────────────────────────┘
+Summary Line Items
+Every pricing line item comes directly from the InnPilot API. The frontend does not compute any monetary values.
+Line  Source  Display
+Room name Website content (selected room) / API (fallback)  "The Forest Suite"
+Dates User selection  "Jul 25 – Jul 28, 2026"
+Nights  Calculated from dates (simple subtraction, not money) "3 nights"
+Guests  User selection  "2 Adults, 1 Child"
+Room cost InnPilot API nightly_rate × nights (display only) "₹21,000"
+Package costs InnPilot API package prices "Nature Photo Walk +₹1,500"
+Subtotal  InnPilot API subtotal "₹22,500"
+Taxes InnPilot API taxes  "Taxes (12%) ₹2,700"
+Discount  InnPilot API discount (if any)  "Discount -₹1,000" (green)
+Grand total InnPilot API grand_total  "₹25,200" (bold, large)
+Summary States
+State Content
+No room selected  "Select a room to see pricing" — placeholder message
+Room selected, API pending  Room name from website content (or API), skeleton shimmer for all price lines
+Room selected, API responded  Room name, dates, guests, room total, taxes, grand total
+Room + packages All above plus package line items
+With discount Discount line in green with strikethrough on original
+API error "Unable to load pricing. Please try again." with retry button
+11. Empty States
+No Search Results
+When the InnPilot API returns no available rooms for the selected dates:
+┌──────────────────────────────────────────────┐
+│                                              │
+│  No rooms available for these dates.         │
+│                                              │
+│  Try adjusting your dates or guest count.    │
+│                                              │
+│  ┌──────────────────────────────────────┐    │
+│  │       [ Search Again ]               │    │
+│  └──────────────────────────────────────┘    │
+│                                              │
+│  Or reach out to us directly:                │
+│  📞 +91 98181 93314                          │
+│  💬 WhatsApp                                 │
+│                                              │
+└──────────────────────────────────────────────┘
+Design notes:
+- Warm, not apologetic
+- Offer an alternative path (search again, contact directly)
+- Do not show an empty list
+- Website content (hero, page styling) remains visible — only the rooms section is empty
+Initial State (No Search Performed)
+┌──────────────────────────────────────────────┐
+│                                              │
+│  Enter your travel dates to discover         │
+│  available rooms at Corbett Foothills.       │
+│                                              │
+│  ┌──────────────────────────────────────┐    │
+│  │       [ Check Availability ]         │    │
+│  └──────────────────────────────────────┘    │
+│                                              │
+└──────────────────────────────────────────────┘
+Design notes:
+- Do not show empty room slots
+- Do not show a blank page
+- Guide the user toward the search bar
+- The page's visual richness (hero, typography, colour) is entirely website content — it renders before any API call
+API Unreachable
+If the InnPilot API is unreachable when the user searches:
+┌──────────────────────────────────────────────┐
+│                                              │
+│  We're having trouble checking availability. │
+│                                              │
+│  This is temporary. Please try again in      │
+│  a moment.                                   │
+│                                              │
+│  ┌──────────────────────────────────────┐    │
+│  │          [ Try Again ]               │    │
+│  └──────────────────────────────────────┘    │
+│                                              │
+│  Or contact us directly:                     │
+│  📞 +91 98181 93314                          │
+│  💬 WhatsApp                                 │
+│                                              │
+└──────────────────────────────────────────────┘
+Design notes:
+- The page's visual framework (header, hero, footer, trust signals) remains fully rendered — only the rooms section shows the error
+- This is the key benefit of the two-layer architecture: content and operations degrade independently
+Room Content Missing (Slug Mismatch)
+If the InnPilot API returns a room slug that has no matching website content:
+┌──────────────────────────────────────────────┐
+│                                              │
+│  [Room Name from API]                        │
+│  (compact layout — no presentation area)     │
+│                                              │
+│  Details for this room are being prepared.   │
+│                                              │
+│  ₹X,XXX / night                             │
+│  (innpilot pricing — fully functional)       │
+│                                              │
+│  [ Select This Room ]                       │
+│  (operational — booking works normally)      │
+│                                              │
+└──────────────────────────────────────────────┘
+Design notes:
+- The card still functions — the user can still select and book
+- No placeholder presentation area. The card uses the compact layout.
+- The name comes from the API
+- A brief "Details being prepared" note indicates content is forthcoming
+- Pricing and booking still work normally
+- This is a graceful degradation, not an error
+Presentation Assets Partially Available
+A room may have some content but not others. The card renders whatever exists:
+Content Available Card Shows
+Name + description + amenities + presentation assets  Full enhanced card
+Name + description + amenities (no presentation assets) Compact card with text content
+Name + presentation assets (no description) Card with presentation area, no description block
+Name only (no other content)  Minimal card with name, pricing, and select button
+Nothing (API slug only) Minimal card with API name, pricing, and select button
+In every case, the card is functional. The booking flow works. The user can always select a room, see pricing, and complete a booking.
+12. Loading States
+Search Loading
+When the user taps "Check Availability," the rooms section transitions to a skeleton state:
+┌──────────────────────────────────────────────┐
+│                                              │
+│  [Skeleton card 1]                           │
+│  ┌──────────────────────────────────────┐    │
+│  │ ████████████████████████████████████  │    │
+│  │ ████  ████████████████████████████   │    │
+│  │ ████  ████████████████               │    │
+│  │ ████  ██████████████                 │    │
+│  │ ████  ████████████████████████████   │    │
+│  │ ████████████████████████████████████  │    │
+│  │         [ ████████████████ ]         │    │
+│  └──────────────────────────────────────┘    │
+│                                              │
+│  [Skeleton card 2]                           │
+│  ┌──────────────────────────────────────┐    │
+│  │ ████████████████████████████████████  │    │
+│  │ ████  ████████████████████████████   │    │
+│  │ ████  ████████████████               │    │
+│  │ ████  ██████████████                 │    │
+│  │ ████  ████████████████████████████   │    │
+│  │ ████████████████████████████████████  │    │
+│  │         [ ████████████████ ]         │    │
+│  └──────────────────────────────────────┘    │
+│                                              │
+└──────────────────────────────────────────────┘
+Design notes:
+- Skeleton cards match the exact dimensions of real room cards
+- Shimmer animation (subtle, left-to-right gradient)
+- 2–3 skeleton cards shown (not more)
+- Loading text: "Finding available rooms…" — small, below search bar
+- In practice, website content loads almost instantly (static/CDN), so the skeleton primarily covers the API response time
+Progressive Loading Pattern
+The ideal loading sequence is:
+1. 0ms: Page frame renders (header, hero, search bar, footer) — website content
+2. 0–100ms: Room cards render with website content (descriptions, amenities, and any presentation assets) — website content
+3. 100–500ms: API responds with availability and pricing — InnPilot data
+4. 500ms: Pricing areas in room cards populate, summary updates
+This means the user sees room content almost immediately. The "loading" experience is limited to the pricing areas, not the entire card. This is a direct benefit of the two-layer architecture.
+If presentation assets are missing: The loading sequence is even faster because there are fewer assets to render in step 2. The cards appear in their compact layout immediately, with pricing populating in step 3–4.
+Summary Loading
+When a room is selected and the quote is being fetched:
+- Summary price lines show skeleton shimmer
+- CTA button shows "Loading…" and is disabled
+- Room selection remains visible (website content is already loaded)
+- Room name and dates are already populated (user selection + website content)
+13. Error States
+Network Error (API Unreachable)
+┌──────────────────────────────────────────────┐
+│                                              │
+│  Something went wrong.                       │
+│  We couldn't check availability right now.   │
+│                                              │
+│  ┌──────────────────────────────────────┐    │
+│  │          [ Try Again ]               │    │
+│  └──────────────────────────────────────┘    │
+│                                              │
+│  If this persists, reach us at               │
+│  corbettfoothills@gmail.com                  │
+│                                              │
+└──────────────────────────────────────────────┘
+Design note: Room content remains visible above this error. Only the pricing/availability layer has failed.
+Booking Error
+┌──────────────────────────────────────────────┐
+│                                              │
+│  We couldn't complete your booking.          │
+│  Don't worry — you haven't been charged.     │
+│                                              │
+│  Reason: [API error message]                 │
+│                                              │
+│  ┌──────────────────────────────────────┐    │
+│  │        [ Try Again ]                 │    │
+│  └──────────────────────────────────────┘    │
+│  ┌──────────────────────────────────────┐    │
+│  │     [ Contact Us Instead ]           │    │
+│  └──────────────────────────────────────┘    │
+│                                              │
+└──────────────────────────────────────────────┘
+Quote Error (Package Change Failed)
+If updating packages fails when calling /quote:
+- The package selection reverts to the previous state
+- A subtle toast message appears: "Unable to update packages. Please try again."
+- The user's room selection is preserved
+- No data is lost
+Field Validation Errors
+- Inline, below the field
+- Red text, small, with subtle icon
+- Field border turns red
+- Error appears on blur, not on every keystroke
+- Error disappears when corrected
+┌──────────────────────────────────┐
+│ Email                            │
+│ not-a-valid-email                │ ← red text below
+└──────────────────────────────────┘
+Room No Longer Available
+If a room becomes unavailable between selection and booking (the API returns updated availability during the booking flow):
+┌──────────────────────────────────────────────┐
+│  ⚠ This room is no longer available for      │
+│    your selected dates.                       │
+│                                              │
+│  Please select another room or adjust         │
+│  your dates.                                 │
+└──────────────────────────────────────────────┘
+Design note: The room's website content remains visible. Only the availability status has changed. The card shifts to the "unavailable" state.
+Content Layer Unreachable
+If the website's own content layer (CMS or markdown files) fails to load room content:
+- Room cards render with API data only (name, pricing, availability)
+- No descriptions, no amenities from website content
+- Cards use the compact layout
+- The booking flow is fully functional. The user can still see availability, pricing, and complete a booking.
+- This scenario is unlikely with static site builds (content is baked in) but possible with a headless CMS
+14. API Interaction Flow
+Sequence Diagram
+User              Frontend             Website Content       InnPilot API
+ │                   │                      │                    │
+ │  Page load        │                      │                    │
+ │──────────────────→│                      │                    │
+ │                   │  Load room content   │                    │
+ │                   │  (markdown/CMS)      │                    │
+ │                   │─────────────────────→│                    │
+ │                   │                      │                    │
+ │                   │  { rooms: [...] }    │                    │
+ │                   │  text content,       │                    │
+ │                   │  presentation*       │  (* = optional)    │
+ │                   │←─────────────────────│                    │
+ │                   │                      │                    │
+ │  Show room cards  │                      │                    │
+ │  (content, or     │                      │                    │
+ │   compact if      │                      │                    │
+ │   no assets)      │                      │                    │
+ │←──────────────────│                      │                    │
+ │                   │                      │                    │
+ │  Enter dates,     │                      │                    │
+ │  Tap "Search"     │                      │                    │
+ │──────────────────→│                      │                    │
+ │                   │                      │                    │
+ │                   │  GET /availability   │                    │
+ │                   │  ?checkin=...        │                    │
+ │                   │  &checkout=...       │                    │
+ │                   │  &adults=2           │                    │
+ │                   │  &children=1         │                    │
+ │                   │─────────────────────────────────────────→│
+ │                   │                      │                    │
+ │                   │  { rooms: [{         │                    │
+ │                   │    slug, name,       │                    │
+ │                   │    available,        │                    │
+ │                   │    nightly_rate,     │                    │
+ │                   │    total, packages   │                    │
+ │                   │  }]}                 │                    │
+ │                   │←──────────────────────────────────────────│
+ │                   │                      │                    │
+ │  Merge: match     │                      │                    │
+ │  slug to website  │                      │                    │
+ │  content (or use  │                      │                    │
+ │  API name),       │                      │                    │
+ │  render merged    │                      │                    │
+ │  cards            │                      │                    │
+ │←──────────────────│                      │                    │
+ │                   │                      │                    │
+ │  Select room      │                      │                    │
+ │──────────────────→│                      │                    │
+ │                   │                      │                    │
+ │                   │  POST /quote         │                    │
+ │                   │  { room_type_id,     │                    │
+ │                   │    dates, guests,    │                    │
+ │                   │    packages }        │                    │
+ │                   │─────────────────────────────────────────→│
+ │                   │                      │                    │
+ │                   │  { pricing, taxes,   │                    │
+ │                   │    packages, total } │                    │
+ │                   │←──────────────────────────────────────────│
+ │                   │                      │                    │
+ │  Show summary     │                      │                    │
+ │←──────────────────│                      │                    │
+ │                   │                      │                    │
+ │  Fill details,    │                      │                    │
+ │  Tap "Book"       │                      │                    │
+ │──────────────────→│                      │                    │
+ │                   │                      │                    │
+ │                   │  POST /book          │                    │
+ │                   │  { booking details } │                    │
+ │                   │─────────────────────────────────────────→│
+ │                   │                      │                    │
+ │                   │  { confirmation }    │                    │
+ │                   │←──────────────────────────────────────────│
+ │                   │                      │                    │
+ │  Show confirmation│                      │                    │
+ │←──────────────────│                      │                    │
+API Call Triggers
+Trigger API Call  Payload Website Content Used
+Page load None (content from website layer) — Room catalogue loaded (text content, presentation* — all optional)
+User taps "Check Availability"  GET /availability dates, adults, children, promo code Room cards already rendered with content
+User selects a room POST /quote room_type_id, dates, guests, selected packages  Room name displayed from website content (or API fallback)
+User changes packages POST /quote updated package selection —
+User taps "Complete Booking"  POST /book  room_type_id, dates, guests, packages, guest details  —
+User changes dates after selection  Re-call GET /availability then POST /quote  updated params  Room cards re-render with new availability
+User changes guest count after selection  Re-call GET /availability then POST /quote  updated params  —
+Debouncing & Edge Cases
+- Search button: Disable during API call, re-enable on response
+- Package toggle: Debounce 300ms before calling /quote
+- Date picker: Wait for both dates to be selected before enabling search
+- Guest count: Validate max occupancy against room capacity (from website content, if available; otherwise let InnPilot enforce) before allowing selection
+- Promo code: Apply on search (part of availability call) or on quote — depends on API design
+- Slug mismatch: If API returns a slug not in website content, render with API data only and the compact layout
+- Content layer failure: If website content fails to load (CMS unreachable), cards render with API data only. Booking remains functional.
+15. Validation Behaviour
+Field Validation Rules
+Field Rule  Error Message
+Check-in  Required, must be today or future "Check-in date is required"
+Check-out Required, must be after check-in  "Check-out must be after check-in"
+Adults  Required, min 1, max 8  "At least 1 adult is required"
+Children  Optional, 0–6 —
+First Name  Required, min 2 chars "Please enter your first name"
+Last Name Required, min 2 chars "Please enter your last name"
+Email Required, valid format  "Please enter a valid email address"
+Phone Required, valid format  "Please enter a valid phone number"
+Special Requests  Optional, max 500 chars —
+Promo Code  Optional, validated by InnPilot API "This code doesn't seem to be valid" (from API)
+Validation Timing
+- On submit only for guest details (not on blur for every field)
+- On blur for email (immediate format check)
+- On change for dates (if check-out < check-in, auto-correct or warn)
+- Inline errors, not modals
+Progressive Disclosure
+The guest details section only appears after a room is selected. This prevents the user from seeing a form they can't use yet.
+Occupancy Validation
+When the user selects guest counts, the frontend checks against the room's max occupancy (from website content, if available). If the guest count exceeds the room's capacity:
+- The room card shows a subtle note: "This room accommodates up to X guests" (if occupancy data exists)
+- The "Select" button is not disabled (InnPilot may have its own rules)
+- InnPilot enforces the actual booking constraint at /book time
+- If no occupancy data exists in website content: The check is skipped. InnPilot enforces the constraint.
+16. Trust-Building Opportunities
+Source: Website Content
+All trust signals are website content. They are not fetched from InnPilot. They are part of the website's editorial layer and can be updated independently. All trust signals are progressive enhancements. Their absence does not affect the booking flow.
+Placement Strategy
+Trust signals are placed at decision points — moments where the user is most likely to hesitate.
+Signal  Placement Format  Source  Enhancement Level
+Google Reviews (4.9 ★)  Below search bar, above rooms Badge with star icon and count  Website content Enhancement
+"Direct Booking Benefits" Below hero, above search  Small text strip  Website content Enhancement
+Secure Payment  Booking summary, below CTA  Lock icon + "SSL Encrypted" Website content Enhancement
+Free Cancellation Booking summary, below CTA  "Free cancellation up to 48 hours before check-in"  Website content + InnPilot cancellation rules Enhancement (editorial) / Critical (rules)
+Best Rate Guarantee Trust strip, below guest details  "We guarantee the best rate when you book direct" Website content Enhancement
+Guest Testimonials  Trust strip, below guest details  2–3 short quotes from real guests Website content Enhancement
+Wildlife Experiences  Below rooms, before guest details "Your stay includes access to…" Website content Enhancement
+Location Advantages Footer CTA section  Distance to park gate, distance to railway  Website content Enhancement
+Free Cancellation — Merged Source
+"Free Cancellation" is a trust signal that combines both sources:
+- Website content provides the marketing copy: "Free cancellation up to 48 hours before check-in"
+- InnPilot provides the actual cancellation rules and deadlines
+- The frontend displays the website's marketing copy, but links to the API's specific cancellation terms for the selected booking
+Trust Strip Design
+A horizontal row of 4 trust items, evenly spaced:
+┌──────────────────────────────────────────────────────────────┐
+│  ⭐ 4.9/5       🔒 Secure       ✓ Free Cancel       🏆 Best │
+│  47 Google       Payment         Up to 48hrs          Rate   │
+│  Reviews         Encrypted       Before              Guarantee│
+└──────────────────────────────────────────────────────────────┘
+- Subtle background (light cream or white)
+- Icons are muted green
+- Text is small, uppercase labels
+- No clickable links (purely informational)
+- Progressive enhancement: If no trust content is defined, the entire strip is omitted. No placeholder.
+Testimonial Display
+Two to three short guest quotes, displayed as a horizontal scroll or static strip:
+┌──────────────────────────────────────────────────────────┐
+│  "The most peaceful place we've ever stayed. The kids   │
+│   didn't want to leave."                                │
+│   — Priya M., Delhi · Google Reviews                    │
+│                                                          │
+│  "Booking direct was so much easier than OTA. And the   │
+│   safari package was incredible."                        │
+│   — Arjun K., Mumbai · Google Reviews                   │
+└──────────────────────────────────────────────────────────┘
+- Progressive enhancement: If no testimonials exist, the section is omitted. No "Testimonials coming soon" placeholder.
+17. Room Comparison
+Source: Website Content (display) + InnPilot (pricing)
+The comparison view lets users compare up to 3 rooms side by side. It is triggered by a "Compare" checkbox on each room card.
+Comparison Layout
+┌──────────────────────────────────────────────────────────────────┐
+│  Room Comparison                                          [✕]  │
+├──────────────────┬──────────────────┬──────────────────┤         │
+│                  │                  │                  │         │
+│  [Presentation]  │  [Presentation]  │  [Presentation]  │         │
+│  (optional)      │  (optional)      │  (optional)      │         │
+│                  │                  │                  │         │
+│  Forest Suite    │  River Cottage   │  Family Lodge    │         │
+│  (website)       │  (website)       │  (website)       │         │
+│                  │                  │                  │         │
+│  ₹7,000/night   │  ₹9,500/night   │  ₹12,000/night  │         │
+│  (innpilot)      │  (innpilot)      │  (innpilot)      │         │
+│                  │                  │                  │         │
+│  King Bed        │  Queen Bed       │  2 King Beds     │         │
+│  (website)       │  (website)       │  (website)       │         │
+│                  │                  │                  │         │
+│  450 sq ft       │  380 sq ft       │  650 sq ft       │         │
+│  (website)       │  (website)       │  (website)       │         │
+│                  │                  │                  │         │
+│  2 Adults + 1    │  2 Adults        │  4 Adults + 2    │         │
+│  (website)       │  (website)       │  (website)       │         │
+│                  │                  │                  │         │
+│  ✓ WiFi          │  ✓ WiFi          │  ✓ WiFi          │         │
+│  ✓ Balcony       │  ✗ Balcony       │  ✓ Balcony       │         │
+│  ✓ Garden View   │  ✓ River View    │  ✓ Garden View   │         │
+│  (website)       │  (website)       │  (website)       │         │
+│                  │                  │                  │         │
+│  [ Select ]      │  [ Select ]      │  [ Select ]      │         │
+│                  │                  │                  │         │
+└──────────────────┴──────────────────┴──────────────────┘
+Comparison Data Sources
+Field Source  Enhancement Level If Missing
+Presentation area Website content Enhancement Omitted; comparison still functional
+Room name Website content / API fallback  Critical  Name from API displayed
+Per-night rate  InnPilot API  Critical  Always available after API response
+Bed type  Website content Enhancement Row omitted from comparison
+Room area Website content Enhancement Row omitted from comparison
+Occupancy Website content Enhancement Row omitted from comparison
+Amenities Website content Enhancement Amenities section omitted from comparison
+Select button Functional  Critical  Always rendered
+The comparison view adapts to whatever data is available. It never shows empty rows or "N/A" placeholders for missing presentation data. It simply omits rows where data is absent.
+18. Policies
+Merged Source: Website Content + InnPilot
+Policies combine editorial content from the website with operational rules from InnPilot.
+┌──────────────────────────────────────────────┐
+│  What to Know                                 │
+│                                              │
+│  ▸ Check-in & Check-out                      │
+│    Check-in: 2:00 PM · Check-out: 11:00 AM  │
+│    (InnPilot data, displayed in website      │
+│     editorial format)                        │
+│                                              │
+│  ▸ Cancellation Policy                       │
+│    Free cancellation up to 48 hours before   │
+│    check-in. Cancellations within 48 hours   │
+│    are subject to a one-night charge.        │
+│    (InnPilot rules, expressed in website     │
+│     editorial language)                      │
+│                                              │
+│  ▸ House Rules                               │
+│    • Quiet hours: 10 PM – 7 AM              │
+│    • Pet-friendly (with prior notice)        │
+│    • No smoking indoors                      │
+│    (Website content — progressive enhancement)│
+│                                              │
+│  ▸ What to Bring                             │
+│    • Comfortable walking shoes               │
+│    • Insect repellent                        │
+│    • Binoculars for bird watching            │
+│    (Website content — progressive enhancement)│
+│                                              │
+└──────────────────────────────────────────────┘
+Progressive enhancement: If no editorial policy content exists (house rules, what to bring), those sections are omitted. The operational policies (check-in/check-out, cancellation) are always present because they come from InnPilot.
+19. FAQ
+Source: Website Content
+FAQs are static website content. They are not fetched from InnPilot. They address common objections and questions. All FAQ content is a progressive enhancement.
+┌──────────────────────────────────────────────┐
+│  Common Questions                             │
+│                                              │
+│  ▸ How do I reach the retreat?               │
+│    (expandable)                              │
+│                                              │
+│  ▸ Is the retreat pet-friendly?              │
+│    (expandable)                              │
+│                                              │
+│  ▸ What safari experiences are included?     │
+│    (expandable)                              │
+│                                              │
+│  ▸ Can I cancel my booking?                  │
+│    (expandable — links to InnPilot           │
+│     cancellation rules for specifics)        │
+│                                              │
+│  ▸ What payment methods do you accept?       │
+│    (expandable — links to InnPilot           │
+│     payment options)                         │
+│                                              │
+└──────────────────────────────────────────────┘
+Progressive enhancement: If no FAQ content exists, the entire section is omitted. No "FAQ coming soon" placeholder.
+20. Footer CTA
+Source: Website Content
+┌──────────────────────────────────────────────────────────────┐
+│                                                              │
+│                    Ready to Begin?                            │
+│                                                              │
+│     Your jungle retreat is one booking away.                 │
+│                                                              │
+│     📞 +91 98181 93314                                       │
+│     💬 Chat on WhatsApp                                      │
+│     ✉ corbettfoothills@gmail.com                             │
+│                                                              │
+│     ──────────────────────────────                           │
+│                                                              │
+│     Jim Corbett, Gaibua Khas, Bail Parao,                    │
+│     Ramnagar, Uttarakhand                                    │
+│                                                              │
+└──────────────────────────────────────────────────────────────┘
+Progressive enhancement: The contact information comes from the website's site data. If the CMS is unreachable, the footer falls back to hardcoded site data (phone, email, address from site.json).
+21. Accessibility Recommendations
+WCAG 2.1 AA Compliance
+Requirement Implementation
+Colour contrast All text meets 4.5:1 ratio minimum. Body text: dark earth (#3D2E1C) on white. White text on dark green: verified contrast.
+Focus states  Visible focus ring on all interactive elements (2px offset, brand accent colour)
+Keyboard navigation All interactive elements reachable via Tab. Logical tab order follows visual flow.
+Screen reader labels  All form fields have associated labels. All buttons have descriptive text. All presentation elements have appropriate alt text if they exist.
+Reduced motion  Respect prefers-reduced-motion. Disable skeleton shimmer, disable scroll animations.
+Touch targets Minimum 48x48px on mobile for all interactive elements
+Error announcements Use aria-live="polite" for validation errors and loading states
+Skip navigation "Skip to main content" link (hidden until focused)
+Specific Accessibility Notes
+- Date picker: Use native <input type="date"> for maximum screen reader support. Custom date pickers require extensive ARIA work and often fail accessibility.
+- Package checkboxes: Use <fieldset> and <legend> for grouping. Each checkbox has a clear label.
+- Booking summary: Use aria-live="polite" so screen readers announce price changes when packages are toggled.
+- Sticky elements: Use aria-label to describe the sticky bar purpose.
+- Merged content loading: Announce to screen readers when pricing data populates: "Pricing loaded" via aria-live="polite".
+- Missing presentation assets: If a room card has no presentation area, the card's accessible name is derived from the room name and description. The absence of presentation content does not create an accessibility gap — screen readers simply have fewer elements to announce, which is appropriate.
+22. Typography Hierarchy
+Font Stack
+The site already uses Playfair Display (serif) for headings and a system sans-serif for body. The booking page should continue this convention.
+Headings:    'Playfair Display', Georgia, serif
+Body:        system-ui, -apple-system, 'Segoe UI', sans-serif
+Mono (if needed): 'SF Mono', 'Fira Code', monospace
+Type Scale
+Level Usage Size (Desktop)  Size (Mobile) Weight  Colour
+Display Hero headline 48px / 3rem 32px / 2rem 700 White (on dark bg)
+H1  Section headings  36px / 2.25rem  28px / 1.75rem  700 Dark earth
+H2  Card titles, room names 24px / 1.5rem 20px / 1.25rem  600 Dark earth
+H3  Sub-sections, labels  18px / 1.125rem 16px / 1rem 600 Dark earth
+Body Large  Descriptions, subtitles 18px / 1.125rem 16px / 1rem 400 Earth 600
+Body  Standard text 16px / 1rem 15px / 0.9375rem  400 Earth 700
+Body Small  Fine print, policies  14px / 0.875rem 13px / 0.8125rem  400 Earth 500
+Caption Labels, badges  12px / 0.75rem  11px / 0.6875rem  500 Earth 400
+Price Pricing emphasis  28px / 1.75rem  24px / 1.5rem 700 Dark earth
+Price Small Per-night rate  16px / 1rem 15px / 0.9375rem  500 Earth 600
+Line Heights
+Level Line Height
+Display 1.1
+H1  1.2
+H2  1.3
+Body  1.6
+Small/Caption 1.4
+Letter Spacing
+- Uppercase labels: +0.05em tracking
+- Body text: normal
+- Price: -0.01em (slightly tighter)
+23. Spacing System
+Base Unit: 4px
+All spacing is a multiple of 4px. This creates consistency and rhythm.
+Token Value Usage
+--space-1 4px Tight internal padding
+--space-2 8px Icon gaps, small padding
+--space-3 12px  Inline element spacing
+--space-4 16px  Card internal padding, form field gaps
+--space-5 20px  Medium spacing
+--space-6 24px  Card padding, section sub-elements
+--space-8 32px  Section internal spacing
+--space-10  40px  Between related sections
+--space-12  48px  Section padding (vertical)
+--space-16  64px  Major section breaks
+--space-20  80px  Hero padding, major vertical rhythm
+--space-24  96px  Page-level vertical rhythm
+Section Spacing
+Section Top padding Bottom padding  Gap to next section
+Hero  0 (full bleed)  0 0 (search bar overlaps)
+Search bar  0 48px  —
+Rooms section 64px  64px  —
+Guest details 64px  64px  —
+Trust strip 48px  48px  —
+Policies  48px  48px  —
+FAQ 48px  48px  —
+Footer CTA  64px  64px  —
+Card Spacing
+Element Spacing If Element Missing
+Presentation area to content  0 (flush) No gap — content starts at card top
+Title to description  8px —
+Description to info grid  16px  —
+Info grid to amenities  16px  —
+Amenities to pricing  16px  —
+Pricing to CTA  16px  —
+CTA to packages 16px  —
+External card padding 24px  —
+24. Colour Usage Recommendations
+Existing Palette (from site)
+The site already defines a colour system via Tailwind config. The booking page should use the same tokens.
+Token Approximate Value Usage
+cfr-green-dark  Deep forest green Primary backgrounds, headers
+cfr-green-accent  Vibrant green CTAs, active states, links
+cfr-green-leaf  Leaf green  Success states, included badges
+cfr-sand-200  Light sand  Text on dark backgrounds
+cfr-sand-300  Medium sand Muted text on dark, borders
+cfr-sand-400  Warm sand Hover states on dark
+cfr-sand-500  Deep sand Book Now buttons, promo accents
+cfr-earth-400 Light earth Muted text
+cfr-earth-500 Medium earth  Secondary text
+cfr-earth-600 Earth Body text, descriptions
+cfr-earth-700 Dark earth  Primary text, headings
+cfr-cream-dark  Warm cream  Alternate section backgrounds
+Booking Page Colour Map
+Element Colour  Rationale
+Page background White #FFFFFF Clean, premium
+Section alternates  cfr-cream-dark  Warmth, rhythm
+Primary text  cfr-earth-700 Readable, warm
+Secondary text  cfr-earth-500 Subtle hierarchy
+Muted text  cfr-earth-400 Captions, fine print
+Primary CTA cfr-green-accent  Brand action colour
+CTA hover cfr-green-dark  Deeper, confident
+Selected state border cfr-green-accent  Clear selection
+Included badge  cfr-green-leaf  Positive, green
+Recommended badge cfr-sand-500  Premium, warm
+Unavailable Grey (#9CA3AF)  Neutral, not alarming
+Error Red (#DC2626) Standard, visible
+Success cfr-green-leaf  Consistent with brand
+Discount text cfr-green-leaf  Positive savings
+Price emphasis  cfr-earth-700 Bold, prominent
+API loading skeleton  cfr-earth-100 with shimmer  Subtle, non-alarming
+Colour Do Nots
+- Do not introduce new colours outside the existing palette
+- Do not use bright red for anything except errors
+- Do not use blue (not on-brand)
+- Do not use more than 3 colours in any single component
+- Avoid pure black (#000000) — use cfr-earth-700 instead
+25. Component Inventory
+Atoms
+Component Description Data Source Enhancement Level
+Button (Primary)  Green fill, white text, rounded-full, shadow  — Critical
+Button (Secondary)  Green outline, green text, rounded-full — Critical
+Button (Ghost)  Text only, green, no border — Critical
+Button (Disabled) Grey fill, grey text, no shadow — Critical
+Input (Text)  Rounded-lg, earth border, focus ring  — Critical
+Input (Date)  Same as text, with calendar icon  — Critical
+Input (Select)  Dropdown with custom chevron  — Critical
+Input (Textarea)  Multi-line, resizable — Critical
+Checkbox  Custom styled, green when checked — Critical
+Radio Custom styled, green when selected  — Critical
+Badge Small pill, various colours InnPilot  Critical
+Icon  Inline SVG, muted green or earth  — Enhancement
+Skeleton  Placeholder shimmer — Critical (loading)
+Divider 1px line, cfr-sand-300/20 — Enhancement
+Price Tag Formatted price display InnPilot  Critical
+Amenity Chip  Text pill, light background Website content Enhancement
+Room Info Chip  Icon + label + value, compact Website content Enhancement
+Package Row Checkbox + name + description + price InnPilot  Critical
+Price Line  Label + amount, horizontal  InnPilot  Critical
+Price Block Subtotal, taxes, discount, total  InnPilot  Critical
+Trust Item  Icon + title + subtitle, compact  Website content Enhancement
+Testimonial Card  Quote + attribution Website content Enhancement
+Form Field  Label + input + error message User input  Critical
+Error Banner  Icon + message + optional CTA — Critical
+Compact Room Header Room name + description (no presentation area)  Website content / API Critical
+Molecules
+Component Description Data Source Enhancement Level
+Search Field  Label + input, stacked  — Critical
+Search Group  Row of search fields  — Critical
+Room Info Grid  Row of info chips Website content Enhancement
+Amenity List  Row of amenity chips  Website content Enhancement
+Package List  Group of package rows InnPilot  Critical
+Price Breakdown Vertical stack of price lines InnPilot  Critical
+Trust Strip 4 trust items in a row  Website content Enhancement
+FAQ Accordion Question + expandable answer  Website content Enhancement
+Form Field  Label + input + error message User input  Critical
+Molecules (Composite)
+Component Description Data Source Enhancement Level
+Room Card Presentation area + info + pricing + CTA + packages (adapts to compact if no presentation assets) Website + InnPilot  Critical (booking) / Enhancement (visual)
+Booking Summary Room info + price breakdown + CTA + trust signals Website + InnPilot  Critical
+Search Bar  All search fields + CTA button  — Critical
+Guest Details Form  All guest fields + validation — Critical
+Policy Section  Expandable/collapsible content  Website + InnPilot  Enhancement (editorial) / Critical (rules)
+FAQ Section Accordion list  Website content Enhancement
+Room Comparison Row Single room column in comparison view Website + InnPilot  Enhancement
+Compact Room Card Room card without presentation area Website / API + InnPilot  Critical
+Organisms
+Component Description Data Source Enhancement Level
+Hero  Visual or colour background + headline + subtitle Website content Enhancement
+Rooms Section Header + room card list + comparison toggle Website + InnPilot  Critical
+Booking Sidebar Sticky summary (desktop) / bottom sheet (mobile)  InnPilot (pricing) + Website (room name, trust) Critical
+Guest Section Form + validation — Critical
+Policies Section  Expandable/collapsible content  Website + InnPilot  Enhancement + Critical
+FAQ Section Accordion list  Website content Enhancement
+Footer CTA  Reassurance + contact options Website content Enhancement
+Templates
+Template  Description
+Full Page Hero → Search → Rooms (2-col) → Guest → Trust → Policies → FAQ → Footer CTA
+Confirmation  Post-booking success page (future task)
+26. Conversion Optimisation Recommendations
+26a. Reduce Time-to-First-Room
+The fastest path to seeing available rooms should be under 10 seconds from page load:
+1. Page loads with search bar immediately visible
+2. Room cards render with website content (descriptions, amenities) — from the website's content layer, no API needed
+3. User enters 2 dates and taps Search
+4. InnPilot API call fires
+5. Pricing and availability populate in existing cards
+Do not require account creation, email, or any personal information before showing rooms.
+The two-layer architecture enables faster perceived performance: users see rich content before the API responds.
+26b. Smart Defaults
+- Adults defaults to 2 (most common)
+- Children defaults to 0
+- Check-in defaults to tomorrow
+- Check-out defaults to day after tomorrow (2-night stay)
+These defaults mean a couple can search with a single tap on "Check Availability."
+26c. Price Anchoring
+Show the per-night rate prominently, then the total. The per-night rate feels smaller and more accessible. The total provides transparency.
+If InnPilot returns a discount (original_total > total), show the original price with a strikethrough and the discounted price in green. This creates a perception of value.
+26d. Reducing Booking Abandonment
+Abandonment Reason  Mitigation
+Hidden fees Show full price breakdown in summary before guest details
+Complicated form  Only 5 fields, all optional except email and name
+Slow loading  Two-layer rendering: content loads instantly, API fills in pricing
+Unclear policies  Policies section visible before booking CTA, combining website editorial with InnPilot rules
+No trust signals  Trust strip, reviews, guarantees visible at decision points
+Mobile friction Sticky CTA, bottom sheet summary, large touch targets
+"I'll book later" No urgency tactics (no countdown). Instead: "Free cancellation up to 48 hours" reduces the need to book later
+26e. The "Select Room" Button
+This is the most important CTA on the page. It should:
+- Be the only green-filled button in the room card
+- Have generous padding (minimum 48px height)
+- Say "Select This Room" (not "Book Now" — that comes later)
+- Have a subtle animation on tap (scale 0.98, then back)
+- On mobile, be full-width within the card
+- Be disabled (grey) if InnPilot reports the room as unavailable
+26f. The "Complete Booking" CTA
+This is the final commitment. It should:
+- Only appear after guest details are filled
+- Show the total amount on the button: "Complete Booking — ₹25,200"
+- Be disabled until required fields are valid
+- Have a loading state during API call
+- Be followed by trust signals ("SSL Encrypted", "Free Cancellation")
+26g. Re-engagement
+If the user scrolls past the rooms without selecting:
+- The sticky summary shows "Select a room to continue"
+- No popup, no interruption
+- The page is patient
+If the user has selected a room but hasn't completed booking after 5 minutes:
+- The sticky summary gently pulses once (subtle animation)
+- No modal, no alert
+26h. The Content-First Advantage
+The two-layer architecture provides a conversion advantage that monolithic booking engines cannot:
+Before search: Users see compelling room descriptions and details. They are engaged before they even enter dates. This is impossible when the PMS owns content — those engines show empty states or generic lists until the API responds.
+During search: Room content remains visible while pricing loads. The user never sees a blank page or a loading spinner replacing content they want to see.
+After search (no results): The page still looks polished. The user sees the property's rooms, even if none are available for their dates. They are more likely to try different dates than if they saw an empty page.
+Without presentation assets: The page still functions. Room names, pricing, and the booking flow are all operational. The user can complete a booking even if no photographs exist. The experience is less visually rich but equally functional. This is the definition of progressive enhancement.
+27. Microcopy Guide
+Tone
+Warm, confident, unhurried. Like a knowledgeable host at a luxury retreat. Never pushy. Never generic.
+Section Headlines
+Section Headline  Subtitle
+Hero  Find Your Perfect Retreat "Your jungle escape begins with a date"
+Search  Check Availability  —
+Rooms Available Rooms "Your dates, your perfect match"
+Empty Rooms No Rooms Available  "Try different dates — we'd love to host you"
+Guest Details Almost There  "Just a few details to complete your booking"
+Trust Why Book Direct "The best experience starts here"
+Policies  What to Know  "Transparent policies, no surprises"
+FAQ Common Questions  —
+Footer CTA  Ready to Begin? "Your jungle retreat is one booking away"
+Button Copy
+Button  Label Context
+Search  Check Availability  Primary, in search bar
+Room Select Select This Room  Primary, in room card
+Room Selected Selected ✓  Green, in room card (after selection)
+Proceed Proceed to Booking  Primary, in summary sidebar
+Complete  Complete Booking — ₹XX,XXX  Primary, final CTA
+Contact Chat on WhatsApp  Secondary, in empty/error states
+Search Again  Search Again  Ghost, in empty states
+Try Again Try Again Secondary, in error states
+Error Messages
+Error Message
+No check-in date  "Please select a check-in date"
+No check-out date "Please select a check-out date"
+Check-out before check-in "Check-out must be after check-in"
+No adults selected  "At least one adult is required"
+Invalid email "Please enter a valid email address"
+Invalid phone "Please enter a valid phone number"
+Name too short  "Please enter your name"
+Network error "Something went wrong. Please try again."
+Booking failed  "We couldn't complete your booking. You haven't been charged."
+Room unavailable  "This room is no longer available for your dates."
+Invalid promo code  "This code doesn't seem to be valid"
+API unreachable "We're having trouble checking availability. Please try again."
+Loading Messages
+State Message Data Source Context
+Searching "Finding available rooms…"  Waiting for InnPilot availability
+Quoting "Calculating your rate…"  Waiting for InnPilot quote
+Booking "Securing your reservation…"  Waiting for InnPilot booking confirmation
+28. Responsive Behaviour Detail
+Breakpoint Definitions
+Breakpoint  Name  Target
+< 640px Mobile  Phones
+640px – 767px Large Mobile  Large phones, small tablets
+768px – 1023px  Tablet  Tablets in portrait
+1024px – 1279px Small Desktop Tablets in landscape, small laptops
+≥ 1280px  Desktop Standard desktops and above
+Layout Shifts by Breakpoint
+Element Mobile (<768) Tablet (768–1023) Desktop (1024+)
+Search fields Stacked vertically  2-column grid Horizontal row
+Room cards (with presentation)  Full width  Full width  Left column (65%)
+Room cards (compact)  Full width  Full width  Left column (65%)
+Booking summary Bottom sheet (sticky bar) Bottom sheet (sticky bar) Sticky sidebar (35%)
+Guest details Stacked fields  2-column name fields  2-column name fields, centered
+Trust strip 2x2 grid  Horizontal row  Horizontal row
+Policies  Full width  Full width, centered  Centered, max-width
+FAQ Full width  Full width, centered  Centered, max-width
+Room comparison Horizontal scroll Side-by-side (2 rooms)  Side-by-side (3 rooms)
+29. Animation & Transitions
+Principles
+- Animations should feel natural, not mechanical
+- Respect prefers-reduced-motion
+- Duration: 150–300ms for micro-interactions, 300–500ms for page transitions
+- Easing: ease-out for entering, ease-in for exiting
+Specific Animations
+Element Animation Duration  Trigger
+Room card select  Border colour transition + scale 0.98 → 1.0 150ms User taps select
+Package toggle  Checkbox fill animation 150ms User toggles package
+Summary price update  Fade number change  200ms API quote response
+Skeleton shimmer  Left-to-right gradient sweep  1.5s loop Loading state
+Sticky bar appear Slide up from bottom  300ms Room selected
+Bottom sheet expand Slide up + fade backdrop  300ms User taps summary bar
+Error message Fade in + slight slide down 200ms Error occurs
+Section scroll-in Fade up + slight translate (10px) 400ms On intersection
+Pricing populate  Fade in from skeleton 300ms API response received
+Content-to-API merge  Subtle fade on pricing area only  200ms API data arrives
+Card layout adapt Smooth height transition when presentation assets load or unload  300ms Content state change
+30. Performance Considerations
+Critical Rendering Path
+1. Hero and search bar must render in first paint
+2. Room cards render with website content immediately (no API dependency)
+3. Booking summary renders as skeleton until API responds
+4. Trust strip, policies, FAQ load on scroll (lazy)
+Two-Layer Performance Strategy
+Layer Source  Load Strategy Perceived Speed
+Page frame (header, hero, footer) Website build Immediate (static HTML) Instant
+Room content (text, details)  Website content layer Immediate (static/CDN)  Instant
+Pricing and availability  InnPilot API  After user search 200–800ms
+Booking quote InnPilot API  After room selection  200–500ms
+Booking confirmation  InnPilot API  After user books  500–2000ms
+The user sees a fully rendered page before any API call is made. This is the primary performance advantage of the two-layer architecture.
+Without presentation assets: The page renders even faster because there are fewer resources to load in the content layer. The compact card layout has no media to fetch. The page reaches interactive state sooner.
+Lazy Loading Strategy
+Element Lazy? Source  Enhancement Level
+Hero area No  Website Enhancement
+Search bar  No  Website Critical
+Trust strip Yes Website Enhancement
+FAQ Yes Website Enhancement
+Footer CTA  Yes Website Enhancement
+API Response Caching
+- Availability responses: No caching (real-time data)
+- Quote responses: Cache for 30 seconds (prevents duplicate calls during package toggling)
+- Booking responses: No caching (transactional)
+This specification is ready for engineering handoff. Every section maps directly to implementation decisions. The two-layer architecture — website content for storytelling, InnPilot for operations — is reflected consistently throughout. The progressive enhancement principle ensures that presentation assets enrich the experience without ever gating the booking flow. The design is presentation-agnostic: the booking page imposes no constraints on what the website's content layer provides, and functions completely regardless of what it provides. The design prioritises simplicity, transparency, and trust, while the architecture ensures that content and operations remain independent, maintainable, and resilient.
