@@ -1,0 +1,170 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import siteData from "../../data/site.json";
+
+const bookingId = Astro.url.searchParams.get("booking_id") || "";
+const paymentId = Astro.url.searchParams.get("payment_id") || "";
+const status = Astro.url.searchParams.get("status") || "pending";
+const isConfirmed = status === "confirmed";
+---
+
+<MainLayout
+  title="Booking Confirmation"
+  description="Your booking confirmation at Corbett Foothills Retreat"
+>
+  <Fragment slot="head">
+    <meta name="robots" content="noindex, nofollow" />
+  </Fragment>
+  <Fragment slot="header">
+    <Header />
+  </Fragment>
+
+  <section class="relative flex min-h-[40vh] items-end overflow-hidden pt-56">
+    <div class="absolute inset-0 bg-cfr-green-dark"></div>
+    <div class="absolute inset-0 bg-leaf-pattern opacity-30"></div>
+    <div class="relative z-10 w-full bg-cfr-green-dark">
+      <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8 lg:pb-16">
+        <div class="mx-auto max-w-3xl text-center">
+          <h1 class="font-display text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
+            {isConfirmed ? "Booking Confirmed!" : "Booking Status"}
+          </h1>
+          <p class="mt-3 text-base text-white/80 sm:text-lg">
+            {isConfirmed
+              ? "Your stay at Corbett Foothills Retreat has been confirmed."
+              : "Your booking is being processed."}
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cfr-cream py-10 sm:py-16">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+      {isConfirmed ? (
+        <div class="space-y-6">
+          <div class="rounded-2xl border border-cfr-earth-100 bg-white p-8 text-center shadow-card">
+            <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-cfr-green-100">
+              <svg class="h-10 w-10 text-cfr-green-leaf" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h2 class="mt-4 font-display text-2xl font-bold text-cfr-green-dark">Payment Successful</h2>
+            <p class="mt-2 text-sm text-cfr-earth-500">
+              Thank you for your booking! Your payment has been received and your reservation is confirmed.
+            </p>
+          </div>
+
+          <div class="rounded-2xl border border-cfr-earth-100 bg-white p-6 shadow-card">
+            <h3 class="font-display text-lg font-bold text-cfr-green-dark">Booking Reference</h3>
+            <div class="mt-4 space-y-3 text-sm">
+              {bookingId && (
+                <div class="flex justify-between border-b border-cfr-earth-100 pb-2">
+                  <span class="text-cfr-earth-500">Booking ID</span>
+                  <span class="font-mono font-bold text-cfr-earth-700">{bookingId}</span>
+                </div>
+              )}
+              {paymentId && (
+                <div class="flex justify-between border-b border-cfr-earth-100 pb-2">
+                  <span class="text-cfr-earth-500">Payment ID</span>
+                  <span class="font-mono text-cfr-earth-600">{paymentId}</span>
+                </div>
+              )}
+              <div class="flex justify-between">
+                <span class="text-cfr-earth-500">Status</span>
+                <span class="inline-flex items-center gap-1 rounded-full bg-cfr-green-50 px-3 py-1 text-xs font-bold text-cfr-green-leaf">
+                  Confirmed
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-2xl border border-cfr-earth-100 bg-white p-6 text-center shadow-card">
+            <h3 class="font-display text-lg font-bold text-cfr-green-dark">What Happens Next?</h3>
+            <div class="mt-4 space-y-4 text-left">
+              <div class="flex items-start gap-3">
+                <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-cfr-green-accent/10">
+                  <span class="text-sm font-bold text-cfr-green-accent">1</span>
+                </div>
+                <div>
+                  <p class="font-semibold text-cfr-earth-700">Check Your Email</p>
+                  <p class="text-sm text-cfr-earth-500">
+                    A confirmation email with your booking details has been sent to the email address you provided.
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-cfr-green-accent/10">
+                  <span class="text-sm font-bold text-cfr-green-accent">2</span>
+                </div>
+                <div>
+                  <p class="font-semibold text-cfr-earth-700">We'll Reach Out</p>
+                  <p class="text-sm text-cfr-earth-500">
+                    Our team may contact you before your arrival to confirm details and any special requests.
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-cfr-green-accent/10">
+                  <span class="text-sm font-bold text-cfr-green-accent">3</span>
+                </div>
+                <div>
+                  <p class="font-semibold text-cfr-earth-700">Arrive & Enjoy</p>
+                  <p class="text-sm text-cfr-earth-500">
+                    We look forward to welcoming you to Corbett Foothills Retreat. If you need anything, don't hesitate to reach out.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div class="rounded-2xl border border-cfr-earth-100 bg-white p-8 text-center shadow-card">
+          <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-cfr-sand-100">
+            <svg class="h-10 w-10 text-cfr-earth-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h2 class="mt-4 font-display text-2xl font-bold text-cfr-green-dark">Payment Pending</h2>
+          <p class="mt-2 text-sm text-cfr-earth-500">
+            Your booking is awaiting payment confirmation. If you've already paid, please wait a moment — the confirmation may still be processing.
+          </p>
+          {bookingId && (
+            <p class="mt-4 text-sm text-cfr-earth-600">
+              Reference: <span class="font-mono font-bold">{bookingId}</span>
+            </p>
+          )}
+        </div>
+      )}
+
+      <div class="mt-6 rounded-2xl border border-cfr-earth-100 bg-cfr-cream p-6 text-center">
+        <h3 class="font-display text-base font-semibold text-cfr-green-dark">Need Help?</h3>
+        <p class="mt-2 text-sm text-cfr-earth-600">
+          Contact us anytime if you have questions about your booking.
+        </p>
+        <div class="mt-4 flex flex-col items-center gap-2 text-sm">
+          <a href="mailto:{siteData.site.email}" class="text-cfr-green-accent hover:underline">
+            {siteData.site.email}
+          </a>
+          <a href="tel:{siteData.site.phone}" class="text-cfr-green-accent hover:underline">
+            {siteData.site.phone}
+          </a>
+        </div>
+      </div>
+
+      <div class="mt-8 text-center">
+        <a
+          href="/"
+          class="inline-flex items-center justify-center gap-2 rounded-lg bg-cfr-green-accent px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark hover:shadow-lg"
+        >
+          Back to Home
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <Fragment slot="footer">
+    <Footer />
+  </Fragment>
+</MainLayout>

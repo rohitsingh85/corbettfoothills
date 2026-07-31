@@ -1,0 +1,418 @@
+---
+interface Props {
+  roomName?: string;
+  checkin?: string;
+  checkout?: string;
+  adults?: number;
+  children?: number;
+  nights?: number;
+  nightlyRate?: number;
+  totalStay?: number;
+  originalTotal?: number;
+  packages?: Array<{ name: string; price: number; included: boolean }>;
+  subtotal?: number;
+  taxBreakdown?: Array<{ label: string; amount: number }>;
+  totalTaxes?: number;
+  grandTotal?: number;
+  cancellationPolicy?: string;
+  quoteExpiry?: string;
+  isLoading?: boolean;
+  step?: 'search' | 'guests' | 'review';
+}
+
+const {
+  roomName,
+  checkin,
+  checkout,
+  adults = 2,
+  children = 0,
+  nights = 1,
+  nightlyRate,
+  totalStay,
+  originalTotal,
+  packages = [],
+  subtotal,
+  taxBreakdown = [],
+  totalTaxes,
+  grandTotal,
+  cancellationPolicy,
+  quoteExpiry,
+  isLoading = false,
+  step = 'search',
+} = Astro.props;
+
+function formatCurrency(amount: number): string {
+  return new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: 0,
+  }).format(amount);
+}
+
+function formatDisplayDate(dateStr: string): string {
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('en-IN', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+}
+---
+
+<!-- Desktop: Sticky Sidebar -->
+<aside
+  class="hidden lg:sticky lg:top-24 lg:block lg:h-fit lg:w-full lg:self-start"
+  aria-label="Booking summary"
+>
+  <div class="rounded-2xl border border-cfr-earth-100 bg-white p-6 shadow-card">
+    <h2 class="font-display text-lg font-bold text-cfr-green-dark">Booking Summary</h2>
+    
+    {isLoading ? (
+      <!-- Loading state -->
+      <div class="mt-4 space-y-3">
+        <div class="skeleton-shimmer h-5 w-3/4 rounded bg-cfr-earth-100"></div>
+        <div class="skeleton-shimmer h-4 w-1/2 rounded bg-cfr-earth-100"></div>
+        <div class="skeleton-shimmer h-4 w-2/3 rounded bg-cfr-earth-100"></div>
+        <div class="mt-4 border-t border-cfr-earth-100 pt-4">
+          <div class="skeleton-shimmer h-4 w-full rounded bg-cfr-earth-100"></div>
+          <div class="skeleton-shimmer mt-2 h-4 w-3/4 rounded bg-cfr-earth-100"></div>
+          <div class="skeleton-shimmer mt-2 h-6 w-1/2 rounded bg-cfr-earth-100"></div>
+        </div>
+      </div>
+    ) : roomName ? (
+      <!-- Room selected state -->
+      <div class="mt-4">
+        <h3 class="font-display text-base font-semibold text-cfr-green-dark">{roomName}</h3>
+        
+        <div class="mt-3 space-y-2 text-sm text-cfr-earth-600">
+          {checkin && checkout && (
+            <p>{formatDisplayDate(checkin)} – {formatDisplayDate(checkout)}</p>
+          )}
+          <p>{nights} night{nights !== 1 ? 's' : ''} · {adults} Adult{adults !== 1 ? 's' : ''}{children > 0 ? `, ${children} Child${children !== 1 ? 'ren' : ''}` : ''}</p>
+        </div>
+        
+        <div class="mt-4 border-t border-cfr-earth-100 pt-4">
+          {nightlyRate && (
+            <div class="flex justify-between text-sm">
+              <span class="text-cfr-earth-600">Room ({nights} night{nights !== 1 ? 's' : ''})</span>
+              <span class="font-medium text-cfr-earth-700">{formatCurrency(totalStay || nightlyRate * nights)}</span>
+            </div>
+          )}
+          
+          {packages.filter(p => !p.included).map(pkg => (
+            <div class="mt-1 flex justify-between text-sm">
+              <span class="text-cfr-earth-600">{pkg.name}</span>
+              <span class="font-medium text-cfr-earth-700">+{formatCurrency(pkg.price)}</span>
+            </div>
+          ))}
+          
+          {(subtotal !== undefined || totalTaxes !== undefined) && (
+            <div class="mt-3 border-t border-cfr-earth-100 pt-3">
+              {subtotal !== undefined && (
+                <div class="flex justify-between text-sm">
+                  <span class="text-cfr-earth-600">Subtotal</span>
+                  <span class="text-cfr-earth-700">{formatCurrency(subtotal)}</span>
+                </div>
+              )}
+              
+              {taxBreakdown.map(tax => (
+                <div class="mt-1 flex justify-between text-xs text-cfr-earth-500">
+                  <span>{tax.label}</span>
+                  <span>{formatCurrency(tax.amount)}</span>
+                </div>
+              ))}
+              
+              {totalTaxes !== undefined && taxBreakdown.length === 0 && (
+                <div class="mt-1 flex justify-between text-xs text-cfr-earth-500">
+                  <span>Taxes</span>
+                  <span>{formatCurrency(totalTaxes)}</span>
+                </div>
+              )}
+            </div>
+          )}
+          
+          {grandTotal !== undefined && (
+            <div class="mt-3 border-t border-cfr-earth-100 pt-3">
+              <div class="flex justify-between">
+                <span class="font-bold text-cfr-earth-700">Total</span>
+                <span class="text-xl font-bold text-cfr-earth-700">{formatCurrency(grandTotal)}</span>
+              </div>
+            </div>
+          )}
+        </div>
+        
+        {cancellationPolicy && (
+          <div class="mt-4 flex items-start gap-2 text-xs text-cfr-green-leaf">
+            <svg class="mt-0.5 h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>{cancellationPolicy}</span>
+          </div>
+        )}
+        
+        {quoteExpiry && (
+          <p class="mt-2 text-xs text-cfr-earth-400">
+            Quote valid until {new Date(quoteExpiry).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
+          </p>
+        )}
+        
+        {step === 'guests' && (
+          <a
+            href={`/booking?step=review&room=${encodeURIComponent(roomName)}&checkin=${checkin}&checkout=${checkout}&adults=${adults}&children=${children}`}
+            class="mt-4 flex w-full items-center justify-center rounded-lg bg-cfr-green-accent px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2"
+          >
+            Proceed to Review
+          </a>
+        )}
+        
+        {step === 'review' && (
+          <button
+            type="submit"
+            id="complete-booking-btn"
+            class="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-cfr-green-accent px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-md"
+          >
+            <svg id="booking-icon" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+            </svg>
+            <span id="booking-btn-text">Complete Booking — {grandTotal ? formatCurrency(grandTotal) : ''}</span>
+            <svg id="booking-spinner" class="hidden h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </button>
+        )}
+        
+        <div class="mt-4 flex items-center justify-center gap-4 text-xs text-cfr-earth-400">
+          <span class="flex items-center gap-1">
+            <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+            </svg>
+            Secure
+          </span>
+          <span class="flex items-center gap-1">
+            <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Best Rate
+          </span>
+        </div>
+      </div>
+    ) : (
+      <!-- No room selected state -->
+      <div class="mt-4 text-center">
+        <p class="text-sm text-cfr-earth-500">Select a room to see pricing</p>
+      </div>
+    )}
+  </div>
+</aside>
+
+<!-- Mobile: Bottom Bar -->
+<div
+  id="mobile-summary-bar"
+  class="fixed inset-x-0 bottom-0 z-40 block border-t border-cfr-earth-100 bg-white p-4 shadow-premium lg:hidden"
+  aria-label="Booking summary"
+  role="region"
+>
+  <div class="mx-auto max-w-lg">
+    {roomName ? (
+      <div class="flex items-center justify-between">
+        <div>
+          {grandTotal !== undefined ? (
+            <p class="font-display text-lg font-bold text-cfr-earth-700">{formatCurrency(grandTotal)}</p>
+          ) : (
+            <p class="text-sm text-cfr-earth-500">Calculating...</p>
+          )}
+          <p class="text-xs text-cfr-earth-500">{nights} night{nights !== 1 ? 's' : ''} · {roomName}</p>
+        </div>
+        <button
+          id="mobile-summary-expand"
+          type="button"
+          class="rounded-lg bg-cfr-green-accent px-4 py-2 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2"
+        >
+          View
+        </button>
+      </div>
+    ) : (
+      <p class="text-center text-sm text-cfr-earth-500">Select a room to continue</p>
+    )}
+  </div>
+</div>
+
+<!-- Mobile: Expanded Summary Overlay -->
+<div
+  id="mobile-summary-overlay"
+  class="fixed inset-0 z-50 hidden bg-black/50 lg:hidden"
+  aria-hidden="true"
+>
+  <div class="absolute inset-x-0 bottom-0 max-h-[85vh] overflow-y-auto rounded-t-2xl bg-white p-6 shadow-premium">
+    <div class="mb-4 flex items-center justify-between">
+      <h2 class="font-display text-lg font-bold text-cfr-green-dark">Booking Summary</h2>
+      <button
+        id="mobile-summary-close"
+        type="button"
+        class="rounded-full p-2 text-cfr-earth-400 hover:bg-cfr-earth-100 hover:text-cfr-earth-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent"
+        aria-label="Close summary"
+      >
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    
+    {roomName && (
+      <div>
+        <h3 class="font-display text-base font-semibold text-cfr-green-dark">{roomName}</h3>
+        
+        <div class="mt-3 space-y-2 text-sm text-cfr-earth-600">
+          {checkin && checkout && (
+            <p>{formatDisplayDate(checkin)} – {formatDisplayDate(checkout)}</p>
+          )}
+          <p>{nights} night{nights !== 1 ? 's' : ''} · {adults} Adult{adults !== 1 ? 's' : ''}{children > 0 ? `, ${children} Child${children !== 1 ? 'ren' : ''}` : ''}</p>
+        </div>
+        
+        <div class="mt-4 border-t border-cfr-earth-100 pt-4">
+          {nightlyRate && (
+            <div class="flex justify-between text-sm">
+              <span class="text-cfr-earth-600">Room ({nights} night{nights !== 1 ? 's' : ''})</span>
+              <span class="font-medium text-cfr-earth-700">{formatCurrency(totalStay || nightlyRate * nights)}</span>
+            </div>
+          )}
+          
+          {packages.filter(p => !p.included).map(pkg => (
+            <div class="mt-1 flex justify-between text-sm">
+              <span class="text-cfr-earth-600">{pkg.name}</span>
+              <span class="font-medium text-cfr-earth-700">+{formatCurrency(pkg.price)}</span>
+            </div>
+          ))}
+          
+          {(subtotal !== undefined || totalTaxes !== undefined) && (
+            <div class="mt-3 border-t border-cfr-earth-100 pt-3">
+              {subtotal !== undefined && (
+                <div class="flex justify-between text-sm">
+                  <span class="text-cfr-earth-600">Subtotal</span>
+                  <span class="text-cfr-earth-700">{formatCurrency(subtotal)}</span>
+                </div>
+              )}
+              
+              {taxBreakdown.map(tax => (
+                <div class="mt-1 flex justify-between text-xs text-cfr-earth-500">
+                  <span>{tax.label}</span>
+                  <span>{formatCurrency(tax.amount)}</span>
+                </div>
+              ))}
+              
+              {totalTaxes !== undefined && taxBreakdown.length === 0 && (
+                <div class="mt-1 flex justify-between text-xs text-cfr-earth-500">
+                  <span>Taxes</span>
+                  <span>{formatCurrency(totalTaxes)}</span>
+                </div>
+              )}
+            </div>
+          )}
+          
+          {grandTotal !== undefined && (
+            <div class="mt-3 border-t border-cfr-earth-100 pt-3">
+              <div class="flex justify-between">
+                <span class="font-bold text-cfr-earth-700">Total</span>
+                <span class="text-xl font-bold text-cfr-earth-700">{formatCurrency(grandTotal)}</span>
+              </div>
+            </div>
+          )}
+        </div>
+        
+        {cancellationPolicy && (
+          <div class="mt-4 flex items-start gap-2 text-xs text-cfr-green-leaf">
+            <svg class="mt-0.5 h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>{cancellationPolicy}</span>
+          </div>
+        )}
+        
+        {quoteExpiry && (
+          <p class="mt-2 text-xs text-cfr-earth-400">
+            Quote valid until {new Date(quoteExpiry).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
+          </p>
+        )}
+        
+        {step === 'guests' && (
+          <a
+            href={`/booking?step=review&room=${encodeURIComponent(roomName)}&checkin=${checkin}&checkout=${checkout}&adults=${adults}&children=${children}`}
+            class="mt-4 flex w-full items-center justify-center rounded-lg bg-cfr-green-accent px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2"
+          >
+            Proceed to Review
+          </a>
+        )}
+        
+        {step === 'review' && (
+          <button
+            type="submit"
+            id="mobile-complete-booking-btn"
+            class="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-cfr-green-accent px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-md"
+          >
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+            </svg>
+            <span>Complete Booking — {grandTotal ? formatCurrency(grandTotal) : ''}</span>
+          </button>
+        )}
+        
+        <div class="mt-4 flex items-center justify-center gap-4 text-xs text-cfr-earth-400">
+          <span class="flex items-center gap-1">
+            <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+            </svg>
+            Secure
+          </span>
+          <span class="flex items-center gap-1">
+            <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Best Rate
+          </span>
+        </div>
+      </div>
+    )}
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const expandBtn = document.getElementById('mobile-summary-expand');
+    const closeBtn = document.getElementById('mobile-summary-close');
+    const overlay = document.getElementById('mobile-summary-overlay');
+    const bar = document.getElementById('mobile-summary-bar');
+
+    if (expandBtn && overlay) {
+      expandBtn.addEventListener('click', () => {
+        overlay.classList.remove('hidden');
+        overlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      });
+    }
+
+    if (closeBtn && overlay) {
+      closeBtn.addEventListener('click', () => {
+        overlay.classList.add('hidden');
+        overlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      });
+    }
+
+    if (overlay) {
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+          overlay.classList.add('hidden');
+          overlay.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+        }
+      });
+    }
+  });
+</script>
+
+<style>
+  #mobile-summary-bar {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+</style>

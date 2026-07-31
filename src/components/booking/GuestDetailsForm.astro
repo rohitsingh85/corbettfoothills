@@ -1,0 +1,285 @@
+---
+interface Props {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phone?: string;
+  country?: string;
+  specialRequests?: string;
+}
+
+const {
+  firstName = '',
+  lastName = '',
+  email = '',
+  phone = '',
+  country = '',
+  specialRequests = '',
+} = Astro.props;
+---
+
+<form id="guest-details-form" class="space-y-6" novalidate>
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+    <!-- First Name -->
+    <div>
+      <label for="guest-firstName" class="block text-sm font-medium text-cfr-earth-700">
+        First Name <span class="text-red-500">*</span>
+      </label>
+      <input
+        type="text"
+        id="guest-firstName"
+        name="firstName"
+        value={firstName}
+        required
+        autocomplete="given-name"
+        class="mt-1 block w-full rounded-lg border-cfr-earth-200 bg-white px-4 py-3 text-sm text-cfr-earth-700 placeholder:text-cfr-earth-400 focus:border-cfr-green-accent focus:ring-cfr-green-accent"
+        placeholder="Enter your first name"
+        aria-describedby="firstName-error"
+      />
+      <p id="firstName-error" class="mt-1 hidden text-xs text-red-600" role="alert"></p>
+    </div>
+
+    <!-- Last Name -->
+    <div>
+      <label for="guest-lastName" class="block text-sm font-medium text-cfr-earth-700">
+        Last Name <span class="text-red-500">*</span>
+      </label>
+      <input
+        type="text"
+        id="guest-lastName"
+        name="lastName"
+        value={lastName}
+        required
+        autocomplete="family-name"
+        class="mt-1 block w-full rounded-lg border-cfr-earth-200 bg-white px-4 py-3 text-sm text-cfr-earth-700 placeholder:text-cfr-earth-400 focus:border-cfr-green-accent focus:ring-cfr-green-accent"
+        placeholder="Enter your last name"
+        aria-describedby="lastName-error"
+      />
+      <p id="lastName-error" class="mt-1 hidden text-xs text-red-600" role="alert"></p>
+    </div>
+  </div>
+
+  <!-- Email -->
+  <div>
+    <label for="guest-email" class="block text-sm font-medium text-cfr-earth-700">
+      Email Address <span class="text-red-500">*</span>
+    </label>
+    <input
+      type="email"
+      id="guest-email"
+      name="email"
+      value={email}
+      required
+      autocomplete="email"
+      class="mt-1 block w-full rounded-lg border-cfr-earth-200 bg-white px-4 py-3 text-sm text-cfr-earth-700 placeholder:text-cfr-earth-400 focus:border-cfr-green-accent focus:ring-cfr-green-accent"
+      placeholder="your.email@example.com"
+      aria-describedby="email-error"
+    />
+    <p id="email-error" class="mt-1 hidden text-xs text-red-600" role="alert"></p>
+  </div>
+
+  <!-- Phone -->
+  <div>
+    <label for="guest-phone" class="block text-sm font-medium text-cfr-earth-700">
+      Phone Number <span class="text-red-500">*</span>
+    </label>
+    <input
+      type="tel"
+      id="guest-phone"
+      name="phone"
+      value={phone}
+      required
+      autocomplete="tel"
+      class="mt-1 block w-full rounded-lg border-cfr-earth-200 bg-white px-4 py-3 text-sm text-cfr-earth-700 placeholder:text-cfr-earth-400 focus:border-cfr-green-accent focus:ring-cfr-green-accent"
+      placeholder="+91 98765 43210"
+      aria-describedby="phone-error"
+    />
+    <p id="phone-error" class="mt-1 hidden text-xs text-red-600" role="alert"></p>
+  </div>
+
+  <!-- Country -->
+  <div>
+    <label for="guest-country" class="block text-sm font-medium text-cfr-earth-700">
+      Country
+    </label>
+    <select
+      id="guest-country"
+      name="country"
+      autocomplete="country"
+      class="mt-1 block w-full rounded-lg border-cfr-earth-200 bg-white px-4 py-3 text-sm text-cfr-earth-700 focus:border-cfr-green-accent focus:ring-cfr-green-accent"
+    >
+      <option value="">Select your country</option>
+      <option value="IN" selected={country === 'IN'}>India</option>
+      <option value="US" selected={country === 'US'}>United States</option>
+      <option value="GB" selected={country === 'GB'}>United Kingdom</option>
+      <option value="CA" selected={country === 'CA'}>Canada</option>
+      <option value="AU" selected={country === 'AU'}>Australia</option>
+      <option value="DE" selected={country === 'DE'}>Germany</option>
+      <option value="FR" selected={country === 'FR'}>France</option>
+      <option value="SG" selected={country === 'SG'}>Singapore</option>
+      <option value="AE" selected={country === 'AE'}>United Arab Emirates</option>
+      <option value="JP" selected={country === 'JP'}>Japan</option>
+      <option value="OTHER" selected={country === 'OTHER'}>Other</option>
+    </select>
+  </div>
+
+  <!-- Special Requests -->
+  <div>
+    <label for="guest-specialRequests" class="block text-sm font-medium text-cfr-earth-700">
+      Special Requests <span class="text-cfr-earth-400">(optional)</span>
+    </label>
+    <textarea
+      id="guest-specialRequests"
+      name="specialRequests"
+      rows="3"
+      maxlength="500"
+      class="mt-1 block w-full resize-none rounded-lg border-cfr-earth-200 bg-white px-4 py-3 text-sm text-cfr-earth-700 placeholder:text-cfr-earth-400 focus:border-cfr-green-accent focus:ring-cfr-green-accent"
+      placeholder="Any dietary requirements, accessibility needs, or special occasions?"
+      aria-describedby="specialRequests-hint"
+    ></textarea>
+    <p id="specialRequests-hint" class="mt-1 text-xs text-cfr-earth-400">
+      <span id="specialRequests-count">0</span>/500 characters
+    </p>
+  </div>
+</form>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('guest-details-form') as HTMLFormElement;
+    if (!form) return;
+
+    const fields = {
+      firstName: {
+        input: document.getElementById('guest-firstName') as HTMLInputElement,
+        error: document.getElementById('firstName-error') as HTMLElement,
+        validate: (value: string) => {
+          if (!value || value.trim().length < 2) {
+            return 'Please enter your first name';
+          }
+          return null;
+        },
+      },
+      lastName: {
+        input: document.getElementById('guest-lastName') as HTMLInputElement,
+        error: document.getElementById('lastName-error') as HTMLElement,
+        validate: (value: string) => {
+          if (!value || value.trim().length < 2) {
+            return 'Please enter your last name';
+          }
+          return null;
+        },
+      },
+      email: {
+        input: document.getElementById('guest-email') as HTMLInputElement,
+        error: document.getElementById('email-error') as HTMLElement,
+        validate: (value: string) => {
+          if (!value) {
+            return 'Email address is required';
+          }
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(value)) {
+            return 'Please enter a valid email address';
+          }
+          return null;
+        },
+      },
+      phone: {
+        input: document.getElementById('guest-phone') as HTMLInputElement,
+        error: document.getElementById('phone-error') as HTMLElement,
+        validate: (value: string) => {
+          if (!value) {
+            return 'Phone number is required';
+          }
+          const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
+          if (!phoneRegex.test(value.replace(/\s/g, ''))) {
+            return 'Please enter a valid phone number';
+          }
+          return null;
+        },
+      },
+    };
+
+    function showError(field: keyof typeof fields, message: string) {
+      const { input, error } = fields[field];
+      if (input) {
+        input.classList.add('!border-red-500');
+      }
+      if (error) {
+        error.textContent = message;
+        error.classList.remove('hidden');
+      }
+    }
+
+    function clearError(field: keyof typeof fields) {
+      const { input, error } = fields[field];
+      if (input) {
+        input.classList.remove('!border-red-500');
+      }
+      if (error) {
+        error.textContent = '';
+        error.classList.add('hidden');
+      }
+    }
+
+    function validateField(field: keyof typeof fields): boolean {
+      const { input, validate } = fields[field];
+      const value = input.value;
+      const error = validate(value);
+      if (error) {
+        showError(field, error);
+        return false;
+      }
+      clearError(field);
+      return true;
+    }
+
+    // Validate on blur
+    Object.keys(fields).forEach((fieldName) => {
+      const field = fieldName as keyof typeof fields;
+      const { input } = fields[field];
+      if (input) {
+        input.addEventListener('blur', () => {
+          validateField(field);
+        });
+        input.addEventListener('input', () => {
+          if (input.classList.contains('!border-red-500')) {
+            validateField(field);
+          }
+        });
+      }
+    });
+
+    // Character count for special requests
+    const specialRequests = document.getElementById('guest-specialRequests') as HTMLTextAreaElement;
+    const charCount = document.getElementById('specialRequests-count');
+    if (specialRequests && charCount) {
+      specialRequests.addEventListener('input', () => {
+        charCount.textContent = String(specialRequests.value.length);
+      });
+    }
+
+    // Expose validation function globally
+    (window as any).validateGuestForm = () => {
+      let valid = true;
+      Object.keys(fields).forEach((fieldName) => {
+        const field = fieldName as keyof typeof fields;
+        if (!validateField(field)) {
+          valid = false;
+        }
+      });
+      return valid;
+    };
+
+    // Expose getGuestDetails function globally
+    (window as any).getGuestDetails = () => {
+      return {
+        firstName: (document.getElementById('guest-firstName') as HTMLInputElement)?.value.trim() || '',
+        lastName: (document.getElementById('guest-lastName') as HTMLInputElement)?.value.trim() || '',
+        email: (document.getElementById('guest-email') as HTMLInputElement)?.value.trim() || '',
+        phone: (document.getElementById('guest-phone') as HTMLInputElement)?.value.trim() || '',
+        country: (document.getElementById('guest-country') as HTMLSelectElement)?.value || '',
+        specialRequests: (document.getElementById('guest-specialRequests') as HTMLTextAreaElement)?.value.trim() || '',
+      };
+    };
+  });
+</script>
