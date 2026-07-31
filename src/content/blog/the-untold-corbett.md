@@ -3,7 +3,7 @@ title: "The Untold Corbett"
 description: "Jim Corbett is known for its tigers, but its most captivating stories often remain hidden from view. Journey into The Untold Corbett and discover facts that will change the way you see this iconic wilderness."
 pubDate: 2026-04-15
 author: "Corbett Foothills Retreat"
-image: "/images/blog-untold-corbett-hero.jpg"
+image: "/images/blog-untold-corbett-hero.webp"
 tags: ["corbett national park", "history", "lesser known facts", "wildlife", "uttarakhand"]
 ---
 
@@ -13,9 +13,9 @@ If you're [planning a trip to Ramnagar](/blogs/how-to-reach) or simply love disc
 
 ![Hailey National Park historical entrance gate from British era](/images/blog-untold-corbett-img1.webp)
 
-![Old forest rest house from colonial period in Corbett reserve](/images/blog-untold-corbett-img2.jpg)
+![Old forest rest house from colonial period in Corbett reserve](/images/blog-untold-corbett-img2.webp)
 
-![Ramganga River flowing through Jim Corbett National Park landscape](/images/blog-untold-corbett-img3.jpg)
+![Ramganga River flowing through Jim Corbett National Park landscape](/images/blog-untold-corbett-img3.webp)
 
 ## 1. Jim Corbett National Park Was Not Always Called "Corbett"
 
@@ -25,7 +25,7 @@ In reality, the park has gone through several names. Established in 1936, it was
 
 Few protected areas in India have undergone such an interesting identity transformation.
 
-![Historical photograph of Jim Corbett with tiger in Kumaon region](/images/blog-untold-corbett-img4.jpg)
+![Historical photograph of Jim Corbett with tiger in Kumaon region](/images/blog-untold-corbett-img4.webp)
 
 ## 2. India's First National Park Was Created Here
 
@@ -43,7 +43,7 @@ Corbett only tracked [animals that had become man-eaters](/blogs/the-untold-stor
 
 Ironically, one of India's most famous hunters became one of its earliest conservationists.
 
-![Bengal tiger walking through Corbett forest grasslands](/images/blog-untold-corbett-img5.jpg)
+![Bengal tiger walking through Corbett forest grasslands](/images/blog-untold-corbett-img5.webp)
 
 ![Asian elephant herd in Jim Corbett National Park wilderness](/images/blog-untold-corbett-img6.webp)
 
@@ -69,11 +69,11 @@ However, decades ago, visiting the interior forests required far more effort. Po
 
 The exclusivity of Dhikala helped preserve its wilderness character.
 
-![Dhikala zone grassland landscape in Corbett National Park](/images/blog-untold-corbett-img7.jpg)
+![Dhikala zone grassland landscape in Corbett National Park](/images/blog-untold-corbett-img7.webp)
 
-![Sambar deer grazing at sunrise in Corbett tiger reserve](/images/blog-untold-corbett-img8.jpg)
+![Sambar deer grazing at sunrise in Corbett tiger reserve](/images/blog-untold-corbett-img8.webp)
 
-![Crocodile basking on riverbank in Jim Corbett National Park](/images/blog-untold-corbett-img9.jpg)
+![Crocodile basking on riverbank in Jim Corbett National Park](/images/blog-untold-corbett-img9.webp)
 
 ## 7. Corbett Is Home to More Than Tigers
 
@@ -91,9 +91,9 @@ Located in Kaladhungi, the historic residence has been converted into a museum s
 
 It offers a fascinating glimpse into the man behind the legend.
 
-![Jim Corbett historic home museum in Kaladhungi village near Ramnagar](/images/blog-untold-corbett-img10.jpg)
+![Jim Corbett historic home museum in Kaladhungi village near Ramnagar](/images/blog-untold-corbett-img10.webp)
 
-![Personal belongings and photographs display at Jim Corbett museum](/images/blog-untold-corbett-img11.jpg)
+![Personal belongings and photographs display at Jim Corbett museum](/images/blog-untold-corbett-img11.webp)
 
 ## 9. Some Forest Rest Houses Are Older Than Independent India
 

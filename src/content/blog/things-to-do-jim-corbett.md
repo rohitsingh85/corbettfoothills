@@ -11,17 +11,17 @@ Nestled in the foothills of the Himalayas and serving as the gateway to the worl
 
 Whether you're planning a family vacation, a romantic getaway, or a nature retreat, here are some of the best things to do near Ramnagar during your visit.
 
-![Ramnagar town view with Himalayan foothills backdrop near Corbett National Park](/images/blog-things-img1.jpg)
+![Ramnagar town view with Himalayan foothills backdrop near Corbett National Park](/images/blog-things-img1.webp)
 
-![Kosi River flowing through Corbett forest landscape in Uttarakhand](/images/blog-things-img2.jpg)
+![Kosi River flowing through Corbett forest landscape in Uttarakhand](/images/blog-things-img2.webp)
 
-![Village trail in Kumaon region near Jim Corbett National Park](/images/blog-things-img3.jpg)
+![Village trail in Kumaon region near Jim Corbett National Park](/images/blog-things-img3.webp)
 
-![Local farmer working in fields near Ramnagar Uttarakhand](/images/blog-things-img4.jpg)
+![Local farmer working in fields near Ramnagar Uttarakhand](/images/blog-things-img4.webp)
 
-![Traditional Kumaoni house surrounded by forest near Corbett](/images/blog-things-img5.jpg)
+![Traditional Kumaoni house surrounded by forest near Corbett](/images/blog-things-img5.webp)
 
-![Morning mist over Corbett National Park forest canopy](/images/blog-things-img6.jpg)
+![Morning mist over Corbett National Park forest canopy](/images/blog-things-img6.webp)
 
 ## 1. Explore Jim Corbett National Park
 
@@ -33,7 +33,7 @@ A [safari through Corbett](/blogs/complete-guide-to-jim-corbett-safari-booking) 
 
 ![Jeep safari on forest track in Jim Corbett National Park](/images/blog-things-img7.webp)
 
-![Bengal tiger sighting during Corbett jungle safari](/images/blog-things-img8.jpg)
+![Bengal tiger sighting during Corbett jungle safari](/images/blog-things-img8.webp)
 
 ![Elephant herd crossing grassland in Corbett tiger reserve](/images/blog-things-img9.webp)
 
@@ -49,15 +49,15 @@ One of the most relaxing ways to experience the beauty of the region is through 
 
 Nature walks are perfect for families, couples, photographers, and anyone seeking a deeper connection with the natural world.
 
-![Nature trail through dense sal forest in Corbett region](/images/blog-things-img10.jpg)
+![Nature trail through dense sal forest in Corbett region](/images/blog-things-img10.webp)
 
-![Butterfly on wildflower along Corbett forest walk](/images/blog-things-img11.jpg)
+![Butterfly on wildflower along Corbett forest walk](/images/blog-things-img11.webp)
 
-![Forest stream in Corbett foothills Uttarakhand](/images/blog-things-img12.jpg)
+![Forest stream in Corbett foothills Uttarakhand](/images/blog-things-img12.webp)
 
-![Bird perched on branch in Jim Corbett National Park](/images/blog-things-img13.jpg)
+![Bird perched on branch in Jim Corbett National Park](/images/blog-things-img13.webp)
 
-![Family walking on forest trail near Ramnagar](/images/blog-things-img14.jpg)
+![Family walking on forest trail near Ramnagar](/images/blog-things-img14.webp)
 
 ![Sunlight filtering through tree canopy in Corbett jungle](/images/blog-things-img15.webp)
 
@@ -89,17 +89,17 @@ Flowing through the Corbett landscape, the Kosi River adds to the region's natur
 
 The river is especially beautiful during sunrise and sunset, when the changing light creates spectacular reflections across the water.
 
-![Kosi River sunset with golden reflections across the water](/images/blog-things-img16.jpg)
+![Kosi River sunset with golden reflections across the water](/images/blog-things-img16.webp)
 
 ![Riverbed view of Kosi River during dry season near Corbett](/images/blog-things-img17.webp)
 
-![Birds flying over Kosi River near Corbett National Park](/images/blog-things-img18.jpg)
+![Birds flying over Kosi River near Corbett National Park](/images/blog-things-img18.webp)
 
-![Scenic river landscape of Kosi river in Uttarakhand](/images/blog-things-img19.jpg)
+![Scenic river landscape of Kosi river in Uttarakhand](/images/blog-things-img19.webp)
 
-![Peaceful riverbank of Kosi River with forest background](/images/blog-things-img20.jpg)
+![Peaceful riverbank of Kosi River with forest background](/images/blog-things-img20.webp)
 
-![Evening view of Kosi River with Himalayan foothill backdrop](/images/blog-things-img21.jpg)
+![Evening view of Kosi River with Himalayan foothill backdrop](/images/blog-things-img21.webp)
 
 ## 6. Discover Local Village Life
 
@@ -119,7 +119,7 @@ For travelers looking to reconnect with nature, [organic farming experiences](/o
 
 ![Seasonal herbs grown organically at Corbett retreat farm](/images/blog-things-img26.webp)
 
-![Vermicompost setup at sustainable farm in Uttarakhand](/images/blog-things-img27.jpg)
+![Vermicompost setup at sustainable farm in Uttarakhand](/images/blog-things-img27.webp)
 
 ## 8. Enjoy Forest Mornings and Sunset Views
 
@@ -131,17 +131,17 @@ A trip to Uttarakhand is incomplete without tasting its rich mountain cuisine, s
 
 Savour local delicacies like Aloo Ke Gutke, Bhatt Ki Churkani, Dubke, Kumaoni Raita, Chainsoo, Mutton Bhutuwa and Jhangora Kheer for an authentic mountain dining experience.
 
-![Aloo Ke Gutke traditional Kumaoni potato dish from Uttarakhand](/images/blog-things-img28.jpg)
+![Aloo Ke Gutke traditional Kumaoni potato dish from Uttarakhand](/images/blog-things-img28.webp)
 
-![Bhatt Ki Churkani black soybean Kumaoni curry preparation](/images/blog-things-img29.jpg)
+![Bhatt Ki Churkani black soybean Kumaoni curry preparation](/images/blog-things-img29.webp)
 
 ![Jhangora Kheer barnyard millet dessert from Kumaon region](/images/blog-things-img30.webp)
 
-![Traditional Kumaoni thali meal platter with local delicacies](/images/blog-things-img31.jpg)
+![Traditional Kumaoni thali meal platter with local delicacies](/images/blog-things-img31.webp)
 
 ![Mutton Bhutuwa spicy Kumaoni meat preparation from Uttarakhand](/images/blog-things-img32.webp)
 
-![Organic ingredients used in authentic Kumaoni cooking](/images/blog-things-img33.jpg)
+![Organic ingredients used in authentic Kumaoni cooking](/images/blog-things-img33.webp)
 
 ## 10. Relax and Reconnect with Nature
 

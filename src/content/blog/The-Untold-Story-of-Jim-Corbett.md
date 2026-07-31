@@ -19,7 +19,7 @@ Armed with a rifle, unmatched tracking skills, and extraordinary courage, Corbet
 
 ## The Champawat Tigress: 436 Victims
 
-![Champawat Tigress blamed for over 400 human deaths in Kumaon forests](/images/blog-champawat-tigress.jpg)
+![Champawat Tigress blamed for over 400 human deaths in Kumaon forests](/images/blog-champawat-tigress.webp)
 
 No animal in recorded history is believed to have killed more people than the infamous Champawat Tigress.
 
@@ -34,7 +34,7 @@ The final hunt became legendary. Corbett followed the tigress after she killed a
 ## The Panar Leopard: The Ghost of Kumaon
 
 <div style="display: flex; justify-content: center; margin: 2rem 0;">
-  <img src="/images/blog-panar-leopard.jpg" alt="Panar Leopard blamed for 400 deaths in Kumaon region of Uttarakhand" style="width: 100%; max-width: 600px; height: auto; border-radius: 0.75rem; display: block;" />
+  <img src="/images/blog-panar-leopard.webp" alt="Panar Leopard blamed for 400 deaths in Kumaon region of Uttarakhand" style="width: 100%; max-width: 600px; height: auto; border-radius: 0.75rem; display: block;" />
 </div>
 
 If the Champawat Tigress was terrifying, the Panar Leopard was something else entirely.
@@ -64,7 +64,7 @@ This realization would later shape Corbett's views on wildlife conservation.
 ## The Thak Man-Eater
 
 <div style="display: flex; justify-content: center; margin: 2rem 0;">
-  <img src="/images/blog-thak-man-eater.jpg" alt="Thak man-eating tigress hunted by Jim Corbett in Uttarakhand forests" style="width: 100%; max-width: 600px; height: auto; border-radius: 0.75rem; display: block;" />
+  <img src="/images/blog-thak-man-eater.webp" alt="Thak man-eating tigress hunted by Jim Corbett in Uttarakhand forests" style="width: 100%; max-width: 600px; height: auto; border-radius: 0.75rem; display: block;" />
 </div>
 
 The Thak Tigress became Jim Corbett's final man-eater.
@@ -78,7 +78,7 @@ After this hunt, he largely retired from pursuing man-eaters.
 ## The Rudraprayag Leopard: Eight Years of Fear
 
 <div style="display: flex; justify-content: center; margin: 2rem 0;">
-  <img src="/images/blog-rudraprayag-leopard.jpg" alt="Rudraprayag leopard terrorized pilgrims for eight years in Garhwal" style="width: 100%; max-width: 600px; height: auto; border-radius: 0.75rem; display: block;" />
+  <img src="/images/blog-rudraprayag-leopard.webp" alt="Rudraprayag leopard terrorized pilgrims for eight years in Garhwal" style="width: 100%; max-width: 600px; height: auto; border-radius: 0.75rem; display: block;" />
 </div>
 
 Perhaps no predator tested Corbett's patience more than the Leopard of Rudraprayag. For nearly eight years, the animal terrorized pilgrims traveling to the sacred shrines of Kedarnath and Badrinath. The leopard was blamed for more than 125 deaths.
@@ -152,9 +152,9 @@ His advocacy helped inspire future conservation efforts and contributed to the p
 ## The Legacy Lives On
 
 <div style="display: flex; justify-content: center; gap: 1rem; margin: 2rem 0; flex-wrap: wrap;">
-  <img src="/images/blog-legacy-1.jpg" alt="Jim Corbett National Park forest landscape with wilderness beauty" style="width: 30%; min-width: 180px; height: auto; border-radius: 0.75rem;" />
-  <img src="/images/blog-legacy-2.jpg" alt="Conservation legacy of Jim Corbett lives on in Uttarakhand forests" style="width: 30%; min-width: 180px; height: auto; border-radius: 0.75rem;" />
-  <img src="/images/blog-legacy-3.jpg" alt="Visitors exploring Corbett National Park wilderness and nature trails" style="width: 30%; min-width: 180px; height: auto; border-radius: 0.75rem;" />
+  <img src="/images/blog-legacy-1.webp" alt="Jim Corbett National Park forest landscape with wilderness beauty" style="width: 30%; min-width: 180px; height: auto; border-radius: 0.75rem;" />
+  <img src="/images/blog-legacy-2.webp" alt="Conservation legacy of Jim Corbett lives on in Uttarakhand forests" style="width: 30%; min-width: 180px; height: auto; border-radius: 0.75rem;" />
+  <img src="/images/blog-legacy-3.webp" alt="Visitors exploring Corbett National Park wilderness and nature trails" style="width: 30%; min-width: 180px; height: auto; border-radius: 0.75rem;" />
 </div>
 
 Today, the forests where Corbett tracked man-eaters are among the most celebrated [wildlife destinations](/blogs/best-time-to-visit-jim-corbett-national-park) in the world. [Plan your visit](/blogs/how-to-reach) to explore these historic forests and experience the wildlife that Jim Corbett dedicated his life to protecting.
