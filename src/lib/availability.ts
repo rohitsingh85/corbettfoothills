@@ -14,11 +14,34 @@ export interface PackageItem {
   tier: "included" | "optional" | "recommended" | "unavailable";
 }
 
+export interface RoomAllocationEntry {
+  adults: number;
+  children: number;
+}
+
+export interface RoomOccupancy {
+  maxAdults: number;
+  maxChildren: number;
+  maxOccupancy: number;
+  roomsRequired: number | null;
+  fits: boolean;
+  allocation: RoomAllocationEntry[] | null;
+  label: string;
+}
+
 export interface RoomAvailability {
   slug: string;
   name: string;
+  room_type: string;
   available: boolean;
+  fits: boolean;
+  rooms_required: number | null;
+  allocation: RoomAllocationEntry[] | null;
   roomsLeft: number;
+  max_adults: number;
+  max_children: number;
+  max_occupancy: number;
+  occupancy: RoomOccupancy;
   nightlyRate: number;
   originalNightlyRate?: number;
   totalStay: number;

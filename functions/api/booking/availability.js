@@ -10,6 +10,15 @@ import { unwrapInnPilotData } from "./_response-envelope.js";
 const ROOM_TYPE_MAP = { "Deluxe Room": "forest-suite" };
 // ---- end mapping ----
 
+// Occupancy is decided by InnPilot (room_types max_adults/max_children/
+// max_occupancy + available room counts).  CFR only relays it: it never
+// re-implements occupancy/cot rules.
+
+function occupancyLabel(r) {
+  const maxOccupancy = r.max_occupancy ?? 2;
+  return `Sleeps ${maxOccupancy}`;
+}
+
 export async function onRequest(context) {
   const { request, env } = context;
   const headers = {
@@ -104,6 +113,7 @@ export async function onRequest(context) {
   upstreamUrl.searchParams.set("check_in", checkin);
   upstreamUrl.searchParams.set("check_out", checkout);
   upstreamUrl.searchParams.set("adults", String(adults));
+  upstreamUrl.searchParams.set("children", String(children));
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), INNPILOT_TIMEOUT_MS);
@@ -155,13 +165,22 @@ export async function onRequest(context) {
       "";
 
     const rooms = (parsed.room_types || []).map(function (r) {
+      const hasRooms = (r.available_count ?? 0) > 0;
       return {
         // content slug (for ROOM_CONTENT lookup in booking.astro)
         slug: ROOM_TYPE_MAP[r.room_type] || r.room_type,
         // raw InnPilot room_type value (for quote/submit BFF "room_id" param)
         room_type: r.room_type,
         name: r.room_type,
-        available: true,
+        // `available` reflects whether this room type has rooms for the dates;
+        // `fits` is InnPilot's verdict on whether the search party can be
+        // housed (occupancy + enough available rooms).  CFR only relays both.
+        available: hasRooms,
+        fits: r.fits ?? hasRooms,
+        rooms_required: r.rooms_required ?? null,
+        // InnPilot's deterministic per-room guest split — CFR renders it
+        // verbatim and never reconstructs allocation itself.
+        allocation: r.allocation ?? null,
         roomsLeft: r.available_count ?? 0,
         nightlyRate: r.nightly_rate ?? 0,
         totalStay: r.total_rate ?? 0,
@@ -171,6 +190,20 @@ export async function onRequest(context) {
         taxBreakdown: [],
         totalTaxes: 0,
         cancellationPolicy: cancellationPolicy,
+        // InnPilot-driven occupancy metadata (frontend renders these; CFR
+        // computes no occupancy/cot rules of its own).
+        max_adults: r.max_adults ?? 2,
+        max_children: r.max_children ?? 0,
+        max_occupancy: r.max_occupancy ?? 2,
+        occupancy: {
+          maxAdults: r.max_adults ?? 2,
+          maxChildren: r.max_children ?? 0,
+          maxOccupancy: r.max_occupancy ?? 2,
+          roomsRequired: r.rooms_required ?? null,
+          fits: r.fits ?? true,
+          allocation: r.allocation ?? null,
+          label: occupancyLabel(r),
+        },
       };
     });
 

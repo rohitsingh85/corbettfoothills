@@ -22,6 +22,12 @@ export function transformQuote(parsed) {
     pay_at_property_allowed: parsed.pay_at_property_allowed,
     room_type_description: parsed.room_type_description,
     max_occupancy: parsed.max_occupancy,
+    max_adults: parsed.max_adults,
+    max_children: parsed.max_children,
+    rooms_required: parsed.rooms_required ?? 1,
+    // InnPilot's deterministic per-room guest split — forwarded for the
+    // frontend to render verbatim (CFR never reconstructs allocation).
+    allocation: parsed.allocation ?? null,
     bed_config: parsed.bed_config,
     amenities: parsed.amenities,
   };

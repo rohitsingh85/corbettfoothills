@@ -180,7 +180,22 @@ export async function onRequest(context) {
 
     const transformed = transformQuote(parsed);
 
-    return new Response(JSON.stringify(transformed), {
+    // InnPilot is the source of truth for occupancy: it computes how many rooms
+    // the party requires and already scales the totals.  CFR only relays it.
+    const roomsRequired = transformed.rooms_required || 1;
+
+    const responsePayload = Object.assign({}, transformed, {
+      room_count: roomsRequired,
+      rooms_required: roomsRequired,
+      occupancy: {
+        maxAdults: transformed.max_adults ?? null,
+        maxChildren: transformed.max_children ?? null,
+        maxOccupancy: transformed.max_occupancy ?? null,
+        roomsRequired,
+      },
+    });
+
+    return new Response(JSON.stringify(responsePayload), {
       status: res.status,
       headers: { ...headers, "Content-Type": "application/json" },
     });

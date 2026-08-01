@@ -574,11 +574,11 @@ const isDev = import.meta.env.DEV;
 
 <style is:global>
   .cfr-carousel-wrap {
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 4 / 3;
   }
   @media (min-width: 640px) {
     .cfr-carousel-wrap {
-      aspect-ratio: 16 / 7;
+      aspect-ratio: 3 / 2;
     }
   }
   .cfr-carousel {
@@ -892,6 +892,16 @@ const isDev = import.meta.env.DEV;
 </style>
 
 <script define:vars={{ roomsJson, roomMappingJson, defaultRoomJson, isDev }}>
+  // Occupancy is decided by InnPilot (room_types max_adults/max_children/
+  // max_occupancy + available room counts). The availability BFF relays per-room
+  // `fits` and `rooms_required`; the quote BFF relays `rooms_required` with
+  // totals already scaled. CFR no longer implements occupancy/cot rules.
+  function getOccupancyFromApi(apiRoom) {
+    return apiRoom && apiRoom.occupancy
+      ? apiRoom.occupancy
+      : { maxAdults: 2, maxChildren: 0, maxOccupancy: 2, roomsRequired: 1, fits: true, label: "Sleeps 2" };
+  }
+
   (function () {
     const ROOM_CONTENT = JSON.parse(roomsJson);
     const ROOM_MAPPING = JSON.parse(roomMappingJson);
@@ -1022,9 +1032,11 @@ const isDev = import.meta.env.DEV;
     function updateUrl(step, params = {}) {
       const url = new URL(window.location);
       url.searchParams.set("step", step);
-      Object.entries(params).forEach(([key, value]) => {
-        if (value !== undefined && value !== null && value !== "") {
-          url.searchParams.set(key, String(value));
+      ["room", "rt", "checkin", "checkout", "adults", "children"].forEach((key) => {
+        if (params[key] !== undefined && params[key] !== null && params[key] !== "") {
+          url.searchParams.set(key, String(params[key]));
+        } else {
+          url.searchParams.delete(key);
         }
       });
       window.history.pushState({}, "", url);
@@ -1208,6 +1220,20 @@ const isDev = import.meta.env.DEV;
       } catch (e) { /* ignore */ }
     }
 
+    function resetBookingFlow() {
+      quoteData = null;
+      selectedRoom = null;
+      selectedRoomType = null;
+      guestData = null;
+      clearDraft();
+      clearBookingSession();
+      document.querySelectorAll("[data-booking-summary]").forEach(function (el) {
+        el.innerHTML = '<p class="text-sm text-cfr-earth-500">Select a room to see pricing</p>';
+      });
+      var mobileTotal = document.querySelector("[data-mobile-total]");
+      if (mobileTotal) mobileTotal.textContent = "—";
+    }
+
     function isSessionExpired(session) {
       return Date.now() >= session.expiresAt;
     }
@@ -1344,6 +1370,10 @@ const isDev = import.meta.env.DEV;
             checkout: lastSearchParams.checkout,
             adults: lastSearchParams.adults,
             children: lastSearchParams.children || 0,
+            rooms_required:
+              Number(quoteData.rooms_required) >= 1
+                ? Number(quoteData.rooms_required)
+                : undefined,
             guest: guestData,
             quote_id: quoteData.quote_id || null,
           }),
@@ -1539,12 +1569,12 @@ const isDev = import.meta.env.DEV;
         sessionData = saved;
         selectedRoom = resolveRoomContent(saved.roomSlug, ROOM_CONTENT);
         selectedRoomType = saved.roomType || SLUG_TO_ROOM_TYPE[saved.roomSlug] || null;
-        lastSearchParams = {
-          checkin: saved.checkin,
-          checkout: saved.checkout,
-          adults: saved.adults,
-          children: saved.children,
-        };
+      lastSearchParams = {
+        checkin: saved.checkin,
+        checkout: saved.checkout,
+        adults: saved.adults,
+        children: saved.children,
+      };
         quoteData = saved.quote;
         guestData = saved.guest;
         showState(statePayment);
@@ -1685,6 +1715,8 @@ const isDev = import.meta.env.DEV;
         children: parseInt(childrenInput.value, 10) || 0,
       };
 
+      resetBookingFlow();
+
       lastSearchParams = params;
 
       gaTrack("search_availability", {
@@ -1721,7 +1753,12 @@ const isDev = import.meta.env.DEV;
         });
 
         if (!response.ok) {
-          throw { message: "Server error", code: "SERVER_ERROR" };
+          let serverMessage = "Server error";
+          try {
+            const errBody = await response.json();
+            if (errBody && errBody.error) serverMessage = errBody.error;
+          } catch (_) { /* keep default */ }
+          throw { message: serverMessage, code: "SERVER_ERROR" };
         }
 
         const data = await response.json();
@@ -1844,6 +1881,7 @@ const isDev = import.meta.env.DEV;
           adults: lastSearchParams.adults,
           children: lastSearchParams.children,
         });
+        scrollGuestsIntoView();
       } catch (err) {
         console.error("Quote error:", err);
         alert("Unable to get pricing. Please try again.");
@@ -1869,15 +1907,25 @@ const isDev = import.meta.env.DEV;
         taxes = [{ label: "Taxes", amount: quoteData.totalTaxes }];
       }
 
+      var roomCount = Number(quoteData.room_count) > 1 ? Number(quoteData.room_count) : 1;
+
+      var roomLabel = roomCount > 1 ? roomCount + " \u00d7 " + selectedRoom.name : "Room";
+      var roomAmount =
+        quoteData.room_subtotal != null
+          ? quoteData.room_subtotal
+          : quoteData.subtotal || quoteData.total || 0;
+
       var rows =
         '<div class="flex justify-between text-sm">' +
-        '<span class="text-cfr-earth-600">Room (' +
+        '<span class="text-cfr-earth-600">' +
+        esc(roomLabel) +
+        " (" +
         nights +
         " night" +
         (nights !== 1 ? "s" : "") +
         ")</span>" +
         '<span class="font-medium text-cfr-earth-700">' +
-        formatCurrency(quoteData.subtotal || quoteData.total || 0) +
+        formatCurrency(roomAmount) +
         "</span></div>";
 
       taxes.forEach(function (t) {
@@ -1908,6 +1956,15 @@ const isDev = import.meta.env.DEV;
           new Date(lastSearchParams.checkin + "T00:00:00")) /
           86400000
       );
+      var roomCount = Number(quoteData.room_count) > 1 ? Number(quoteData.room_count) : 1;
+      var roomsSuffix = roomCount > 1 ? " · " + roomCount + " Rooms required" : "";
+      var allocation =
+        Array.isArray(quoteData.allocation)
+          ? quoteData.allocation
+          : Array.isArray(selectedRoom.allocation)
+          ? selectedRoom.allocation
+          : (selectedRoom.occupancy && selectedRoom.occupancy.allocation) || null;
+      var allocationHtml = allocation && allocation.length > 0 ? allocationRowsHtml(allocation) : "";
       var pricingRows = buildPricingRowsHtml(nights);
       var cancellationPolicy = quoteData.cancellation_policy || selectedRoom.cancellationPolicy || "";
       var quoteExpiry = quoteData.quote_expires_at || "";
@@ -1934,7 +1991,9 @@ const isDev = import.meta.env.DEV;
         (lastSearchParams.children > 0
           ? ", " + lastSearchParams.children + " Child" + (lastSearchParams.children !== 1 ? "ren" : "")
           : "") +
+        roomsSuffix +
         "</p>" +
+        allocationHtml +
         "</div>" +
         '<div class="border-t border-cfr-earth-100 pt-4">' +
         pricingRows +
@@ -1967,25 +2026,20 @@ const isDev = import.meta.env.DEV;
           " · " +
           nights +
           " night" +
-          (nights !== 1 ? "s" : "") +
-          " · " +
-          lastSearchParams.adults +
-          " Adult" +
-          (lastSearchParams.adults !== 1 ? "s" : "") +
-          (lastSearchParams.children > 0
-            ? ", " + lastSearchParams.children + " Child" + (lastSearchParams.children !== 1 ? "ren" : "")
-            : "");
+          (nights !== 1 ? "s" : "");
       }
 
       var guestsInfoEl = document.getElementById("review-guests-info");
       if (guestsInfoEl) {
-        guestsInfoEl.textContent =
+        guestsInfoEl.innerHTML =
           lastSearchParams.adults +
           " Adult" +
           (lastSearchParams.adults !== 1 ? "s" : "") +
           (lastSearchParams.children > 0
             ? ", " + lastSearchParams.children + " Child" + (lastSearchParams.children !== 1 ? "ren" : "")
-            : "");
+            : "") +
+          roomsSuffix +
+          allocationHtml;
       }
 
       var pricingEl = document.getElementById("review-pricing");
@@ -2070,7 +2124,6 @@ const isDev = import.meta.env.DEV;
         quoteData?.quote_id,
         selectedRoomType
       );
-
       clearDraft();
 
       showState(statePayment);
@@ -2090,7 +2143,23 @@ const isDev = import.meta.env.DEV;
       requestAnimationFrame(function () {
         var header = document.getElementById("site-header");
         var headerH = header ? header.offsetHeight : 0;
-        var top = searchSection.getBoundingClientRect().top + window.scrollY;
+        var resultsTop = stateResults.getBoundingClientRect().top + window.scrollY;
+        var panelBottom =
+          searchSection.getBoundingClientRect().bottom + window.scrollY;
+        var target = resultsTop - headerH - 12;
+        var keepPanelVisible = panelBottom - headerH - 32;
+        window.scrollTo({
+          top: Math.max(0, Math.min(target, keepPanelVisible)),
+          behavior: "smooth",
+        });
+      });
+    }
+
+    function scrollGuestsIntoView() {
+      requestAnimationFrame(function () {
+        var header = document.getElementById("site-header");
+        var headerH = header ? header.offsetHeight : 0;
+        var top = stateGuests.getBoundingClientRect().top + window.scrollY;
         window.scrollTo({
           top: Math.max(0, top - headerH - 12),
           behavior: "smooth",
@@ -2113,6 +2182,67 @@ const isDev = import.meta.env.DEV;
         '<svg class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10"></path><path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-9"></path><path stroke-linecap="round" stroke-linejoin="round" d="M12 12c0-4 2.5-6.5 6.5-6.5.3 3.5-2.2 6.5-6.5 6.5Z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M12 12c0-4-2.5-6.5-6.5-6.5C5.2 9 7.7 12 12 12Z"></path></svg>',
     };
     var FEATURED_AMENITIES = ["Free Parking", "Room Service", "Non-smoking Rooms", "Free WiFi", "Family Rooms", "Lawn"];
+
+    // Per-room occupant icons. InnPilot returns the per-room allocation
+    // (adults/children); CFR only renders it. Adults alternate male/female
+    // purely as a visual occupancy count — no gender data is ever persisted or
+    // implied by the booking system.
+    function occupantIconHtml(kind) {
+      if (kind === "female") {
+        return (
+          '<svg class="h-3.5 w-3.5 shrink-0 text-cfr-green-accent" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">' +
+          '<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0z"></path>' +
+          '<path stroke-linecap="round" stroke-linejoin="round" d="M4.75 21c.6-4.7 2.8-5.9 7.25-5.9s6.65 1.2 7.25 5.9"></path>' +
+          "</svg>"
+        );
+      }
+      if (kind === "child") {
+        return (
+          '<svg class="h-3 w-3 shrink-0 text-cfr-green-leaf" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">' +
+          '<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.25a1.75 1.75 0 1 1 0 3.5 1.75 1.75 0 1 1 0-3.5z"></path>' +
+          '<path stroke-linecap="round" stroke-linejoin="round" d="M5.5 19.75c.6-4.1 3-5.2 6.5-5.2s5.9 1.1 6.5 5.2"></path>' +
+          "</svg>"
+        );
+      }
+      return (
+        '<svg class="h-3.5 w-3.5 shrink-0 text-cfr-green-accent" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">' +
+        '<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0z"></path>' +
+        '<path stroke-linecap="round" stroke-linejoin="round" d="M4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632z"></path>' +
+        "</svg>"
+      );
+    }
+
+    function allocationRowsHtml(allocation) {
+      if (!Array.isArray(allocation) || allocation.length === 0) return "";
+      var rows = allocation
+        .map(function (room, i) {
+          var adultCount = Number(room.adults) || 0;
+          var childCount = Number(room.children) || 0;
+          var icons = "";
+          for (var a = 0; a < adultCount; a++) {
+            icons += occupantIconHtml(a % 2 === 0 ? "male" : "female");
+          }
+          for (var c = 0; c < childCount; c++) {
+            icons += occupantIconHtml("child");
+          }
+          var label =
+            "Room " + (i + 1) + ": " + adultCount + " adult" + (adultCount === 1 ? "" : "s") +
+            (childCount > 0 ? ", " + childCount + " child" + (childCount === 1 ? "" : "ren") : "");
+          return (
+            '<li class="flex items-center justify-between gap-2" aria-label="' + esc(label) + '">' +
+            '<span class="text-[11px] font-medium text-cfr-earth-500">Room ' + (i + 1) + "</span>" +
+            '<span class="flex items-center justify-end gap-1">' + icons + "</span>" +
+            "</li>"
+          );
+        })
+        .join("");
+      return (
+        '<div class="cfr-allocation mt-2 rounded-lg bg-cfr-cream px-3 py-2" data-allocation>' +
+        '<p class="text-center text-[11px] font-semibold uppercase tracking-wide text-cfr-earth-500">Rooms required: ' + allocation.length + "</p>" +
+        '<ul class="mt-1.5 space-y-1">' + rows + "</ul>" +
+        "</div>"
+      );
+    }
 
     function buildCarouselHtml(images, name) {
       var total = images.length;
@@ -2623,12 +2753,15 @@ const isDev = import.meta.env.DEV;
       const name = content && content.name ? content.name : apiRoom.name;
       const description = content ? content.shortDescription : "";
       const image = content ? content.image : "";
-      const maxOccupancy = content
-        ? content.maxOccupancy.adults +
-          (content.maxOccupancy.children > 0
-            ? " Adults + " + content.maxOccupancy.children + " Children"
-            : " Adults")
-        : "";
+      const maxOccupancy =
+        apiRoom.occupancy && apiRoom.occupancy.label
+          ? apiRoom.occupancy.label
+          : content
+          ? content.maxOccupancy.adults +
+            (content.maxOccupancy.children > 0
+              ? " Adults + " + content.maxOccupancy.children + " Children"
+              : " Adults")
+          : "";
       const bedType = content ? content.bedType : "";
       const area = content ? content.area : "";
       const smoking = content ? content.smoking : false;
@@ -2647,6 +2780,20 @@ const isDev = import.meta.env.DEV;
       const taxBreakdown = apiRoom.taxBreakdown || [];
       const totalTaxes = apiRoom.totalTaxes || 0;
 
+      // InnPilot decides occupancy: `fits` gates the Select button (a room that
+      // cannot hold the search party is never selectable) and `rooms_required`
+      // drives the "N rooms required" note. CFR computes no rules of its own.
+      const fits = apiRoom.fits ?? apiRoom.available ?? true;
+      const roomsRequired =
+        (apiRoom.rooms_required != null
+          ? apiRoom.rooms_required
+          : apiRoom.occupancy && apiRoom.occupancy.roomsRequired) || 1;
+      // InnPilot's per-room guest split — rendered verbatim (never rebuilt here).
+      const allocation =
+        Array.isArray(apiRoom.allocation)
+          ? apiRoom.allocation
+          : (apiRoom.occupancy && apiRoom.occupancy.allocation) || null;
+
       let imageHtml = "";
       const gallery =
         content && content.gallery && content.gallery.length > 0
@@ -2656,7 +2803,7 @@ const isDev = import.meta.env.DEV;
           : [];
       if (gallery.length > 0) {
         imageHtml =
-          '<div class="relative cfr-carousel-wrap aspect-[16/10] sm:aspect-[16/7]">' +
+          '<div class="relative cfr-carousel-wrap aspect-[4/3] sm:aspect-[3/2]">' +
           buildCarouselHtml(gallery, name) +
           (!available
             ? '<div class="absolute inset-0 z-10 flex items-center justify-center bg-black/45"><span class="rounded-full bg-white/95 px-4 py-1.5 text-sm font-bold text-cfr-earth-700">Not Available</span></div>'
@@ -2775,6 +2922,23 @@ const isDev = import.meta.env.DEV;
           '<div class="mt-4"><p class="text-sm font-medium text-cfr-earth-400">Not available for these dates</p></div>';
       }
 
+      // InnPilot decides occupancy: the per-room allocation block (adult/
+      // child icons per room) renders its verdict verbatim; when an older
+      // InnPilot omits allocation, fall back to the plain multi-room note.
+      let roomsRequiredHtml = "";
+      let allocationHtml = "";
+      if (available && fits && Array.isArray(allocation) && allocation.length > 0) {
+        allocationHtml = allocationRowsHtml(allocation);
+      } else if (available && roomsRequired > 1) {
+        roomsRequiredHtml =
+          '<p class="mb-3 rounded-lg bg-cfr-cream px-3 py-2 text-center text-xs text-cfr-earth-600">' +
+          "Your party needs " +
+          roomsRequired +
+          " \u00d7 " +
+          esc(name) +
+          ".</p>";
+      }
+
       let cancellationHtml = "";
       if (cancellationPolicy) {
         cancellationHtml =
@@ -2810,13 +2974,17 @@ const isDev = import.meta.env.DEV;
           : "") +
         cancellationHtml +
         '<div class="mt-5">' +
-        (available
+        roomsRequiredHtml +
+        allocationHtml +
+        (available && fits
           ? '<button class="flex w-full items-center justify-center gap-2 rounded-lg bg-cfr-green-accent px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2 select-room-btn" data-slug="' +
             apiRoom.slug +
             '" data-room-type="' +
             apiRoom.room_type +
             '">Select This Room</button>'
-          : '<button disabled class="flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-lg bg-cfr-earth-200 px-6 py-3 text-sm font-semibold text-cfr-earth-400">Unavailable</button>') +
+          : '<button disabled class="flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-lg bg-cfr-earth-200 px-6 py-3 text-sm font-semibold text-cfr-earth-400">' +
+            (available ? "Too many guests for this room" : "Unavailable") +
+            "</button>") +
         "</div>" +
         "</div>";
 
@@ -2844,6 +3012,7 @@ const isDev = import.meta.env.DEV;
         checkout: lastSearchParams?.checkout,
         adults: lastSearchParams?.adults,
         children: lastSearchParams?.children,
+
       });
     });
 
@@ -2856,6 +3025,7 @@ const isDev = import.meta.env.DEV;
         checkout: lastSearchParams?.checkout,
         adults: lastSearchParams?.adults,
         children: lastSearchParams?.children,
+
       });
     });
 
@@ -2871,6 +3041,7 @@ const isDev = import.meta.env.DEV;
         checkout: lastSearchParams?.checkout,
         adults: lastSearchParams?.adults,
         children: lastSearchParams?.children,
+
         quote: quoteData || {},
         guest: guestData,
         step: "review",
@@ -2888,6 +3059,7 @@ const isDev = import.meta.env.DEV;
         checkout: lastSearchParams?.checkout,
         adults: lastSearchParams?.adults,
         children: lastSearchParams?.children,
+
       });
     });
 
@@ -2908,6 +3080,7 @@ const isDev = import.meta.env.DEV;
           checkout: lastSearchParams?.checkout,
           adults: lastSearchParams?.adults,
           children: lastSearchParams?.children,
+
         });
       });
     }
@@ -2958,6 +3131,7 @@ const isDev = import.meta.env.DEV;
             checkout: lastSearchParams?.checkout,
             adults: lastSearchParams?.adults,
             children: lastSearchParams?.children,
+
           });
         }
       }

@@ -61,6 +61,7 @@ export async function onRequest(context) {
     checkout,
     adults,
     children,
+    rooms_required,
     guest,
     quote_id,
   } = body || {};
@@ -135,6 +136,9 @@ export async function onRequest(context) {
 
   const base = env.INNPILOT_BASE_URL || "https://app.inn-pilot.com";
 
+  // InnPilot decides occupancy: it validates the party against the room type's
+  // occupancy limits, prices the required number of rooms, and persists
+  // total_rooms.  CFR relays the computed rooms_required (if any).
   const bookingPayload = {
     room_type: room_id,
     check_in: checkin,
@@ -148,6 +152,10 @@ export async function onRequest(context) {
     special_requests: guest.specialRequests || "",
     source: "website",
   };
+
+  if (rooms_required && rooms_required >= 1) {
+    bookingPayload.rooms_required = Number(rooms_required);
+  }
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), INNPILOT_TIMEOUT_MS);

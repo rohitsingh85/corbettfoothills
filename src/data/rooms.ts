@@ -77,7 +77,7 @@ export const rooms: RoomContent[] = [
       "Spacious family-friendly lodge with connecting rooms — designed for shared adventures.",
     image: "/images/accommodation-11.webp",
     gallery: ROOM_GALLERY,
-    maxOccupancy: { adults: 4, children: 2 },
+    maxOccupancy: { adults: 3, children: 2 },
     bedType: "2 King Beds",
     area: "650 sq ft",
     amenities: [
