@@ -7,8 +7,6 @@ image: "/images/cost-of-tourism.webp"
 tags: ["responsible tourism", "mass tourism", "jim corbett", "conservation", "sustainable travel"]
 ---
 
-# The Hidden Cost of Mass Tourism in Jim Corbett
-
 Jim Corbett National Park has never been more popular. India's oldest national park attracts hundreds of thousands of visitors every year — families, photographers, adventure seekers, and international travellers — all drawn by the promise of wilderness, tigers, and the timeless beauty of the Himalayan foothills.
 
 But popularity comes with a price that rarely appears on any bill.
