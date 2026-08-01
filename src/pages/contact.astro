@@ -295,6 +295,9 @@ import siteData from "../data/site.json";
                   msg.className = "text-xs text-center text-cfr-green-accent";
                   msg.classList.remove("hidden");
                   form.reset();
+                  window.CFR_ANALYTICS?.track("contact_submitted", {
+                    property_name: "Corbett Foothills Retreat",
+                  });
                 } else {
                   msg.textContent = json.error || "Something went wrong. Please try again.";
                   msg.className = "text-xs text-center text-red-500";

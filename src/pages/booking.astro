@@ -930,6 +930,32 @@ const isDev = import.meta.env.DEV;
 
     const BFF_BASE = "/api/booking";
     const TIMEOUT_MS = 15000;
+    const GA_PROPERTY = "Corbett Foothills Retreat";
+
+    function gaParams(extra) {
+      const params = {
+        room_name: selectedRoom ? selectedRoom.name : null,
+        room_type: selectedRoomType || (selectedRoom ? selectedRoom.slug : null),
+        check_in: lastSearchParams ? lastSearchParams.checkin : null,
+        check_out: lastSearchParams ? lastSearchParams.checkout : null,
+        guest_count: lastSearchParams
+          ? (lastSearchParams.adults || 0) + (lastSearchParams.children || 0)
+          : null,
+        booking_value: quoteData && quoteData.total ? quoteData.total : null,
+        currency: (quoteData && quoteData.currency) || "INR",
+        property_name: GA_PROPERTY,
+      };
+      return extra ? Object.assign(params, extra) : params;
+    }
+
+    function gaTrack(name, params) {
+      if (window.CFR_ANALYTICS) window.CFR_ANALYTICS.track(name, params || {});
+    }
+
+    function gaTrackOnce(name, token, params) {
+      if (window.CFR_ANALYTICS)
+        window.CFR_ANALYTICS.trackOnce(name, token, params || {});
+    }
 
     const form = document.getElementById("search-form");
     const checkinInput = document.getElementById("checkin");
@@ -1329,6 +1355,16 @@ const isDev = import.meta.env.DEV;
           throw new Error(submitData.error || "Failed to create booking order");
         }
 
+        var amountInr = Math.round(Number(submitData.amount || 0) / 100);
+        gaTrack(
+          "payment_started",
+          gaParams({
+            booking_value:
+              amountInr || (quoteData && quoteData.total ? quoteData.total : null),
+            currency: submitData.currency || "INR",
+          })
+        );
+
         var options = {
           key: submitData.razorpay_key_id,
           amount: submitData.amount,
@@ -1344,6 +1380,7 @@ const isDev = import.meta.env.DEV;
           theme: { color: "#1a4a3f" },
           modal: {
             ondismiss: function () {
+              gaTrack("payment_failed", gaParams({ reason: "cancelled" }));
               if (payBtn) payBtn.disabled = false;
               if (payText) payText.textContent = "Pay Now";
               if (paySpinner) paySpinner.classList.add("hidden");
@@ -1355,6 +1392,7 @@ const isDev = import.meta.env.DEV;
           },
           handler: async function (response) {
             if (response.error || !response.razorpay_payment_id) {
+              gaTrack("payment_failed", gaParams({ reason: "error" }));
               if (payBtn) payBtn.disabled = false;
               if (payText) payText.textContent = "Pay Now";
               if (paySpinner) paySpinner.classList.add("hidden");
@@ -1396,13 +1434,32 @@ const isDev = import.meta.env.DEV;
                 persistSession(sessionData);
               }
 
+              gaTrackOnce(
+                "payment_success",
+                response.razorpay_payment_id,
+                gaParams({
+                  booking_value: Math.round(Number(submitData.amount || 0) / 100),
+                  currency: submitData.currency || "INR",
+                })
+              );
+
               var params = new URLSearchParams({
                 booking_id: submitData.booking_id || "",
                 payment_id: response.razorpay_payment_id,
                 status: "confirmed",
+                room_name: selectedRoom.name || "",
+                room_type: selectedRoomType || selectedRoom.slug || "",
+                check_in: lastSearchParams ? lastSearchParams.checkin : "",
+                check_out: lastSearchParams ? lastSearchParams.checkout : "",
+                guest_count: lastSearchParams
+                  ? String((lastSearchParams.adults || 0) + (lastSearchParams.children || 0))
+                  : "",
+                booking_value: String(amountInr || ""),
+                currency: submitData.currency || "INR",
               });
               window.location.href = "/booking/confirmation?" + params.toString();
             } catch (verifyErr) {
+              gaTrack("payment_failed", gaParams({ reason: "verification_failed" }));
               if (payBtn) payBtn.disabled = false;
               if (payText) payText.textContent = "Pay Now";
               if (paySpinner) paySpinner.classList.add("hidden");
@@ -1630,6 +1687,14 @@ const isDev = import.meta.env.DEV;
 
       lastSearchParams = params;
 
+      gaTrack("search_availability", {
+        check_in: params.checkin,
+        check_out: params.checkout,
+        guest_count: params.adults + (params.children || 0),
+        currency: "INR",
+        property_name: GA_PROPERTY,
+      });
+
       if (currentAbortController) currentAbortController.abort();
       currentAbortController = new AbortController();
 
@@ -1662,11 +1727,35 @@ const isDev = import.meta.env.DEV;
         const data = await response.json();
 
         if (!data.rooms || data.rooms.length === 0) {
+          gaTrackOnce(
+            "availability_results",
+            "avail:" + params.checkin + ":" + params.checkout + ":" + params.adults + ":" + (params.children || 0),
+            {
+              room_count: 0,
+              check_in: params.checkin,
+              check_out: params.checkout,
+              guest_count: params.adults + (params.children || 0),
+              currency: "INR",
+              property_name: GA_PROPERTY,
+            }
+          );
           showState(stateEmpty);
           return;
         }
 
         renderResults(data);
+        gaTrackOnce(
+          "availability_results",
+          "avail:" + params.checkin + ":" + params.checkout + ":" + params.adults + ":" + (params.children || 0),
+          {
+            room_count: data.rooms.length,
+            check_in: params.checkin,
+            check_out: params.checkout,
+            guest_count: params.adults + (params.children || 0),
+            currency: "INR",
+            property_name: GA_PROPERTY,
+          }
+        );
         showState(stateResults);
         updateUrl("results", {
           checkin: params.checkin,
@@ -1742,6 +1831,11 @@ const isDev = import.meta.env.DEV;
           step: "guests",
         });
         showState(stateGuests);
+        gaTrackOnce(
+          "enter_guest_details",
+          "guests:" + (selectedRoomType || roomSlug) + ":" + lastSearchParams.checkin + ":" + lastSearchParams.checkout,
+          gaParams()
+        );
         updateUrl("guests", {
           room: roomSlug,
           rt: roomType || roomSlug,
@@ -1959,6 +2053,8 @@ const isDev = import.meta.env.DEV;
         }
         return;
       }
+
+      gaTrack("complete_booking_clicked", gaParams());
 
       await fetchServerTime();
 
@@ -2780,6 +2876,11 @@ const isDev = import.meta.env.DEV;
         step: "review",
       });
       showState(stateReview);
+      gaTrackOnce(
+        "review_booking",
+        "review:" + (selectedRoomType || selectedRoom?.slug) + ":" + lastSearchParams?.checkin + ":" + lastSearchParams?.checkout,
+        gaParams()
+      );
       updateUrl("review", {
         room: selectedRoom?.slug,
         rt: selectedRoomType || selectedRoom?.slug,
@@ -2827,6 +2928,20 @@ const isDev = import.meta.env.DEV;
         const slug = target.getAttribute("data-slug");
         const roomType = target.getAttribute("data-room-type");
         if (slug) {
+          const roomContent = resolveRoomContent(slug, ROOM_CONTENT);
+          const roomName =
+            roomContent === DEFAULT_ROOM ? roomType || slug : roomContent.name;
+          gaTrack("select_room", {
+            room_name: roomName,
+            room_type: roomType || slug,
+            check_in: lastSearchParams ? lastSearchParams.checkin : null,
+            check_out: lastSearchParams ? lastSearchParams.checkout : null,
+            guest_count: lastSearchParams
+              ? (lastSearchParams.adults || 0) + (lastSearchParams.children || 0)
+              : null,
+            currency: "INR",
+            property_name: GA_PROPERTY,
+          });
           fetchQuote(slug, roomType || slug);
         }
         return;

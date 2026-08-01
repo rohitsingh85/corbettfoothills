@@ -203,6 +203,9 @@ import siteData from "../data/site.json";
                 msg.textContent = "Thank. We'll be in touch.";
                 msg.className = "mt-2 text-xs text-green-300";
                 markSubmitted(email || phone);
+                window.CFR_ANALYTICS?.track("newsletter_subscribed", {
+                  property_name: "Corbett Foothills Retreat",
+                });
                 form.reset();
                 form.querySelectorAll("input[type='email'], input[type='tel']").forEach((el) => (el.value = ""));
               } else {

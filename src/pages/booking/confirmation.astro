@@ -3,11 +3,6 @@ import MainLayout from "../../layouts/MainLayout.astro";
 import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
 import siteData from "../../data/site.json";
-
-const bookingId = Astro.url.searchParams.get("booking_id") || "";
-const paymentId = Astro.url.searchParams.get("payment_id") || "";
-const status = Astro.url.searchParams.get("status") || "pending";
-const isConfirmed = status === "confirmed";
 ---
 
 <MainLayout
@@ -27,13 +22,11 @@ const isConfirmed = status === "confirmed";
     <div class="relative z-10 w-full bg-cfr-green-dark">
       <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8 lg:pb-16">
         <div class="mx-auto max-w-3xl text-center">
-          <h1 class="font-display text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
-            {isConfirmed ? "Booking Confirmed!" : "Booking Status"}
+          <h1 id="confirm-h1" class="font-display text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
+            Booking Status
           </h1>
-          <p class="mt-3 text-base text-white/80 sm:text-lg">
-            {isConfirmed
-              ? "Your stay at Corbett Foothills Retreat has been confirmed."
-              : "Your booking is being processed."}
+          <p id="confirm-lead" class="mt-3 text-base text-white/80 sm:text-lg">
+            Your booking is being processed.
           </p>
         </div>
       </div>
@@ -42,43 +35,44 @@ const isConfirmed = status === "confirmed";
 
   <section class="bg-cfr-cream py-10 sm:py-16">
     <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-      {isConfirmed ? (
-        <div class="space-y-6">
-          <div class="rounded-2xl border border-cfr-earth-100 bg-white p-8 text-center shadow-card">
-            <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-cfr-green-100">
-              <svg class="h-10 w-10 text-cfr-green-leaf" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <h2 class="mt-4 font-display text-2xl font-bold text-cfr-green-dark">Payment Successful</h2>
-            <p class="mt-2 text-sm text-cfr-earth-500">
-              Thank you for your booking! Your payment has been received and your reservation is confirmed.
-            </p>
+      {/*
+        The confirmation state is resolved client-side: this page is statically
+        built (SSG), so the ?status=confirmed query param is only visible in the
+        browser at request time. Both panels ship in the DOM and the script below
+        toggles the correct one and fires the booking_confirmed analytics event.
+      */}
+      <div id="confirm-confirmed" class="hidden space-y-6">
+        <div class="rounded-2xl border border-cfr-earth-100 bg-white p-8 text-center shadow-card">
+          <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-cfr-green-100">
+            <svg class="h-10 w-10 text-cfr-green-leaf" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
           </div>
+          <h2 class="mt-4 font-display text-2xl font-bold text-cfr-green-dark">Payment Successful</h2>
+          <p class="mt-2 text-sm text-cfr-earth-500">
+            Thank you for your booking! Your payment has been received and your reservation is confirmed.
+          </p>
+        </div>
 
-          <div class="rounded-2xl border border-cfr-earth-100 bg-white p-6 shadow-card">
-            <h3 class="font-display text-lg font-bold text-cfr-green-dark">Booking Reference</h3>
-            <div class="mt-4 space-y-3 text-sm">
-              {bookingId && (
-                <div class="flex justify-between border-b border-cfr-earth-100 pb-2">
-                  <span class="text-cfr-earth-500">Booking ID</span>
-                  <span class="font-mono font-bold text-cfr-earth-700">{bookingId}</span>
-                </div>
-              )}
-              {paymentId && (
-                <div class="flex justify-between border-b border-cfr-earth-100 pb-2">
-                  <span class="text-cfr-earth-500">Payment ID</span>
-                  <span class="font-mono text-cfr-earth-600">{paymentId}</span>
-                </div>
-              )}
-              <div class="flex justify-between">
-                <span class="text-cfr-earth-500">Status</span>
-                <span class="inline-flex items-center gap-1 rounded-full bg-cfr-green-50 px-3 py-1 text-xs font-bold text-cfr-green-leaf">
-                  Confirmed
-                </span>
-              </div>
+        <div class="rounded-2xl border border-cfr-earth-100 bg-white p-6 shadow-card">
+          <h3 class="font-display text-lg font-bold text-cfr-green-dark">Booking Reference</h3>
+          <div class="mt-4 space-y-3 text-sm">
+            <div id="confirm-booking-row" class="hidden justify-between border-b border-cfr-earth-100 pb-2">
+              <span class="text-cfr-earth-500">Booking ID</span>
+              <span class="font-mono font-bold text-cfr-earth-700" id="confirm-booking-id"></span>
+            </div>
+            <div id="confirm-payment-row" class="hidden justify-between border-b border-cfr-earth-100 pb-2">
+              <span class="text-cfr-earth-500">Payment ID</span>
+              <span class="font-mono text-cfr-earth-600" id="confirm-payment-id"></span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-cfr-earth-500">Status</span>
+              <span class="inline-flex items-center gap-1 rounded-full bg-cfr-green-50 px-3 py-1 text-xs font-bold text-cfr-green-leaf">
+                Confirmed
+              </span>
             </div>
           </div>
+        </div>
 
           <div class="rounded-2xl border border-cfr-earth-100 bg-white p-6 text-center shadow-card">
             <h3 class="font-display text-lg font-bold text-cfr-green-dark">What Happens Next?</h3>
@@ -119,9 +113,10 @@ const isConfirmed = status === "confirmed";
             </div>
           </div>
         </div>
-      ) : (
-        <div class="rounded-2xl border border-cfr-earth-100 bg-white p-8 text-center shadow-card">
-          <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-cfr-sand-100">
+      </div>
+
+      <div id="confirm-pending" class="rounded-2xl border border-cfr-earth-100 bg-white p-8 text-center shadow-card">
+        <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-cfr-sand-100">
             <svg class="h-10 w-10 text-cfr-earth-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
@@ -130,13 +125,11 @@ const isConfirmed = status === "confirmed";
           <p class="mt-2 text-sm text-cfr-earth-500">
             Your booking is awaiting payment confirmation. If you've already paid, please wait a moment — the confirmation may still be processing.
           </p>
-          {bookingId && (
-            <p class="mt-4 text-sm text-cfr-earth-600">
-              Reference: <span class="font-mono font-bold">{bookingId}</span>
-            </p>
-          )}
+          <p id="pending-ref" class="mt-4 hidden text-sm text-cfr-earth-600">
+            Reference: <span class="font-mono font-bold" id="pending-ref-id"></span>
+          </p>
         </div>
-      )}
+      </div>
 
       <div class="mt-6 rounded-2xl border border-cfr-earth-100 bg-cfr-cream p-6 text-center">
         <h3 class="font-display text-base font-semibold text-cfr-green-dark">Need Help?</h3>
@@ -168,3 +161,78 @@ const isConfirmed = status === "confirmed";
     <Footer />
   </Fragment>
 </MainLayout>
+
+<script>
+  (function () {
+    var params = new URLSearchParams(window.location.search);
+    var status = params.get("status");
+    var isConfirmed = status === "confirmed";
+
+    var confirmed = document.getElementById("confirm-confirmed");
+    var pending = document.getElementById("confirm-pending");
+    if (confirmed && pending) {
+      confirmed.classList.toggle("hidden", !isConfirmed);
+      pending.classList.toggle("hidden", isConfirmed);
+    }
+
+    var h1 = document.getElementById("confirm-h1");
+    var lead = document.getElementById("confirm-lead");
+    if (h1) h1.textContent = isConfirmed ? "Booking Confirmed!" : "Booking Status";
+    if (lead) {
+      lead.textContent = isConfirmed
+        ? "Your stay at Corbett Foothills Retreat has been confirmed."
+        : "Your booking is being processed.";
+    }
+
+    var bookingId = params.get("booking_id") || "";
+    var paymentId = params.get("payment_id") || "";
+
+    if (isConfirmed) {
+      if (bookingId) {
+        var bookingRow = document.getElementById("confirm-booking-row");
+        if (bookingRow) {
+          bookingRow.classList.remove("hidden");
+          bookingRow.classList.add("flex");
+        }
+        var bookingIdEl = document.getElementById("confirm-booking-id");
+        if (bookingIdEl) bookingIdEl.textContent = bookingId;
+      }
+      if (paymentId) {
+        var paymentRow = document.getElementById("confirm-payment-row");
+        if (paymentRow) {
+          paymentRow.classList.remove("hidden");
+          paymentRow.classList.add("flex");
+        }
+        var paymentIdEl = document.getElementById("confirm-payment-id");
+        if (paymentIdEl) paymentIdEl.textContent = paymentId;
+      }
+    } else {
+      var pendingRef = document.getElementById("pending-ref");
+      if (pendingRef && bookingId) {
+        pendingRef.classList.remove("hidden");
+        var refId = document.getElementById("pending-ref-id");
+        if (refId) refId.textContent = bookingId;
+      }
+    }
+
+    var cfr = window.CFR_ANALYTICS;
+    if (cfr && isConfirmed) {
+      cfr.trackOnce(
+        "booking_confirmed",
+        paymentId || bookingId || "confirm",
+        {
+          booking_id: bookingId,
+          payment_id: paymentId,
+          room_name: params.get("room_name") || null,
+          room_type: params.get("room_type") || null,
+          check_in: params.get("check_in") || null,
+          check_out: params.get("check_out") || null,
+          guest_count: params.get("guest_count") ? Number(params.get("guest_count")) : null,
+          booking_value: params.get("booking_value") ? Number(params.get("booking_value")) : null,
+          currency: params.get("currency") || "INR",
+          property_name: "Corbett Foothills Retreat",
+        }
+      );
+    }
+  })();
+</script>
