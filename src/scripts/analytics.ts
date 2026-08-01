@@ -35,12 +35,12 @@ function log(name: string, params?: Record<string, unknown>) {
 
 window.dataLayer = window.dataLayer || [];
 
-function push(...args: unknown[]) {
-  window.dataLayer!.push(args);
+function push(..._args: unknown[]) {
+  window.dataLayer!.push(arguments as unknown as unknown[]);
 }
 
-function gtag(...args: unknown[]) {
-  push(...args);
+function gtag(..._args: unknown[]) {
+  window.dataLayer!.push(arguments as unknown as unknown[]);
 }
 window.gtag = gtag;
 
