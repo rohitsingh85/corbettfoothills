@@ -79,4 +79,36 @@ describe("transformQuote", () => {
       "Free cancellation up to 48 hours before check-in"
     );
   });
+
+  it("forwards allocation options, minimum rooms and availability errors verbatim", () => {
+    const parsed = {
+      allocation_options: [
+        { rooms: [{ adults: 2, children: 1 }], total: 9000, recommended: true },
+        { rooms: [{ adults: 2, children: 0 }, { adults: 0, children: 1 }], total: 8800 },
+      ],
+      minimum_rooms: 2,
+      availability_error: {
+        code: "INSUFFICIENT_INVENTORY",
+        message: "Not enough rooms left for these dates.",
+      },
+    };
+
+    const result = transformQuote(parsed);
+
+    expect(result.allocation_options).toEqual(parsed.allocation_options);
+    expect(result.minimum_rooms).toBe(2);
+    expect(result.availability_error).toEqual(parsed.availability_error);
+  });
+
+  it("defaults minimum_rooms to 1 and nulls missing options/errors", () => {
+    const result = transformQuote({});
+    expect(result.minimum_rooms).toBe(1);
+    expect(result.allocation_options).toBeNull();
+    expect(result.availability_error).toBeNull();
+  });
+
+  it("forwards the server-computed bedding_subtotal and defaults it to null", () => {
+    expect(transformQuote({ bedding_subtotal: 1500 }).bedding_subtotal).toBe(1500);
+    expect(transformQuote({}).bedding_subtotal).toBeNull();
+  });
 });

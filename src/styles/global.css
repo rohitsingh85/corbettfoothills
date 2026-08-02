@@ -7,6 +7,14 @@
     scroll-behavior: smooth;
   }
 
+  /* Base size 16px → 17px on laptop-and-up viewports (rem-based Tailwind
+     utilities scale with this; .prose keeps its own explicit sizing). */
+  @media (min-width: 1024px) {
+    html {
+      font-size: 17px;
+    }
+  }
+
   body {
     @apply font-body antialiased;
   }

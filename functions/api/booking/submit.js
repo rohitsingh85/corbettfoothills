@@ -2,6 +2,7 @@ const INNPILOT_TIMEOUT_MS = 15000;
 const rateLimitMap = new Map();
 
 import { unwrapInnPilotData } from "./_response-envelope.js";
+import { sanitizeBeddingSelections } from "./_bedding.js";
 
 export async function onRequest(context) {
   const { request, env } = context;
@@ -64,6 +65,7 @@ export async function onRequest(context) {
     rooms_required,
     guest,
     quote_id,
+    bedding,
   } = body || {};
 
   if (!room_id || typeof room_id !== "string") {
@@ -155,6 +157,13 @@ export async function onRequest(context) {
 
   if (rooms_required && rooms_required >= 1) {
     bookingPayload.rooms_required = Number(rooms_required);
+  }
+
+  // Relay only the customer's bedding selections (room_index + selected).
+  // Any injected financial values are stripped by the sanitizer.
+  const beddingSelections = sanitizeBeddingSelections(bedding);
+  if (beddingSelections !== undefined) {
+    bookingPayload.bedding = beddingSelections;
   }
 
   const controller = new AbortController();

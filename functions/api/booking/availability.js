@@ -66,6 +66,7 @@ export async function onRequest(context) {
   const checkout = url.searchParams.get("checkout") || "";
   const adults = parseInt(url.searchParams.get("adults") || "0", 10);
   const children = parseInt(url.searchParams.get("children") || "0", 10);
+  const requestedRooms = parseInt(url.searchParams.get("rooms") || "1", 10);
 
   if (!checkin || !/^\d{4}-\d{2}-\d{2}$/.test(checkin)) {
     return new Response(
@@ -97,6 +98,12 @@ export async function onRequest(context) {
       { status: 400, headers }
     );
   }
+  if (!requestedRooms || requestedRooms < 1 || requestedRooms > 12) {
+    return new Response(
+      JSON.stringify({ error: "Rooms must be between 1 and 12" }),
+      { status: 400, headers }
+    );
+  }
 
   const apiKey = env.BOOKING_API_KEY;
   if (!apiKey) {
@@ -114,6 +121,9 @@ export async function onRequest(context) {
   upstreamUrl.searchParams.set("check_out", checkout);
   upstreamUrl.searchParams.set("adults", String(adults));
   upstreamUrl.searchParams.set("children", String(children));
+  // The customer explicitly requested a room count — InnPilot is authoritative
+  // on whether it is feasible; CFR never substitutes its own minimum.
+  upstreamUrl.searchParams.set("rooms_required", String(requestedRooms));
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), INNPILOT_TIMEOUT_MS);
@@ -178,9 +188,17 @@ export async function onRequest(context) {
         available: hasRooms,
         fits: r.fits ?? hasRooms,
         rooms_required: r.rooms_required ?? null,
+        minimum_rooms: r.minimum_rooms ?? null,
+        requested_rooms: r.requested_rooms ?? requestedRooms,
         // InnPilot's deterministic per-room guest split — CFR renders it
         // verbatim and never reconstructs allocation itself.
         allocation: r.allocation ?? null,
+        // InnPilot enumerates meaningful customer-selectable alternatives
+        // (CFR never computes these) — pass through verbatim.
+        allocation_options: r.allocation_options ?? null,
+        // Authoritative reason when the requested room count cannot be
+        // satisfied (occupancy vs inventory distinction from InnPilot).
+        availability_error: r.availability_error ?? r.error ?? null,
         roomsLeft: r.available_count ?? 0,
         nightlyRate: r.nightly_rate ?? 0,
         totalStay: r.total_rate ?? 0,

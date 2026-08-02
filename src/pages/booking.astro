@@ -37,7 +37,7 @@ const isDev = import.meta.env.DEV;
     <div class="relative z-10 w-full bg-cfr-green-dark">
       <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8 lg:pb-16">
         <div class="mx-auto max-w-3xl text-center">
-          <div class="inline-flex items-center gap-2 rounded-full border border-cfr-sand-500/20 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-cfr-sand-300 backdrop-blur-sm">
+          <div class="inline-flex items-center gap-2 rounded-full border border-cfr-sand-500/20 bg-white/5 px-4 py-1.5 text-[13px] font-medium uppercase tracking-widest text-cfr-sand-300 backdrop-blur-sm">
             <span class="flex h-2 w-2 rounded-full bg-cfr-sand-500 animate-pulse"></span>
             Jim Corbett National Park, Uttarakhand
           </div>
@@ -66,10 +66,10 @@ const isDev = import.meta.env.DEV;
         </p>
 
         <!-- Desktop: horizontal layout -->
-        <div class="grid grid-cols-1 gap-3 text-left sm:grid-cols-2 lg:grid-cols-5">
+        <div class="grid grid-cols-1 gap-3 text-left sm:grid-cols-2 lg:grid-cols-6">
           <!-- Check-in -->
           <div class="relative">
-            <label for="checkin" class="block text-xs font-semibold uppercase tracking-wider text-cfr-earth-500">
+            <label for="checkin" class="block text-[13px] font-semibold uppercase tracking-wider text-cfr-earth-500">
               Check-in
             </label>
             <input
@@ -80,12 +80,12 @@ const isDev = import.meta.env.DEV;
               autocomplete="off"
               class="mt-1 block w-full rounded-lg border-cfr-earth-200 bg-cfr-cream text-sm text-cfr-earth-700 focus:border-cfr-green-accent focus:ring-cfr-green-accent"
             />
-            <p id="checkin-error" class="mt-1 hidden text-xs text-red-600" role="alert"></p>
+            <p id="checkin-error" class="mt-1 hidden text-[13px] text-red-600" role="alert"></p>
           </div>
 
           <!-- Check-out -->
           <div class="relative">
-            <label for="checkout" class="block text-xs font-semibold uppercase tracking-wider text-cfr-earth-500">
+            <label for="checkout" class="block text-[13px] font-semibold uppercase tracking-wider text-cfr-earth-500">
               Check-out
             </label>
             <input
@@ -96,45 +96,70 @@ const isDev = import.meta.env.DEV;
               autocomplete="off"
               class="mt-1 block w-full rounded-lg border-cfr-earth-200 bg-cfr-cream text-sm text-cfr-earth-700 focus:border-cfr-green-accent focus:ring-cfr-green-accent"
             />
-            <p id="checkout-error" class="mt-1 hidden text-xs text-red-600" role="alert"></p>
+            <p id="checkout-error" class="mt-1 hidden text-[13px] text-red-600" role="alert"></p>
           </div>
 
           <!-- Adults -->
           <div class="relative">
-            <label for="adults" class="block text-xs font-semibold uppercase tracking-wider text-cfr-earth-500">
+            <label for="adults" class="block text-[13px] font-semibold uppercase tracking-wider text-cfr-earth-500">
               Adults
             </label>
-            <select
+            <input
+              type="text"
               id="adults"
               name="adults"
-              required
+              inputmode="numeric"
+              pattern="[0-9]*"
+              autocomplete="off"
+              value="2"
+              min="1"
+              max="20"
+              aria-describedby="adults-error"
               class="mt-1 block w-full rounded-lg border-cfr-earth-200 bg-cfr-cream text-sm text-cfr-earth-700 focus:border-cfr-green-accent focus:ring-cfr-green-accent"
-            >
-              <option value="1">1 Adult</option>
-              <option value="2" selected>2 Adults</option>
-              <option value="3">3 Adults</option>
-              <option value="4">4 Adults</option>
-              <option value="5">5 Adults</option>
-              <option value="6">6 Adults</option>
-            </select>
+            />
+            <p id="adults-error" class="mt-1 hidden text-[13px] text-red-600" role="alert"></p>
           </div>
 
           <!-- Children -->
           <div class="relative">
-            <label for="children" class="block text-xs font-semibold uppercase tracking-wider text-cfr-earth-500">
+            <label for="children" class="block text-[13px] font-semibold uppercase tracking-wider text-cfr-earth-500">
               Children
             </label>
-            <select
+            <input
+              type="text"
               id="children"
               name="children"
+              inputmode="numeric"
+              pattern="[0-9]*"
+              autocomplete="off"
+              value="0"
+              min="0"
+              max="10"
+              aria-describedby="children-error"
               class="mt-1 block w-full rounded-lg border-cfr-earth-200 bg-cfr-cream text-sm text-cfr-earth-700 focus:border-cfr-green-accent focus:ring-cfr-green-accent"
-            >
-              <option value="0" selected>0 Children</option>
-              <option value="1">1 Child</option>
-              <option value="2">2 Children</option>
-              <option value="3">3 Children</option>
-              <option value="4">4 Children</option>
-            </select>
+            />
+            <p id="children-error" class="mt-1 hidden text-[13px] text-red-600" role="alert"></p>
+          </div>
+
+          <!-- Rooms -->
+          <div class="relative">
+            <label for="rooms" class="block text-[13px] font-semibold uppercase tracking-wider text-cfr-earth-500">
+              Rooms
+            </label>
+            <input
+              type="text"
+              id="rooms"
+              name="rooms"
+              inputmode="numeric"
+              pattern="[0-9]*"
+              autocomplete="off"
+              value="1"
+              min="1"
+              max="12"
+              aria-describedby="rooms-error"
+              class="mt-1 block w-full rounded-lg border-cfr-earth-200 bg-cfr-cream text-sm text-cfr-earth-700 focus:border-cfr-green-accent focus:ring-cfr-green-accent"
+            />
+            <p id="rooms-error" class="mt-1 hidden text-[13px] text-red-600" role="alert"></p>
           </div>
 
           <!-- Search Button -->
@@ -230,7 +255,7 @@ const isDev = import.meta.env.DEV;
           >
             Try Again
           </button>
-          <p class="mt-4 text-xs text-cfr-earth-400">
+          <p class="mt-4 text-[13px] text-cfr-earth-400">
             If this persists, reach us at
             <a href={`mailto:${siteData.site.email}`} class="text-cfr-green-accent hover:underline">{siteData.site.email}</a>
           </p>
@@ -407,7 +432,7 @@ const isDev = import.meta.env.DEV;
                   <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
               </button>
-              <p id="razorpay-error" class="mt-2 hidden text-center text-xs text-red-600" role="alert"></p>
+              <p id="razorpay-error" class="mt-2 hidden text-center text-[13px] text-red-600" role="alert"></p>
             </div>
             <PayAtCheckin />
             <div class="mt-6 flex items-center justify-between">
@@ -539,28 +564,28 @@ const isDev = import.meta.env.DEV;
           <svg class="h-6 w-6 text-cfr-green-accent" fill="currentColor" viewBox="0 0 20 20">
             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
           </svg>
-          <p class="mt-1.5 text-xs font-bold text-cfr-earth-700">4.9 / 5</p>
+          <p class="mt-1.5 text-[13px] font-bold text-cfr-earth-700">4.9 / 5</p>
           <p class="text-[10px] uppercase tracking-wider text-cfr-earth-400">Google Reviews</p>
         </div>
         <div class="flex flex-col items-center text-center">
           <svg class="h-6 w-6 text-cfr-green-accent" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
           </svg>
-          <p class="mt-1.5 text-xs font-bold text-cfr-earth-700">Secure</p>
+          <p class="mt-1.5 text-[13px] font-bold text-cfr-earth-700">Secure</p>
           <p class="text-[10px] uppercase tracking-wider text-cfr-earth-400">Payment</p>
         </div>
         <div class="flex flex-col items-center text-center">
           <svg class="h-6 w-6 text-cfr-green-accent" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <p class="mt-1.5 text-xs font-bold text-cfr-earth-700">Free Cancel</p>
+          <p class="mt-1.5 text-[13px] font-bold text-cfr-earth-700">Free Cancel</p>
           <p class="text-[10px] uppercase tracking-wider text-cfr-earth-400">Up to 48hrs</p>
         </div>
         <div class="flex flex-col items-center text-center">
           <svg class="h-6 w-6 text-cfr-green-accent" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M18.75 4.236c.982.143 1.954.317 2.916.52A6.003 6.003 0 0016.27 9.728M18.75 4.236V4.5c0 2.108-.966 3.99-2.48 5.228m0 0a6.023 6.023 0 01-2.77.665 6.023 6.023 0 01-2.77-.665" />
           </svg>
-          <p class="mt-1.5 text-xs font-bold text-cfr-earth-700">Best Rate</p>
+          <p class="mt-1.5 text-[13px] font-bold text-cfr-earth-700">Best Rate</p>
           <p class="text-[10px] uppercase tracking-wider text-cfr-earth-400">Guarantee</p>
         </div>
       </div>
@@ -892,6 +917,77 @@ const isDev = import.meta.env.DEV;
 </style>
 
 <script define:vars={{ roomsJson, roomMappingJson, defaultRoomJson, isDev }}>
+  // Pure presentation/input helpers (mirror of src/lib/booking-logic.ts, kept
+  // inline because `define:vars` scripts are rendered as plain <script> and
+  // cannot use ESM imports). Nothing here computes InnPilot rules — CFR only
+  // parses user input and renders what InnPilot returns verbatim.
+  const GUEST_FIELD_LABELS = { adults: "Adults", children: "Children", rooms: "Rooms" };
+
+  function parseNumericGuestInput(raw, field) {
+    const label = GUEST_FIELD_LABELS[field] || "Value";
+    const s = String(raw ?? "").trim();
+    if (s === "") {
+      return { value: null, error: label + " is required" };
+    }
+    if (!/^\d+$/.test(s)) {
+      return { value: null, error: label + " must be a whole number" };
+    }
+    const n = Number(s);
+    if (!Number.isFinite(n)) {
+      return { value: null, error: label + " must be a valid number" };
+    }
+    if (field === "adults") {
+      if (n < 1) return { value: null, error: "At least 1 adult is required" };
+      if (n > 20) return { value: null, error: "Adults cannot exceed 20" };
+    } else if (field === "children") {
+      if (n > 10) return { value: null, error: "Children cannot exceed 10" };
+    } else {
+      if (n < 1) return { value: null, error: "At least 1 room is required" };
+      if (n > 12) return { value: null, error: "Rooms cannot exceed 12" };
+    }
+    return { value: n, error: null };
+  }
+
+  function roomOccupancyLabel(room) {
+    const parts = [];
+    if (room.adults > 0) {
+      parts.push(room.adults + (room.adults === 1 ? " adult" : " adults"));
+    }
+    if (room.children > 0) {
+      parts.push(room.children + (room.children === 1 ? " child" : " children"));
+    }
+    return parts.join(" + ");
+  }
+
+  function roomRowLabel(room, index) {
+    var adultCount = Number(room.adults) || 0;
+    var childCount = Number(room.children) || 0;
+    return (
+      "Room " + (index + 1) + ": " + adultCount + " adult" + (adultCount === 1 ? "" : "s") +
+      (childCount > 0 ? ", " + childCount + " child" + (childCount === 1 ? "" : "ren") : "")
+    );
+  }
+
+  function hasMixedRoomTypes(rooms) {
+    if (!rooms || rooms.length < 2) return false;
+    const first = rooms[0] && rooms[0].room_type;
+    return rooms.some(function (r) { return r.room_type !== first; });
+  }
+
+  function affectedBeddingRooms(rooms) {
+    const idx = [];
+    (rooms || []).forEach(function (r, i) {
+      const b = r && r.bedding;
+      if (b && (b.mandatory || b.selected)) idx.push(i);
+    });
+    return idx;
+  }
+
+  function roomTypeDescription(room, fallback) {
+    const t = room && room.room_type ? room.room_type : fallback;
+    return t || fallback;
+  }
+
   // Occupancy is decided by InnPilot (room_types max_adults/max_children/
   // max_occupancy + available room counts). The availability BFF relays per-room
   // `fits` and `rooms_required`; the quote BFF relays `rooms_required` with
@@ -972,6 +1068,7 @@ const isDev = import.meta.env.DEV;
     const checkoutInput = document.getElementById("checkout");
     const adultsInput = document.getElementById("adults");
     const childrenInput = document.getElementById("children");
+    const roomsInput = document.getElementById("rooms");
     const searchBtn = document.getElementById("search-btn");
     const searchBtnText = document.getElementById("search-btn-text");
     const searchIcon = document.getElementById("search-icon");
@@ -1006,6 +1103,20 @@ const isDev = import.meta.env.DEV;
     let selectedRoomType = null;
     let quoteData = null;
     let guestData = null;
+    // The allocation the customer picked on the results card (option + bedding
+    // selections). InnPilot's allocation stays authoritative; CFR only echoes
+    // the customer's selection into the summary/review.
+    let selectedAllocation = null;
+    let lastApiRooms = [];
+
+    function findApiRoom(slug) {
+      if (!lastApiRooms || lastApiRooms.length === 0) return null;
+      return (
+        lastApiRooms.find(function (r) {
+          return r.slug === slug || r.room_type === slug;
+        }) || null
+      );
+    }
 
     const SESSION_DURATION_MS = 300000;
     const SESSION_WARNING_MS = 120000;
@@ -1026,13 +1137,14 @@ const isDev = import.meta.env.DEV;
         checkout: params.get("checkout") || "",
         adults: parseInt(params.get("adults") || "2", 10),
         children: parseInt(params.get("children") || "0", 10),
+        rooms: parseInt(params.get("rooms") || "1", 10),
       };
     }
 
     function updateUrl(step, params = {}) {
       const url = new URL(window.location);
       url.searchParams.set("step", step);
-      ["room", "rt", "checkin", "checkout", "adults", "children"].forEach((key) => {
+      ["room", "rt", "checkin", "checkout", "adults", "children", "rooms"].forEach((key) => {
         if (params[key] !== undefined && params[key] !== null && params[key] !== "") {
           url.searchParams.set(key, String(params[key]));
         } else {
@@ -1225,6 +1337,7 @@ const isDev = import.meta.env.DEV;
       selectedRoom = null;
       selectedRoomType = null;
       guestData = null;
+      selectedAllocation = null;
       clearDraft();
       clearBookingSession();
       document.querySelectorAll("[data-booking-summary]").forEach(function (el) {
@@ -1361,6 +1474,18 @@ const isDev = import.meta.env.DEV;
       try {
         await loadRazorpayScript();
 
+        var guestPayload = Object.assign({}, guestData || {});
+        var beddingNote = beddingSummaryNote(
+          selectedAllocation && Array.isArray(selectedAllocation.rooms)
+            ? selectedAllocation.rooms
+            : null
+        );
+        if (beddingNote) {
+          guestPayload.specialRequests = (guestPayload.specialRequests || "") +
+            (guestPayload.specialRequests ? "\n" : "") +
+            beddingNote;
+        }
+
         var submitRes = await fetch("/api/booking/submit", {
           method: "POST",
           headers: { "Content-Type": "application/json", Accept: "application/json" },
@@ -1371,11 +1496,14 @@ const isDev = import.meta.env.DEV;
             adults: lastSearchParams.adults,
             children: lastSearchParams.children || 0,
             rooms_required:
-              Number(quoteData.rooms_required) >= 1
+              Number(lastSearchParams.rooms) >= 1
+                ? Number(lastSearchParams.rooms)
+                : Number(quoteData.rooms_required) >= 1
                 ? Number(quoteData.rooms_required)
                 : undefined,
-            guest: guestData,
+            guest: guestPayload,
             quote_id: quoteData.quote_id || null,
+            bedding: beddingSelectionsFromAllocation(selectedAllocation),
           }),
         });
 
@@ -1527,7 +1655,7 @@ const isDev = import.meta.env.DEV;
       } catch (e) { /* ignore */ }
     }
 
-    function createBookingSession(roomSlug, roomName, checkin, checkout, adults, children, quote, guest, quoteId, roomType) {
+    function createBookingSession(roomSlug, roomName, checkin, checkout, adults, children, rooms, quote, guest, quoteId, roomType) {
       var now = Date.now();
       var session = {
         sessionId: generateSessionId(),
@@ -1541,6 +1669,7 @@ const isDev = import.meta.env.DEV;
         checkout: checkout,
         adults: adults,
         children: children,
+        rooms: rooms || 1,
         quoteId: quoteId || null,
         guest: guest || {},
         quote: quote || {},
@@ -1574,6 +1703,7 @@ const isDev = import.meta.env.DEV;
         checkout: saved.checkout,
         adults: saved.adults,
         children: saved.children,
+        rooms: saved.rooms || 1,
       };
         quoteData = saved.quote;
         guestData = saved.guest;
@@ -1600,7 +1730,9 @@ const isDev = import.meta.env.DEV;
         checkout: source.checkout,
         adults: source.adults,
         children: source.children || 0,
+        rooms: source.rooms || 1,
       };
+      selectedAllocation = source.allocation || null;
       quoteData = source.quote || null;
       guestData = source.guest || {};
     }
@@ -1626,6 +1758,7 @@ const isDev = import.meta.env.DEV;
           checkoutInput.value = urlParams.checkout;
           adultsInput.value = String(urlParams.adults || 2);
           childrenInput.value = String(urlParams.children || 0);
+          roomsInput.value = String(urlParams.rooms || 1);
           searchAvailability();
         }
         return;
@@ -1655,6 +1788,7 @@ const isDev = import.meta.env.DEV;
             checkout: urlParams.checkout,
             adults: urlParams.adults,
             children: urlParams.children,
+            rooms: urlParams.rooms || 1,
           };
           fetchQuote(roomSlug, selectedRoomType);
         }
@@ -1678,7 +1812,6 @@ const isDev = import.meta.env.DEV;
 
       const checkin = checkinInput.value;
       const checkout = checkoutInput.value;
-      const adults = parseInt(adultsInput.value, 10);
       const today = formatDateValue(new Date());
 
       if (!checkin) {
@@ -1697,8 +1830,24 @@ const isDev = import.meta.env.DEV;
         valid = false;
       }
 
-      if (!adults || adults < 1) {
-        showError("adults", "At least 1 adult is required");
+      // Adults/Children/Rooms are open numeric typing fields. Each is parsed
+      // independently (bounds are a CFR UX guard; InnPilot stays authoritative
+      // on whether the party actually fits the requested rooms).
+      const adults = parseNumericGuestInput(adultsInput.value, "adults");
+      if (adults.error) {
+        showError("adults", adults.error);
+        valid = false;
+      }
+
+      const children = parseNumericGuestInput(childrenInput.value, "children");
+      if (children.error) {
+        showError("children", children.error);
+        valid = false;
+      }
+
+      const rooms = parseNumericGuestInput(roomsInput.value, "rooms");
+      if (rooms.error) {
+        showError("rooms", rooms.error);
         valid = false;
       }
 
@@ -1713,6 +1862,7 @@ const isDev = import.meta.env.DEV;
         checkout: checkoutInput.value,
         adults: parseInt(adultsInput.value, 10),
         children: parseInt(childrenInput.value, 10) || 0,
+        rooms: parseInt(roomsInput.value, 10) || 1,
       };
 
       resetBookingFlow();
@@ -1742,6 +1892,7 @@ const isDev = import.meta.env.DEV;
             checkout: params.checkout,
             adults: String(params.adults),
             children: String(params.children),
+            rooms: String(params.rooms),
           }).toString();
 
         const response = await fetch(url, {
@@ -1799,6 +1950,7 @@ const isDev = import.meta.env.DEV;
           checkout: params.checkout,
           adults: params.adults,
           children: params.children,
+          rooms: params.rooms,
         });
         scrollResultsIntoView();
       } catch (err) {
@@ -1846,6 +1998,8 @@ const isDev = import.meta.env.DEV;
             checkout: lastSearchParams.checkout,
             adults: lastSearchParams.adults,
             children: lastSearchParams.children,
+            rooms_required: lastSearchParams.rooms || 1,
+            bedding: beddingSelectionsFromAllocation(selectedAllocation),
           }),
         });
 
@@ -1863,6 +2017,8 @@ const isDev = import.meta.env.DEV;
           checkout: lastSearchParams.checkout,
           adults: lastSearchParams.adults,
           children: lastSearchParams.children,
+          rooms: lastSearchParams.rooms || 1,
+          allocation: selectedAllocation || null,
           quote: data,
           guest: guestData || {},
           step: "guests",
@@ -1880,6 +2036,7 @@ const isDev = import.meta.env.DEV;
           checkout: lastSearchParams.checkout,
           adults: lastSearchParams.adults,
           children: lastSearchParams.children,
+          rooms: lastSearchParams.rooms || 1,
         });
         scrollGuestsIntoView();
       } catch (err) {
@@ -1899,7 +2056,7 @@ const isDev = import.meta.env.DEV;
         .replace(/'/g, "&#39;");
     }
 
-    function buildPricingRowsHtml(nights) {
+    function buildPricingRowsHtml(nights, beddingAmount, serverBedding) {
       var taxes = [];
       if (Array.isArray(quoteData.taxBreakdown)) {
         taxes = quoteData.taxBreakdown;
@@ -1908,7 +2065,7 @@ const isDev = import.meta.env.DEV;
       }
 
       var roomCount = Number(quoteData.room_count) > 1 ? Number(quoteData.room_count) : 1;
-
+      var bedding = Number(beddingAmount) || 0;
       var roomLabel = roomCount > 1 ? roomCount + " \u00d7 " + selectedRoom.name : "Room";
       var roomAmount =
         quoteData.room_subtotal != null
@@ -1928,9 +2085,17 @@ const isDev = import.meta.env.DEV;
         formatCurrency(roomAmount) +
         "</span></div>";
 
+      if (bedding > 0) {
+        rows +=
+          '<div class="flex justify-between text-[13px] text-cfr-earth-500">' +
+          '<span>Extra bedding</span><span>' +
+          formatCurrency(bedding) +
+          "</span></div>";
+      }
+
       taxes.forEach(function (t) {
         rows +=
-          '<div class="flex justify-between text-xs text-cfr-earth-500">' +
+          '<div class="flex justify-between text-[13px] text-cfr-earth-500">' +
           "<span>" +
           esc(t.label) +
           "</span><span>" +
@@ -1938,14 +2103,66 @@ const isDev = import.meta.env.DEV;
           "</span></div>";
       });
 
+      // When InnPilot returned a server-computed `bedding_subtotal`, its
+      // `total` is already tax-inclusive of bedding — adding it again would
+      // double count. The server value only falls back to the display-only
+      // client estimate against older servers.
+      var baseTotal = quoteData.total || quoteData.grandTotal || quoteData.subtotal || 0;
+      var displayTotal = Number(baseTotal) + (serverBedding ? 0 : bedding);
       rows +=
         '<div class="mt-1 flex justify-between border-t border-cfr-earth-100 pt-2">' +
         '<span class="font-bold text-cfr-earth-700">Total</span>' +
         '<span class="text-xl font-bold text-cfr-earth-700">' +
-        formatCurrency(quoteData.total || quoteData.grandTotal || quoteData.subtotal || 0) +
+        formatCurrency(displayTotal) +
         "</span></div>";
 
       return rows;
+    }
+
+    // Bedding is spec'd at ₹750/night/affected room; when InnPilot supplies a
+    // different per-room charge via bedding state, that charge wins.
+    function beddingTotalFor(rooms, nights) {
+      if (!Array.isArray(rooms) || rooms.length === 0) return 0;
+      var total = 0;
+      rooms.forEach(function (r) {
+        var b = r && r.bedding;
+        if (b && (b.mandatory || b.selected)) {
+          var charge = Number(b.chargePerNight) > 0 ? Number(b.chargePerNight) : 750;
+          total += charge * nights;
+        }
+      });
+      return total;
+    }
+
+    // Free-text note (sent as a special request) describing the bedding the
+    // customer selected so the property can prepare it.
+    function beddingSummaryNote(rooms) {
+      if (!Array.isArray(rooms) || rooms.length === 0) return "";
+      var affected = affectedBeddingRooms(rooms);
+      if (affected.length === 0) return "";
+      return (
+        "Extra bedding requested for " +
+        affected.length +
+        (affected.length === 1 ? " room" : " rooms") +
+        " (Rooms " +
+        affected.map(function (i) { return i + 1; }).join(", ") +
+        ")"
+      );
+    }
+
+    // The customer's bedding choices, in the contract InnPilot expects:
+    // [{ room_index, selected }] per allocated room. Only these two fields are
+    // relayed; InnPilot revalidates them against its own policy on quote + book.
+    function beddingSelectionsFromAllocation(allocation) {
+      if (!allocation || !Array.isArray(allocation.rooms)) return undefined;
+      var out = [];
+      allocation.rooms.forEach(function (room, i) {
+        var b = room && room.bedding;
+        if (b) {
+          out.push({ room_index: i, selected: !!(b.mandatory || b.selected) });
+        }
+      });
+      return out.length > 0 ? out : undefined;
     }
 
     function renderBookingState() {
@@ -1957,20 +2174,49 @@ const isDev = import.meta.env.DEV;
           86400000
       );
       var roomCount = Number(quoteData.room_count) > 1 ? Number(quoteData.room_count) : 1;
-      var roomsSuffix = roomCount > 1 ? " · " + roomCount + " Rooms required" : "";
+      // The customer's chosen allocation (option + bedding) takes precedence;
+      // otherwise fall back to InnPilot's quote/room allocation verbatim.
       var allocation =
-        Array.isArray(quoteData.allocation)
+        selectedAllocation && Array.isArray(selectedAllocation.rooms)
+          ? selectedAllocation.rooms
+          : Array.isArray(quoteData.allocation)
           ? quoteData.allocation
           : Array.isArray(selectedRoom.allocation)
           ? selectedRoom.allocation
           : (selectedRoom.occupancy && selectedRoom.occupancy.allocation) || null;
       var allocationHtml = allocation && allocation.length > 0 ? allocationRowsHtml(allocation) : "";
-      var pricingRows = buildPricingRowsHtml(nights);
+      var affectedRooms = affectedBeddingRooms(allocation);
+      var beddingTotal = beddingTotalFor(allocation, nights);
+      var serverBeddingSubtotal =
+        quoteData.bedding_subtotal != null ? Number(quoteData.bedding_subtotal) : null;
+      var beddingAmount = serverBeddingSubtotal != null ? serverBeddingSubtotal : beddingTotal;
+      var pricingRows = buildPricingRowsHtml(
+        nights,
+        beddingAmount,
+        serverBeddingSubtotal != null
+      );
       var cancellationPolicy = quoteData.cancellation_policy || selectedRoom.cancellationPolicy || "";
       var quoteExpiry = quoteData.quote_expires_at || "";
 
+      // 3 centred lines: room, stay, guests — then "N Rooms required" on its
+      // own line when the party needs more than one room.
+      var guestsText =
+        lastSearchParams.adults +
+        " Adult" +
+        (lastSearchParams.adults !== 1 ? "s" : "") +
+        (lastSearchParams.children > 0
+          ? ", " + lastSearchParams.children + " Child" + (lastSearchParams.children !== 1 ? "ren" : "")
+          : "");
+      var roomsRequiredLine =
+        roomCount > 1
+          ? '<p class="mt-1 text-sm font-semibold text-cfr-green-dark">' +
+            roomCount +
+            (roomCount === 1 ? " Room required" : " Rooms required") +
+            "</p>"
+          : "";
+
       var summaryHtml =
-        '<div class="space-y-4">' +
+        '<div class="space-y-4 text-center">' +
         "<div>" +
         '<h3 class="font-display text-base font-semibold text-cfr-green-dark">' +
         esc(selectedRoom.name) +
@@ -1979,27 +2225,24 @@ const isDev = import.meta.env.DEV;
         formatDisplayDate(lastSearchParams.checkin) +
         " – " +
         formatDisplayDate(lastSearchParams.checkout) +
-        "</p>" +
-        '<p class="text-sm text-cfr-earth-500">' +
+        " · " +
         nights +
         " night" +
         (nights !== 1 ? "s" : "") +
-        " · " +
-        lastSearchParams.adults +
-        " Adult" +
-        (lastSearchParams.adults !== 1 ? "s" : "") +
-        (lastSearchParams.children > 0
-          ? ", " + lastSearchParams.children + " Child" + (lastSearchParams.children !== 1 ? "ren" : "")
-          : "") +
-        roomsSuffix +
         "</p>" +
-        allocationHtml +
+        '<p class="mt-0.5 text-sm text-cfr-earth-500">' +
+        guestsText +
+        "</p>" +
+        roomsRequiredLine +
         "</div>" +
+        (allocationHtml
+          ? '<div class="text-center">' + allocationHtml + "</div>"
+          : "") +
         '<div class="border-t border-cfr-earth-100 pt-4">' +
         pricingRows +
         "</div>" +
         (cancellationPolicy
-          ? '<div class="flex items-start gap-2 text-xs text-cfr-green-leaf">' +
+          ? '<div class="flex items-start gap-2 text-[13px] text-cfr-green-leaf">' +
             '<svg class="mt-0.5 h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>' +
             "<span>" +
             esc(cancellationPolicy) +
@@ -2012,7 +2255,11 @@ const isDev = import.meta.env.DEV;
       });
 
       var mobileTotal = document.querySelector("[data-mobile-total]");
-      if (mobileTotal) mobileTotal.textContent = formatCurrency(quoteData.total || quoteData.grandTotal || quoteData.subtotal || 0);
+      if (mobileTotal)
+        mobileTotal.textContent = formatCurrency(
+          (quoteData.total || quoteData.grandTotal || quoteData.subtotal || 0) +
+            (serverBeddingSubtotal != null ? 0 : beddingTotal)
+        );
 
       var roomNameEl = document.getElementById("review-room-name");
       if (roomNameEl) roomNameEl.textContent = selectedRoom.name;
@@ -2032,14 +2279,11 @@ const isDev = import.meta.env.DEV;
       var guestsInfoEl = document.getElementById("review-guests-info");
       if (guestsInfoEl) {
         guestsInfoEl.innerHTML =
-          lastSearchParams.adults +
-          " Adult" +
-          (lastSearchParams.adults !== 1 ? "s" : "") +
-          (lastSearchParams.children > 0
-            ? ", " + lastSearchParams.children + " Child" + (lastSearchParams.children !== 1 ? "ren" : "")
-            : "") +
-          roomsSuffix +
-          allocationHtml;
+          '<span class="block">' +
+          guestsText +
+          "</span>" +
+          roomsRequiredLine +
+          (allocationHtml ? '<span class="mt-1 block">' + allocationHtml + "</span>" : "");
       }
 
       var pricingEl = document.getElementById("review-pricing");
@@ -2119,6 +2363,7 @@ const isDev = import.meta.env.DEV;
         lastSearchParams.checkout,
         lastSearchParams.adults,
         lastSearchParams.children,
+        lastSearchParams.rooms || 1,
         quoteData || {},
         guestData,
         quoteData?.quote_id,
@@ -2136,6 +2381,7 @@ const isDev = import.meta.env.DEV;
         checkout: lastSearchParams.checkout,
         adults: lastSearchParams.adults,
         children: lastSearchParams.children,
+        rooms: lastSearchParams.rooms || 1,
       });
     }
 
@@ -2225,12 +2471,17 @@ const isDev = import.meta.env.DEV;
           for (var c = 0; c < childCount; c++) {
             icons += occupantIconHtml("child");
           }
-          var label =
-            "Room " + (i + 1) + ": " + adultCount + " adult" + (adultCount === 1 ? "" : "s") +
-            (childCount > 0 ? ", " + childCount + " child" + (childCount === 1 ? "" : "ren") : "");
+          var label = roomRowLabel(room, i);
+          var typeNote = "";
+          if (hasMixedRoomTypes(allocation) && room.room_type) {
+            typeNote =
+              '<span class="text-[10px] font-medium text-cfr-earth-400">' +
+              esc(roomTypeDescription(room, "Room")) +
+              "</span>";
+          }
           return (
             '<li class="flex items-center justify-between gap-2" aria-label="' + esc(label) + '">' +
-            '<span class="text-[11px] font-medium text-cfr-earth-500">Room ' + (i + 1) + "</span>" +
+            '<span class="flex items-center gap-1.5 text-[11px] font-medium text-cfr-earth-500">Room ' + (i + 1) + typeNote + "</span>" +
             '<span class="flex items-center justify-end gap-1">' + icons + "</span>" +
             "</li>"
           );
@@ -2242,6 +2493,227 @@ const isDev = import.meta.env.DEV;
         '<ul class="mt-1.5 space-y-1">' + rows + "</ul>" +
         "</div>"
       );
+    }
+
+    // Bedding is per-room state provided by InnPilot (charge, mandatory vs
+    // optional). CFR renders it verbatim and never decides the requirement.
+    // Mandatory bedding is checked + disabled; optional starts unchecked.
+    function beddingCheckboxHtml(room, roomIndex) {
+      var b = room && room.bedding;
+      if (!b) return "";
+      var charge =
+        Number(b.chargePerNight) > 0
+          ? "₹" + Math.round(b.chargePerNight).toLocaleString("en-IN") + "/night"
+          : "";
+      var mandatory = !!b.mandatory;
+      var checked = mandatory || !!b.selected;
+      return (
+        '<div class="mt-2 flex items-center justify-between gap-2 rounded-lg bg-cfr-cream px-3 py-2" data-bedding-room>' +
+        '<label class="flex items-center gap-2 text-[13px] text-cfr-earth-600">' +
+        '<input type="checkbox" data-bedding-check data-room-index="' +
+        roomIndex +
+        '"' +
+        (checked ? " checked" : "") +
+        (mandatory ? " disabled" : "") +
+        ' class="h-4 w-4 rounded border-cfr-earth-300 text-cfr-green-accent focus:ring-cfr-green-accent" aria-label="' +
+        (mandatory ? "Extra bedding required (included)" : "Add extra bedding") +
+        ' for room ' +
+        (roomIndex + 1) +
+        '" />' +
+        "<span>" +
+        (mandatory ? "Extra bedding required (included)" : "Add extra bedding") +
+        "</span>" +
+        "</label>" +
+        (charge
+          ? '<span class="text-[11px] font-medium text-cfr-earth-500">' + charge + "</span>"
+          : "") +
+        "</div>"
+      );
+    }
+
+    // InnPilot enumerates customer-selectable allocations (`allocation_options`).
+    // CFR renders them as radio-style options and never computes them. When more
+    // than one exists, the first (or InnPilot's recommended) is pre-selected.
+    function allocationOptionPickerHtml(apiRoom, nights) {
+      var options =
+        Array.isArray(apiRoom.allocation_options) && apiRoom.allocation_options.length > 1
+          ? apiRoom.allocation_options
+          : null;
+      var allocation =
+        options
+          ? options[0].rooms
+          : Array.isArray(apiRoom.allocation)
+          ? apiRoom.allocation
+          : (apiRoom.occupancy && apiRoom.occupancy.allocation) || null;
+      if (!Array.isArray(allocation) || allocation.length === 0) return "";
+      var roomKey = (apiRoom.room_type || apiRoom.slug || "room").replace(/[^a-zA-Z0-9]/g, "");
+      var html =
+        '<div class="mt-2 rounded-lg bg-white px-3 py-2" data-allocation-editor>' +
+        '<p class="text-center text-[11px] font-semibold uppercase tracking-wide text-cfr-earth-500">Rooms required: ' +
+        allocation.length +
+        "</p>";
+      if (options) {
+        html +=
+          '<div class="mt-2 space-y-1.5" data-allocation-options role="radiogroup" aria-label="Choose how your rooms are arranged">' +
+          '<p class="text-[11px] text-cfr-earth-500">Choose how your rooms are arranged:</p>';
+        options.forEach(function (opt, i) {
+          var total = Number(opt.total) || 0;
+          var recommended = !!opt.recommended;
+          html +=
+            '<label class="flex items-center justify-between gap-2 rounded-lg border px-3 py-2 text-[13px] text-cfr-earth-600' +
+            (i === 0 ? " border-cfr-green-accent bg-cfr-green-50" : " border-cfr-earth-200") +
+            '" data-allocation-option>' +
+            '<span class="flex items-center gap-2">' +
+            '<input type="radio" name="alloc-' +
+            roomKey +
+            '" data-allocation-radio data-option-index="' +
+            i +
+            '" value="' +
+            i +
+            '"' +
+            (i === 0 ? " checked" : "") +
+            ' class="h-4 w-4 border-cfr-earth-300 text-cfr-green-accent focus:ring-cfr-green-accent" />' +
+            "<span>" +
+            (opt.rooms.length === 1
+              ? "1 room: " + roomOccupancyLabel(opt.rooms[0])
+              : opt.rooms.length + " rooms") +
+            "</span>" +
+            "</span>" +
+            (total > 0
+              ? '<span class="font-medium text-cfr-earth-700">' +
+                (recommended ? '<span class="mr-1 text-[10px] font-bold uppercase text-cfr-green-leaf">Best price</span>' : "") +
+                formatCurrency(total) +
+                "</span>"
+              : "") +
+            "</label>";
+        });
+        html += "</div>";
+      }
+      html +=
+        '<ul class="mt-2 space-y-1.5" data-allocation-rows>' +
+        allocation
+          .map(function (room, i) {
+            return allocationRowEditorHtml(room, i);
+          })
+          .join("") +
+        "</ul>";
+      if (affectedBeddingRooms(allocation).length === 0) {
+        html +=
+          '<p class="mt-2 text-[11px] text-cfr-earth-400">Bedding extras, if applicable, appear below.</p>';
+      }
+      html += "</div>";
+      return html;
+    }
+
+    function allocationRowEditorHtml(room, i) {
+      var adultCount = Number(room.adults) || 0;
+      var childCount = Number(room.children) || 0;
+      var icons = "";
+      for (var a = 0; a < adultCount; a++) {
+        icons += occupantIconHtml(a % 2 === 0 ? "male" : "female");
+      }
+      for (var c = 0; c < childCount; c++) {
+        icons += occupantIconHtml("child");
+      }
+      var typeNote = "";
+      if (room.room_type) {
+        typeNote =
+          '<span class="text-[10px] font-medium text-cfr-earth-400">' +
+          esc(room.room_type) +
+          "</span>";
+      }
+      return (
+        '<li class="rounded-lg bg-cfr-cream px-3 py-2">' +
+        '<div class="flex items-center justify-between gap-2" aria-label="' +
+        roomRowLabel(room, i) +
+        '">' +
+        '<span class="flex items-center gap-1.5 text-[11px] font-medium text-cfr-earth-500">Room ' +
+        (i + 1) +
+        typeNote +
+        "</span>" +
+        '<span class="flex items-center justify-end gap-1">' +
+        icons +
+        "</span>" +
+        "</div>" +
+        beddingCheckboxHtml(room, i) +
+        "</li>"
+      );
+    }
+
+    function allocationRowFromEditor(room) {
+      return {
+        adults: Number(room.adults) || 0,
+        children: Number(room.children) || 0,
+        room_type: room.room_type || null,
+        nightly_rate: room.nightly_rate != null ? room.nightly_rate : null,
+        room_total: room.room_total != null ? room.room_total : null,
+        bedding_total: room.bedding_total != null ? room.bedding_total : null,
+        bedding: room.bedding
+          ? Object.assign({}, room.bedding, { selected: false })
+          : null,
+      };
+    }
+
+    // Reads the currently selected allocation + bedding checks from a results
+    // card into the contract shape used by quote/summary/review.
+    function readCardAllocation(card, apiRoom) {
+      var options =
+        Array.isArray(apiRoom.allocation_options) && apiRoom.allocation_options.length > 1
+          ? apiRoom.allocation_options
+          : null;
+      var checkedRadio = card.querySelector("[data-allocation-radio]:checked");
+      var optionIndex = checkedRadio ? parseInt(checkedRadio.getAttribute("data-option-index"), 10) : 0;
+      var base =
+        options && options[optionIndex] && Array.isArray(options[optionIndex].rooms)
+          ? options[optionIndex].rooms
+          : Array.isArray(apiRoom.allocation)
+          ? apiRoom.allocation
+          : (apiRoom.occupancy && apiRoom.occupancy.allocation) || [];
+      var rooms = base.map(function (room, i) {
+        var out = allocationRowFromEditor(room);
+        if (out.bedding) {
+          var check = card.querySelector('[data-bedding-check][data-room-index="' + i + '"]');
+          out.bedding.selected = !!(check && check.checked);
+        }
+        return out;
+      });
+      var optionTotal =
+        options && options[optionIndex] ? Number(options[optionIndex].total) || null : null;
+      return { rooms: rooms, total: optionTotal, option_index: optionIndex };
+    }
+
+    // Re-renders the per-room rows + bedding inside a card when the customer
+    // switches allocation options (InnPilot's alternatives, rendered verbatim).
+    function rerenderCardAllocation(card, apiRoom) {
+      var editor = card.querySelector("[data-allocation-editor]");
+      var rowsEl = card.querySelector("[data-allocation-rows]");
+      if (!editor || !rowsEl) return;
+      var options =
+        Array.isArray(apiRoom.allocation_options) && apiRoom.allocation_options.length > 1
+          ? apiRoom.allocation_options
+          : null;
+      var checked = card.querySelector("[data-allocation-radio]:checked");
+      var idx = checked ? parseInt(checked.getAttribute("data-option-index"), 10) : 0;
+      var allocation =
+        options && options[idx] && Array.isArray(options[idx].rooms)
+          ? options[idx].rooms
+          : Array.isArray(apiRoom.allocation)
+          ? apiRoom.allocation
+          : [];
+      rowsEl.innerHTML = allocation
+        .map(function (room, i) {
+          return allocationRowEditorHtml(room, i);
+        })
+        .join("");
+      card.querySelectorAll("[data-allocation-option]").forEach(function (labelEl, i) {
+        if (i === idx) {
+          labelEl.classList.add("border-cfr-green-accent", "bg-cfr-green-50");
+          labelEl.classList.remove("border-cfr-earth-200");
+        } else {
+          labelEl.classList.remove("border-cfr-green-accent", "bg-cfr-green-50");
+          labelEl.classList.add("border-cfr-earth-200");
+        }
+      });
     }
 
     function buildCarouselHtml(images, name) {
@@ -2712,6 +3184,7 @@ const isDev = import.meta.env.DEV;
 
     function renderResults(data) {
       roomsGrid.innerHTML = "";
+      lastApiRooms = Array.isArray(data.rooms) ? data.rooms : [];
 
       const nights = Math.ceil(
         (new Date(data.checkout + "T00:00:00") -
@@ -2808,7 +3281,7 @@ const isDev = import.meta.env.DEV;
           (!available
             ? '<div class="absolute inset-0 z-10 flex items-center justify-center bg-black/45"><span class="rounded-full bg-white/95 px-4 py-1.5 text-sm font-bold text-cfr-earth-700">Not Available</span></div>'
             : roomsLeft > 0 && roomsLeft <= 3
-            ? '<div class="absolute top-3 right-3 z-10 rounded-full bg-cfr-sand-500 px-3 py-1 text-xs font-bold text-cfr-earth-700 shadow-sm">Only ' + roomsLeft + " left</div>"
+            ? '<div class="absolute top-3 right-3 z-10 rounded-full bg-cfr-sand-500 px-3 py-1 text-[13px] font-bold text-cfr-earth-700 shadow-sm">Only ' + roomsLeft + " left</div>"
             : "") +
           "</div>" +
           buildThumbsHtml(gallery, name);
@@ -2839,7 +3312,7 @@ const isDev = import.meta.env.DEV;
           '<ul class="mt-3 grid grid-cols-1 gap-x-4 gap-y-2.5 sm:grid-cols-2">' +
           FEATURED_AMENITIES.map(function (a) {
             return (
-              '<li class="flex items-center gap-2.5 text-xs text-cfr-earth-600">' +
+              '<li class="flex items-center gap-2.5 text-[13px] text-cfr-earth-600">' +
               '<span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-cfr-green-50 text-cfr-green-accent">' +
               (AMENITY_ICONS[a] || "") +
               "</span>" +
@@ -2900,7 +3373,7 @@ const isDev = import.meta.env.DEV;
             '<div class="mt-2 border-t border-cfr-earth-100 pt-2">';
           taxBreakdown.forEach(function (t) {
             pricingHtml +=
-              '<div class="flex justify-between text-xs text-cfr-earth-400"><span>' +
+              '<div class="flex justify-between text-[13px] text-cfr-earth-400"><span>' +
               t.label +
               "</span><span>" +
               formatCurrency(t.amount) +
@@ -2908,7 +3381,7 @@ const isDev = import.meta.env.DEV;
           });
           if (totalTaxes > 0 && taxBreakdown.length === 0) {
             pricingHtml +=
-              '<div class="flex justify-between text-xs text-cfr-earth-400"><span>Taxes</span><span>' +
+              '<div class="flex justify-between text-[13px] text-cfr-earth-400"><span>Taxes</span><span>' +
               formatCurrency(totalTaxes) +
               "</span></div>";
           }
@@ -2922,14 +3395,15 @@ const isDev = import.meta.env.DEV;
           '<div class="mt-4"><p class="text-sm font-medium text-cfr-earth-400">Not available for these dates</p></div>';
       }
 
-      // InnPilot decides occupancy: the per-room allocation block (adult/
-      // child icons per room) renders its verdict verbatim; when an older
-      // InnPilot omits allocation, fall back to the plain multi-room note.
+      // InnPilot decides occupancy: the allocation block (options + per-room
+      // adult/child rows + bedding state) renders its verdict verbatim. CFR
+      // never reconstructs allocation, availability or bedding rules.
       let roomsRequiredHtml = "";
       let allocationHtml = "";
-      if (available && fits && Array.isArray(allocation) && allocation.length > 0) {
-        allocationHtml = allocationRowsHtml(allocation);
-      } else if (available && roomsRequired > 1) {
+      let errorHtml = "";
+      if (available && fits) {
+        allocationHtml = allocationOptionPickerHtml(apiRoom, nights);
+      } else if (available && roomsRequired > 1 && !apiRoom.availability_error) {
         roomsRequiredHtml =
           '<p class="mb-3 rounded-lg bg-cfr-cream px-3 py-2 text-center text-xs text-cfr-earth-600">' +
           "Your party needs " +
@@ -2938,11 +3412,37 @@ const isDev = import.meta.env.DEV;
           esc(name) +
           ".</p>";
       }
+      if (available && !fits) {
+        // InnPilot's authoritative reason — distinguishes occupancy failure
+        // (party cannot be housed) from inventory failure (not enough rooms
+        // left), and includes the minimum room count when InnPilot provides it.
+        const errInfo = apiRoom.availability_error;
+        const code = errInfo && errInfo.code;
+        const message =
+          (errInfo && errInfo.message) ||
+          (code === "INSUFFICIENT_INVENTORY"
+            ? "Not enough rooms left for these dates."
+            : "The requested number of rooms cannot be arranged for your party.");
+        const minimum =
+          errInfo && errInfo.minimum_rooms != null ? errInfo.minimum_rooms : apiRoom.minimum_rooms;
+        errorHtml =
+          '<div class="mt-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2.5 text-[13px] text-red-700" data-availability-error>' +
+          '<p class="font-semibold">' +
+          esc(message) +
+          "</p>" +
+          (minimum != null
+            ? '<p class="mt-1 text-red-600">This room type needs at least ' +
+              minimum +
+              (minimum === 1 ? " room." : " rooms.") +
+              "</p>"
+            : "") +
+          "</div>";
+      }
 
       let cancellationHtml = "";
       if (cancellationPolicy) {
         cancellationHtml =
-          '<div class="mt-3 flex items-center gap-1.5 text-xs text-cfr-green-leaf">' +
+          '<div class="mt-3 flex items-center gap-1.5 text-[13px] text-cfr-green-leaf">' +
           '<svg class="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>' +
           cancellationPolicy +
           "</div>";
@@ -2976,6 +3476,7 @@ const isDev = import.meta.env.DEV;
         '<div class="mt-5">' +
         roomsRequiredHtml +
         allocationHtml +
+        errorHtml +
         (available && fits
           ? '<button class="flex w-full items-center justify-center gap-2 rounded-lg bg-cfr-green-accent px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2 select-room-btn" data-slug="' +
             apiRoom.slug +
@@ -3012,7 +3513,7 @@ const isDev = import.meta.env.DEV;
         checkout: lastSearchParams?.checkout,
         adults: lastSearchParams?.adults,
         children: lastSearchParams?.children,
-
+        rooms: lastSearchParams?.rooms || 1,
       });
     });
 
@@ -3025,6 +3526,7 @@ const isDev = import.meta.env.DEV;
         checkout: lastSearchParams?.checkout,
         adults: lastSearchParams?.adults,
         children: lastSearchParams?.children,
+        rooms: lastSearchParams?.rooms || 1,
 
       });
     });
@@ -3041,6 +3543,8 @@ const isDev = import.meta.env.DEV;
         checkout: lastSearchParams?.checkout,
         adults: lastSearchParams?.adults,
         children: lastSearchParams?.children,
+        rooms: lastSearchParams?.rooms || 1,
+        allocation: selectedAllocation || null,
 
         quote: quoteData || {},
         guest: guestData,
@@ -3059,6 +3563,7 @@ const isDev = import.meta.env.DEV;
         checkout: lastSearchParams?.checkout,
         adults: lastSearchParams?.adults,
         children: lastSearchParams?.children,
+        rooms: lastSearchParams?.rooms || 1,
 
       });
     });
@@ -3080,6 +3585,7 @@ const isDev = import.meta.env.DEV;
           checkout: lastSearchParams?.checkout,
           adults: lastSearchParams?.adults,
           children: lastSearchParams?.children,
+          rooms: lastSearchParams?.rooms || 1,
 
         });
       });
@@ -3095,12 +3601,26 @@ const isDev = import.meta.env.DEV;
       });
     }
 
+    document.addEventListener("change", function (e) {
+      var radio = e.target && e.target.matches && e.target.matches("[data-allocation-radio]") ? e.target : null;
+      if (!radio) return;
+      var card = radio.closest("article");
+      var btn = card && card.querySelector(".select-room-btn");
+      var apiRoom = btn ? findApiRoom(btn.getAttribute("data-slug")) : null;
+      if (card && apiRoom) rerenderCardAllocation(card, apiRoom);
+    });
+
     document.addEventListener("click", function (e) {
       const target = e.target;
       if (target.classList.contains("select-room-btn")) {
         const slug = target.getAttribute("data-slug");
         const roomType = target.getAttribute("data-room-type");
         if (slug) {
+          const card = target.closest("article");
+          const apiRoom = findApiRoom(slug);
+          // Capture the customer's chosen allocation (option + bedding
+          // selection) so the quote/summary/review echo it verbatim.
+          selectedAllocation = card && apiRoom ? readCardAllocation(card, apiRoom) : null;
           const roomContent = resolveRoomContent(slug, ROOM_CONTENT);
           const roomName =
             roomContent === DEFAULT_ROOM ? roomType || slug : roomContent.name;
@@ -3131,6 +3651,7 @@ const isDev = import.meta.env.DEV;
             checkout: lastSearchParams?.checkout,
             adults: lastSearchParams?.adults,
             children: lastSearchParams?.children,
+            rooms: lastSearchParams?.rooms || 1,
 
           });
         }

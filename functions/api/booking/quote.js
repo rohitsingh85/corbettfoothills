@@ -3,6 +3,7 @@ const rateLimitMap = new Map();
 
 import { unwrapInnPilotData } from "./_response-envelope.js";
 import { transformQuote } from "./_quote-transform.js";
+import { sanitizeBeddingSelections } from "./_bedding.js";
 
 export async function onRequest(context) {
   const { request, env } = context;
@@ -63,7 +64,9 @@ export async function onRequest(context) {
     checkout,
     adults,
     children,
+    rooms_required,
     packages,
+    bedding,
   } = body || {};
 
   if (!room_id || typeof room_id !== "string") {
@@ -108,6 +111,13 @@ export async function onRequest(context) {
     );
   }
 
+  if (rooms_required !== undefined && rooms_required < 1) {
+    return new Response(
+      JSON.stringify({ error: "Rooms count cannot be less than 1" }),
+      { status: 400, headers }
+    );
+  }
+
   const apiKey = env.BOOKING_API_KEY;
   if (!apiKey) {
     console.error("BOOKING_API_KEY not configured");
@@ -128,12 +138,25 @@ export async function onRequest(context) {
     rate_plan_id: rate_plan_id || undefined,
   };
 
+  // The customer's requested room count (if any) is relayed to InnPilot so its
+  // quote prices exactly that many rooms; InnPilot is authoritative.
+  if (rooms_required && rooms_required >= 1) {
+    quotePayload.rooms_required = Number(rooms_required);
+  }
+
   if (rate_plan_id) {
     quotePayload.rate_plan_id = rate_plan_id;
   }
 
   if (packages && Array.isArray(packages) && packages.length > 0) {
     quotePayload.packages = packages;
+  }
+
+  // Relay only the customer's bedding selections (room_index + selected).
+  // Any injected financial values are stripped by the sanitizer.
+  const beddingSelections = sanitizeBeddingSelections(bedding);
+  if (beddingSelections !== undefined) {
+    quotePayload.bedding = beddingSelections;
   }
 
   const controller = new AbortController();
