@@ -6,4 +6,5 @@ dist/
 .env.*
 .DS_Store
 .cache/
+.wrangler/
 test-results/

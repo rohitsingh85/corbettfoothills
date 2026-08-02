@@ -1496,10 +1496,10 @@ const isDev = import.meta.env.DEV;
             adults: lastSearchParams.adults,
             children: lastSearchParams.children || 0,
             rooms_required:
-              Number(lastSearchParams.rooms) >= 1
-                ? Number(lastSearchParams.rooms)
-                : Number(quoteData.rooms_required) >= 1
+              Number(quoteData.rooms_required) >= 1
                 ? Number(quoteData.rooms_required)
+                : Number(lastSearchParams.rooms) >= 1
+                ? Number(lastSearchParams.rooms)
                 : undefined,
             guest: guestPayload,
             quote_id: quoteData.quote_id || null,
