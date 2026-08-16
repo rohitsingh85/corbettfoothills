@@ -197,6 +197,13 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"jim-corbett-safari-zones-which-zone-should-you-choose.md": {
+	id: "jim-corbett-safari-zones-which-zone-should-you-choose.md";
+  slug: "jim-corbett-safari-zones-which-zone-should-you-choose";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "long-weekends-in-2026.md": {
 	id: "long-weekends-in-2026.md";
   slug: "long-weekends-in-2026";
