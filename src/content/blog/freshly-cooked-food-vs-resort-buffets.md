@@ -1,7 +1,7 @@
 ---
 title: "Why Freshly Cooked Food Beats Resort Buffets"
 description: "Discover why freshly cooked, farm-to-table meals offer a richer dining experience than mass-produced resort buffets. From organic ingredients to personalised menus, see what sets boutique hospitality apart."
-pubDate: 2026-07-01
+pubDate: 2026-08-01
 author: "Corbett Foothills Retreat"
 image: "/images/blog-boutique-freshly-cooked.webp"
 tags: ["farm-to-table", "freshly cooked food", "boutique stay", "corbett national park", "travel dining"]

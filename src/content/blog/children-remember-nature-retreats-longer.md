@@ -1,7 +1,7 @@
 ---
 title: "Why Children Remember Nature Retreats Longer Than Resorts"
 description: "Children remember nature retreats longer than resort holidays because of meaningful hands-on experiences — farm activities, forest walks, stargazing, and quality family time away from screens."
-pubDate: 2026-07-20
+pubDate: 2026-03-01
 author: "Corbett Foothills Retreat"
 image: "/images/family-1.webp"
 tags: ["family travel", "nature retreat", "children", "corbett national park", "boutique farmstay"]

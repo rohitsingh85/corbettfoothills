@@ -1,7 +1,7 @@
 ---
 title: "The Mysterious Side of Kumaon: Legends, Haunted Places & Stories the Hills Still Whisper"
 description: "Beneath Kumaon's scenic beauty lies a world of folklore, ghost stories, and unexplained mysteries. Explore haunted forest rest houses, ancient legends, and the supernatural tales that Kumaon's hills still whisper."
-pubDate: 2026-01-10
+pubDate: 2026-03-15
 author: "Corbett Foothills Retreat"
 image: "/images/mysterious-kumaon-1.webp"
 tags: ["kumaon", "legends", "haunted places", "folklore", "uttarakhand", "supernatural"]

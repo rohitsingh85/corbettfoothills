@@ -1,7 +1,7 @@
 ---
 title: "What Most Guests Don't Realize About Jim Corbett Before They Arrive"
 description: "From safari realities and seasonal surprises to hidden costs and local tips — learn what first-time visitors wish they'd known before travelling to Jim Corbett National Park."
-pubDate: 2026-07-10
+pubDate: 2026-08-15
 author: "Corbett Foothills Retreat"
 image: "/images/live-1.webp"
 tags: ["jim corbett", "travel tips", "safari", "first-time visitors", "uttarakhand"]

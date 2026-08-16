@@ -1,7 +1,7 @@
 ---
 title: "Why Smaller Stays Often Deliver Better Hospitality"
 description: "Discover why intimate boutique stays with fewer rooms offer more personalized hospitality, greater attention to detail, and a more memorable travel experience than large commercial resorts."
-pubDate: 2026-07-05
+pubDate: 2026-06-01
 author: "Corbett Foothills Retreat"
 image: "/images/blog-boutique-hero.webp"
 tags: ["boutique stay", "hospitality", "personalized service", "corbett national park", "travel tips"]

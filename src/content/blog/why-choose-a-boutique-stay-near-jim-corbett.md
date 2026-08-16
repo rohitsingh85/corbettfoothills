@@ -1,7 +1,7 @@
 ---
 title: "Why Choose a Boutique Stay Near Jim Corbett?"
 description: "Looking for the best place to stay near Jim Corbett? Find out why boutique retreats are becoming the preferred choice for travellers seeking peaceful surroundings, personalized service, authentic local experiences, and better value for money than many large resorts."
-pubDate: 2026-06-01
+pubDate: 2026-01-01
 author: "Corbett Foothills Retreat"
 image: "/images/blog-boutique-hero.webp"
 tags: ["boutique stay", "corbett national park", "accommodation", "travel tips", "uttarakhand"]

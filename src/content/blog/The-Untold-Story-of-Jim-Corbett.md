@@ -1,7 +1,7 @@
 ---
 title: "The Untold Story of Jim Corbett: Hunter, Hero, and Protector of Tigers"
 description: "From tracking the deadliest man-eaters in history to becoming India's earliest conservation champions — discover the untold story of Jim Corbett, the hunter who became a protector."
-pubDate: 2026-06-01
+pubDate: 2026-06-15
 author: "Corbett Foothills Retreat"
 image: "/images/blog-hero-untold-story.webp"
 tags: ["jim corbett", "history", "man-eater", "conservation", "kumaon", "tiger"]

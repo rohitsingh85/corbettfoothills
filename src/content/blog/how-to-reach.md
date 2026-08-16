@@ -1,7 +1,7 @@
 ---
 title: "How to Reach Corbett Foothills Retreat – Complete Travel Guide"
 description: "Complete travel guide to Corbett Foothills Retreat — driving directions from Delhi, nearest railway stations and airports, distances from major cities, and travel tips."
-pubDate: 2026-03-01
+pubDate: 2026-02-01
 author: "Corbett Foothills Retreat"
 image: "/images/live-1.webp"
 tags: ["how to reach", "travel guide", "directions", "jim corbett", "uttarakhand"]

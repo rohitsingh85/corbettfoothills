@@ -1,7 +1,7 @@
 ---
 title: "The Untold Corbett"
 description: "Jim Corbett is known for its tigers, but its most captivating stories often remain hidden from view. Journey into The Untold Corbett and discover facts that will change the way you see this iconic wilderness."
-pubDate: 2026-04-15
+pubDate: 2026-01-15
 author: "Corbett Foothills Retreat"
 image: "/images/blog-untold-corbett-hero.webp"
 tags: ["corbett national park", "history", "lesser known facts", "wildlife", "uttarakhand"]

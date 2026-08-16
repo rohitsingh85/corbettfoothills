@@ -1,7 +1,7 @@
 ---
 title: "Why Some Visitors Leave Jim Corbett Disappointed"
 description: "Not every Corbett trip turns out the way visitors expect. Discover the surprising reasons some travellers leave disappointed—and the simple mistakes you can avoid for a more rewarding experience."
-pubDate: 2026-02-01
+pubDate: 2026-02-15
 author: "Corbett Foothills Retreat"
 image: "/images/blog-disappointed-hero.webp"
 tags: ["jim corbett", "travel tips", "wildlife safari", "tourism", "uttarakhand"]

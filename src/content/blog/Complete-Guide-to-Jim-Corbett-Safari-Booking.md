@@ -1,7 +1,7 @@
 ---
 title: "Complete Guide to Jim Corbett Safari Booking (2026 Update)"
 description: "Everything you need to know about Jim Corbett safari booking in 2026 — zones, fees, timings, tiger sighting hotspots, and step-by-step booking instructions. Plan smarter and make the most of your Corbett adventure."
-pubDate: 2026-05-15
+pubDate: 2026-07-15
 author: "Corbett Foothills Retreat"
 image: "/images/blog-safari-guide-hero.webp"
 tags: ["safari booking", "corbett national park", "safari guide", "travel tips", "uttarakhand"]

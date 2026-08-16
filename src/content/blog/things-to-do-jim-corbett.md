@@ -1,7 +1,7 @@
 ---
 title: "Top Things to Do Near Jim Corbett"
 description: "10 unforgettable experiences near Jim Corbett that most visitors miss. From forest walks and riverside sunsets to local cuisine and hidden spiritual gems, discover the best of Ramnagar beyond the safari."
-pubDate: 2026-05-01
+pubDate: 2026-05-15
 author: "Corbett Foothills Retreat"
 image: "/images/blog-things-hero.webp"
 tags: ["things to do", "ramnagar", "corbett national park", "travel", "uttarakhand"]

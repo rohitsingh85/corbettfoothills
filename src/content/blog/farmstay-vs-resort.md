@@ -1,7 +1,7 @@
 ---
 title: "Farmstay vs Resort Near Jim Corbett – Which Is Better?"
 description: "Compare boutique farmstay vs large resort near Jim Corbett National Park. Find out which is best for families, couples, pet owners, and nature lovers."
-pubDate: 2026-03-15
+pubDate: 2026-04-01
 author: "Corbett Foothills Retreat"
 image: "/images/live-57.webp"
 tags: ["farmstay", "resort", "comparison", "jim corbett", "accommodation"]

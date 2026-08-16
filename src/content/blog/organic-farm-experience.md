@@ -1,7 +1,7 @@
 ---
 title: "Organic Farm Experience Near Jim Corbett – Farm-to-Table Living"
 description: "Immerse yourself in organic farm living at Corbett Foothills Retreat — harvest fresh produce, enjoy farm-to-table meals, explore nature trails, and experience the simple rhythms of life on a working farm at the edge of the forest."
-pubDate: 2026-01-15
+pubDate: 2026-05-01
 author: "Corbett Foothills Retreat"
 image: "/images/blog-organic-farm-hero.webp"
 tags: ["organic farm", "farmstay", "farm-to-table", "jim corbett", "sustainable tourism"]

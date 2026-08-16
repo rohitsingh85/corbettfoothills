@@ -1,7 +1,7 @@
 ---
 title: "Corbett Through the Seasons"
 description: "Thinking of visiting Jim Corbett National Park? Whether you're hoping to spot a tiger, enjoy pleasant weather, or experience the forest at its most beautiful, this guide will help you choose the perfect time for your trip."
-pubDate: 2026-04-01
+pubDate: 2026-04-15
 author: "Corbett Foothills Retreat"
 image: "/images/blog-seasons-hero.webp"
 tags: ["corbett national park", "seasons", "travel guide", "best time to visit", "uttarakhand"]

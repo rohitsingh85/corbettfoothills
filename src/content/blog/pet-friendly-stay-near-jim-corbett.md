@@ -1,7 +1,7 @@
 ---
 title: "Pet-Friendly Stay Near Jim Corbett – A Complete Guide for Pet Parents"
 description: "Planning a trip to Jim Corbett with your dog or cat? Discover everything you need to know about pet-friendly stays near Corbett National Park — from what to pack and which properties welcome pets to tips for travelling with your furry companion in the Kumaon foothills."
-pubDate: 2026-02-15
+pubDate: 2026-07-01
 author: "Corbett Foothills Retreat"
 image: "/images/blog-pet-friendly-hero.webp"
 tags: ["pet-friendly", "travel with pets", "dog-friendly stay", "jim corbett", "uttarakhand", "boutique farmstay"]

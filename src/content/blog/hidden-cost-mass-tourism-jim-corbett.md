@@ -1,7 +1,7 @@
 ---
 title: "The Hidden Cost of Mass Tourism in Jim Corbett"
 description: "Mass tourism in Jim Corbett comes with hidden costs — environmental degradation, crowded safaris, and lost authenticity. Discover how responsible travel choices can protect the forest for future generations."
-pubDate: 2026-07-15
+pubDate: 2025-12-15
 author: "Corbett Foothills Retreat"
 image: "/images/cost-of-tourism.webp"
 tags: ["responsible tourism", "mass tourism", "jim corbett", "conservation", "sustainable travel"]
