@@ -3,7 +3,7 @@ title: "What Most Guests Don't Realize About Jim Corbett Before They Arrive"
 description: "From safari realities and seasonal surprises to hidden costs and local tips — learn what first-time visitors wish they'd known before travelling to Jim Corbett National Park."
 pubDate: 2026-08-15
 author: "Corbett Foothills Retreat"
-image: "/images/live-1.webp"
+image: "/images/blog-guests-realize-hero.webp"
 tags: ["jim corbett", "travel tips", "safari", "first-time visitors", "uttarakhand"]
 ---
 
@@ -19,7 +19,7 @@ Some of these realisations are delightful surprises. Others can be frustrating i
 
 This post is written for the traveller who wants to show up knowing what awaits. Not to take away the magic, but to help you arrive with the kind of awareness that turns a good trip into a truly memorable one.
 
-<img src="/images/live-1.webp" alt="Lush forest landscape in Jim Corbett National Park" style="display: block; width: 100%; max-width: 700px; margin: 1.5rem auto; border-radius: 0.75rem; height: auto;" />
+<img src="/images/blog-guests-realize-hero.webp" alt="Lush forest landscape in Jim Corbett National Park" style="display: block; width: 100%; max-width: 700px; margin: 1.5rem auto; border-radius: 0.75rem; height: auto;" />
 
 ## Safari Is Not a Guarantee — Managing Wildlife Expectations
 
