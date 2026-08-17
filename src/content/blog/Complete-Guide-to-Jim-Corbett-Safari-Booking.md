@@ -3,7 +3,7 @@ title: "Complete Guide to Jim Corbett Safari Booking (2026 Update)"
 description: "Everything you need to know about Jim Corbett safari booking in 2026 — zones, fees, timings, tiger sighting hotspots, and step-by-step booking instructions. Plan smarter and make the most of your Corbett adventure."
 pubDate: 2026-07-15
 author: "Corbett Foothills Retreat"
-image: "/images/blog-safari-guide-hero.webp"
+image: "/images/jim-corbett-safari-zones-3d06d791.webp"
 tags: ["safari booking", "corbett national park", "safari guide", "travel tips", "uttarakhand"]
 ---
 
@@ -15,9 +15,9 @@ If you're planning a trip in 2026, understanding the safari booking process, [sa
 
 This guide covers everything you need to know before booking your Jim Corbett safari.
 
-![Safari jeep entering Dhikala zone of Corbett National Park](/images/blog-safari-guide-img1.webp)
+<img src="/images/blog-safari-guide-img1.webp" alt="Safari jeep entering Dhikala zone of Corbett National Park" style="display: block; margin-left: auto; margin-right: auto;" />
 
-![Bengal tiger spotted during jeep safari in Corbett tiger reserve](/images/blog-safari-guide-img2.webp)
+<img src="/images/jim-corbett-safari-zones-3d06d791.webp" alt="Jim Corbett safari zones map" style="display: block; margin-left: auto; margin-right: auto;" />
 
 ## Why Visit Jim Corbett National Park?
 
