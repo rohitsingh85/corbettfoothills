@@ -7,7 +7,7 @@ import { unwrapInnPilotData } from "./_response-envelope.js";
 // availability.js is the sole owner of this mapping.  Changing it here updates
 // every downstream caller (quote.js and submit.js receive the raw InnPilot
 // room_type from the frontend, so they need no mapping at all).
-const ROOM_TYPE_MAP = { "Deluxe Room": "forest-suite" };
+const ROOM_TYPE_MAP = { "Deluxe Room": "family-lodge" };
 // ---- end mapping ----
 
 // Occupancy is decided by InnPilot (room_types max_adults/max_children/

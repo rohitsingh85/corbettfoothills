@@ -132,7 +132,7 @@ describe("payment-exit → new 1-night search (pricing must not be stale)", () =
     const state = createFlowState({
       quoteData: OLD_2_NIGHT_QUOTE,
       selectedRoom: { slug: "family-lodge" },
-      selectedRoomType: "Family Room",
+      selectedRoomType: "Deluxe Room",
       storage: {
         [SESSION_STORAGE_KEY]: JSON.stringify({ sessionId: "s-1", quote: OLD_2_NIGHT_QUOTE }),
       },
@@ -168,7 +168,7 @@ describe("payment-exit → new 1-night search (pricing must not be stale)", () =
 
     const currentParams = { checkin: "2026-08-02", checkout: "2026-08-03", adults: 2, children: 0 };
     const quoteRequestBody = {
-      room_id: "Family Room",
+      room_id: "Deluxe Room",
       checkin: currentParams.checkin,
       checkout: currentParams.checkout,
       adults: currentParams.adults,

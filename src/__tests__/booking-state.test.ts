@@ -94,7 +94,7 @@ function buildPricingRows(quote: any) {
 
 const sampleDraft = {
   roomSlug: "family-lodge",
-  roomType: "Family Room",
+  roomType: "Deluxe Room",
   checkin: "2026-08-01",
   checkout: "2026-08-03",
   adults: 2,
@@ -108,7 +108,7 @@ const sampleSession = {
   sessionId: "s-1",
   expiresAt: Date.now() + 300000,
   roomSlug: "family-lodge",
-  roomType: "Family Room",
+  roomType: "Deluxe Room",
   checkin: "2026-08-01",
   checkout: "2026-08-03",
   adults: 2,
@@ -148,7 +148,7 @@ describe("hydrate from source", () => {
   it("hydrates from a draft", () => {
     const state = hydrateFromSource(sampleDraft);
     expect(state.roomSlug).toBe("family-lodge");
-    expect(state.roomType).toBe("Family Room");
+    expect(state.roomType).toBe("Deluxe Room");
     expect(state.quote.subtotal).toBe(7000);
     expect(state.guest.firstName).toBe("Rahul");
   });

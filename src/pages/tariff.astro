@@ -13,11 +13,6 @@ const roomCategories = [
     capacity: "2 adults",
     size: "Spacious",
     image: "/images/luxury-room-style.webp",
-    pricing: {
-      peak: "₹3,500",
-      summer: "₹3,000",
-      monsoon: "₹2,500",
-    },
   },
   {
     name: "Premium Suite",
@@ -25,11 +20,6 @@ const roomCategories = [
     capacity: "3 adults or 2 adults + 1 child",
     size: "Large",
     image: siteData.images.accommodation[2],
-    pricing: {
-      peak: "₹4,000",
-      summer: "₹3,500",
-      monsoon: "₹3,000",
-    },
   },
   {
     name: "Garden Room",
@@ -37,31 +27,10 @@ const roomCategories = [
     capacity: "2 adults + 1 child",
     size: "Spacious",
     image: siteData.images.accommodation[1],
-    pricing: {
-      peak: "₹3,500",
-      summer: "₹3,000",
-      monsoon: "₹2,000",
-    },
   },
 ];
 
-const seasons = [
-  {
-    name: "Peak Season",
-    period: "October – February",
-    note: "Best weather & peak birdwatching. Book 30–60 days in advance.",
-  },
-  {
-    name: "Summer Season",
-    period: "March – June",
-    note: "Excellent wildlife sightings. Book 15–30 days in advance.",
-  },
-  {
-    name: "Monsoon Season",
-    period: "July – September",
-    note: "Lush green landscapes, fewer crowds. Best availability.",
-  },
-];
+const cotRate = "₹750";
 
 const includedItems = [
   "Comfortable king-size bed with premium linen",
@@ -81,7 +50,7 @@ const includedItems = [
 
 <MainLayout
   title="Tariff & Pricing"
-  description="Room rates and seasonal pricing at Corbett Foothills Retreat — a boutique farmstay near Jim Corbett National Park. Transparent pricing with no hidden charges."
+  description="Room rates at Corbett Foothills Retreat — weekday and weekend pricing at a boutique farmstay near Jim Corbett National Park. Transparent pricing with no hidden charges."
   breadcrumbs={[{name: "Tariff"}]}
 >
   <Fragment slot="head">
@@ -101,7 +70,7 @@ const includedItems = [
       "@type": "Offer",
       name: room.name,
       description: room.description,
-      price: room.pricing.peak.replace("₹", "").replace(",", ""),
+      price: "2250",
       priceCurrency: "INR",
       availability: "https://schema.org/InStock",
       url: new URL("/tariff", siteUrl).href,
@@ -157,9 +126,9 @@ const includedItems = [
                 <p><span class="font-semibold text-cfr-green-dark">Capacity:</span> {room.capacity}</p>
               </div>
               <div class="mt-4 space-y-2 border-t border-cfr-earth-100 pt-4">
-                <p class="flex items-center justify-between text-sm"><span class="text-cfr-earth-500">Peak (Oct–Feb)</span> <span class="font-semibold text-cfr-green-dark">{room.pricing.peak}<span class="font-normal text-cfr-earth-400">/night</span></span></p>
-                <p class="flex items-center justify-between text-sm"><span class="text-cfr-earth-500">Summer (Mar–Jun)</span> <span class="font-semibold text-cfr-green-dark">{room.pricing.summer}<span class="font-normal text-cfr-earth-400">/night</span></span></p>
-                <p class="flex items-center justify-between text-sm"><span class="text-cfr-earth-500">Monsoon (Jul–Sep)</span> <span class="font-semibold text-cfr-green-dark">{room.pricing.monsoon}<span class="font-normal text-cfr-earth-400">/night</span></span></p>
+                <p class="flex items-center justify-between text-sm"><span class="text-cfr-earth-500">Weekdays (Mon–Thu)</span> <span class="font-semibold text-cfr-green-dark">₹2,250<span class="font-normal text-cfr-earth-400">/night</span></span></p>
+                <p class="flex items-center justify-between text-sm"><span class="text-cfr-earth-500">Weekends (Fri–Sun)</span> <span class="font-semibold text-cfr-green-dark">₹2,500<span class="font-normal text-cfr-earth-400">/night</span></span></p>
+                <p class="flex items-center justify-between text-xs text-cfr-earth-400"><span>Additional cot: {cotRate}/night</span></p>
               </div>
               <a href="/contact" class="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-cfr-green-accent px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark hover:shadow-lg hover:-translate-y-0.5">
                 Enquire About This Room
@@ -174,18 +143,29 @@ const includedItems = [
   <section class="bg-cfr-green-dark py-16 sm:py-20">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="mx-auto max-w-3xl">
-        <h2 class="font-display text-3xl font-bold text-white sm:text-4xl text-center">Seasonal Pricing Guide</h2>
+        <h2 class="font-display text-3xl font-bold text-white sm:text-4xl text-center">How Pricing Works</h2>
         <p class="mt-4 text-center text-lg text-white">
-          Rates vary by season to reflect demand and weather conditions. All prices are per room per night and include taxes.
+          Rates are based on your day of arrival. All prices are per room per night and include taxes. Breakfast is complimentary.
         </p>
         <div class="mt-10 grid gap-6 sm:grid-cols-3">
-          {seasons.map((season) => (
-            <div class="rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-              <h3 class="font-display text-xl font-bold text-white">{season.name}</h3>
-              <p class="mt-1 text-sm font-semibold text-cfr-green-accent">{season.period}</p>
-              <p class="mt-3 text-sm leading-relaxed text-white/70">{season.note}</p>
-            </div>
-          ))}
+          <div class="rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+            <h3 class="font-display text-xl font-bold text-white">Weekday Rate</h3>
+            <p class="mt-1 text-sm font-semibold text-cfr-green-accent">Mon–Thu</p>
+            <p class="mt-3 text-2xl font-bold text-white">₹2,250<span class="text-sm font-normal text-white/60">/night</span></p>
+            <p class="mt-2 text-sm leading-relaxed text-white/70">The standard rate for any stay beginning Monday to Thursday.</p>
+          </div>
+          <div class="rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+            <h3 class="font-display text-xl font-bold text-white">Weekend Rate</h3>
+            <p class="mt-1 text-sm font-semibold text-cfr-green-accent">Fri–Sun</p>
+            <p class="mt-3 text-2xl font-bold text-white">₹2,500<span class="text-sm font-normal text-white/60">/night</span></p>
+            <p class="mt-2 text-sm leading-relaxed text-white/70">Applied to stays beginning Friday, Saturday, or Sunday.</p>
+          </div>
+          <div class="rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+            <h3 class="font-display text-xl font-bold text-white">Additional Cot</h3>
+            <p class="mt-1 text-sm font-semibold text-cfr-green-accent">If needed</p>
+            <p class="mt-3 text-2xl font-bold text-white">₹750<span class="text-sm font-normal text-white/60">/night</span></p>
+            <p class="mt-2 text-sm leading-relaxed text-white/70">For a third adult or extra bedding, available in select rooms.</p>
+          </div>
         </div>
       </div>
     </div>

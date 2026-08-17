@@ -10,8 +10,7 @@ import { ROOM_GALLERY } from "../data/roomGallery";
 
 describe("ROOM_MAPPING", () => {
   it("maps known PMS room types to website content slugs", () => {
-    expect(ROOM_MAPPING["Family Room"]).toBe("family-lodge");
-    expect(ROOM_MAPPING["Deluxe Room"]).toBe("forest-suite");
+    expect(ROOM_MAPPING["Deluxe Room"]).toBe("family-lodge");
   });
 
   it("every mapped slug exists in the room content list", () => {
@@ -24,8 +23,7 @@ describe("ROOM_MAPPING", () => {
 
 describe("resolveRoomSlug", () => {
   it("returns the content slug for a known PMS room type", () => {
-    expect(resolveRoomSlug("Family Room")).toBe("family-lodge");
-    expect(resolveRoomSlug("Deluxe Room")).toBe("forest-suite");
+    expect(resolveRoomSlug("Deluxe Room")).toBe("family-lodge");
   });
 
   it("matches existing content slugs directly", () => {
@@ -48,7 +46,7 @@ describe("resolveRoomSlug", () => {
 
 describe("resolveRoomContent", () => {
   it("resolves a known PMS room type to its website content", () => {
-    const content = resolveRoomContent("Family Room");
+    const content = resolveRoomContent("Deluxe Room");
     expect(content.slug).toBe("family-lodge");
     expect(content.name).toBe("The Family Lodge");
     expect(content.gallery.length).toBeGreaterThan(0);

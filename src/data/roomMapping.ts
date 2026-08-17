@@ -2,8 +2,7 @@ import { rooms, type RoomContent } from "./rooms";
 import { ROOM_GALLERY } from "./roomGallery";
 
 export const ROOM_MAPPING: Record<string, string> = {
-  "Family Room": "family-lodge",
-  "Deluxe Room": "forest-suite",
+  "Deluxe Room": "family-lodge",
 };
 
 export const DEFAULT_ROOM: RoomContent = {
