@@ -1164,6 +1164,25 @@ const isDev = import.meta.env.DEV;
       checkinInput.value = formatDateValue(tomorrow);
       checkoutInput.value = formatDateValue(dayAfter);
       checkinInput.min = formatDateValue(now);
+      syncCheckoutRange();
+    }
+
+    // Single source of truth for the same-date rule. Any date change —
+    // default dates, URL restore, or native picker input — re-anchors the
+    // checkout picker's lower bound to the day after check-in and corrects a
+    // checkout value that is on or before check-in. Without it, the checkout
+    // picker has no minimum on fresh load / URL restore and a same-date pick
+    // slips straight through to availability.
+    function syncCheckoutRange() {
+      const checkin = checkinInput.value;
+      if (!checkin) return;
+      const nextDay = new Date(checkin + "T00:00:00");
+      nextDay.setDate(nextDay.getDate() + 1);
+      const nextDayStr = formatDateValue(nextDay);
+      checkoutInput.min = nextDayStr;
+      if (checkoutInput.value && checkoutInput.value <= checkin) {
+        checkoutInput.value = nextDayStr;
+      }
     }
 
     function formatDateValue(d) {
@@ -1759,6 +1778,7 @@ const isDev = import.meta.env.DEV;
           adultsInput.value = String(urlParams.adults || 2);
           childrenInput.value = String(urlParams.children || 0);
           roomsInput.value = String(urlParams.rooms || 1);
+          syncCheckoutRange();
           searchAvailability();
         }
         return;
@@ -3674,14 +3694,27 @@ const isDev = import.meta.env.DEV;
       });
     }
 
+    // Native date pickers leave their calendar popup open after a date is
+    // committed. Release focus once a valid date is selected so the calendar
+    // closes immediately (matches the same date rules used in validate()).
     checkinInput.addEventListener("change", function () {
       if (checkinInput.value) {
-        const nextDay = new Date(checkinInput.value + "T00:00:00");
-        nextDay.setDate(nextDay.getDate() + 1);
-        checkoutInput.min = formatDateValue(nextDay);
-        if (checkoutInput.value && checkoutInput.value <= checkinInput.value) {
-          checkoutInput.value = formatDateValue(nextDay);
+        syncCheckoutRange();
+        if (checkinInput.value >= formatDateValue(new Date())) {
+          checkinInput.blur();
         }
+      }
+    });
+
+    checkoutInput.addEventListener("change", function () {
+      if (!checkoutInput.value || !checkinInput.value) return;
+      if (checkoutInput.value > checkinInput.value) {
+        checkoutInput.blur();
+      } else {
+        // Same-date or back-dated checkout: correct it instead of silently
+        // ignoring, so the native picker always closes on a valid range.
+        syncCheckoutRange();
+        checkoutInput.blur();
       }
     });
 
