@@ -92,33 +92,15 @@ import siteData from "../data/site.json";
         <p class="mt-4 text-sm text-white">Get exclusive offers and wildlife stories.</p>
         <form id="newsletter-form" class="mt-4 space-y-4">
           <input type="text" name="website" class="hidden" tabindex="-1" autocomplete="off" />
-          <!-- Phone row -->
-          <div class="flex gap-2">
-            <input
-              type="tel"
-              name="phone"
-              placeholder="Your number"
-              class="min-w-0 flex-1 rounded-lg border-0 bg-white/10 px-3 py-2 text-sm text-white placeholder:text-cfr-sand-300 focus:outline-none focus:ring-2 focus:ring-cfr-green-accent"
-            />
-            <button type="submit" data-field="phone" class="rounded-lg bg-cfr-green-accent px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-cfr-green-leaf">
-              Join
-            </button>
-          </div>
-          <!-- OR divider -->
-          <div class="flex items-center gap-3">
-            <span class="h-px flex-1 bg-white/10"></span>
-            <span class="text-xs font-semibold uppercase tracking-widest text-cfr-sand-300">OR</span>
-            <span class="h-px flex-1 bg-white/10"></span>
-          </div>
-          <!-- Email row -->
           <div class="flex gap-2">
             <input
               type="email"
               name="email"
               placeholder="Your email"
+              required
               class="min-w-0 flex-1 rounded-lg border-0 bg-white/10 px-3 py-2 text-sm text-white placeholder:text-cfr-sand-300 focus:outline-none focus:ring-2 focus:ring-cfr-green-accent"
             />
-            <button type="submit" data-field="email" class="rounded-lg bg-cfr-green-accent px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-cfr-green-leaf">
+            <button type="submit" class="rounded-lg bg-cfr-green-accent px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-cfr-green-leaf">
               Join
             </button>
           </div>
@@ -144,40 +126,21 @@ import siteData from "../data/site.json";
           document.getElementById("newsletter-form")?.addEventListener("submit", async (e) => {
             e.preventDefault();
             const form = e.currentTarget;
-            const btn = e.submitter;
+            const btn = form.querySelector('button[type="submit"]');
             const msg = document.getElementById("newsletter-msg");
             const email = form.querySelector('[name="email"]').value.trim();
-            const phone = form.querySelector('[name="phone"]').value.trim();
-            const field = btn.getAttribute("data-field");
-            if (field === "email" && !email) return;
-            if (field === "phone" && !phone) return;
-            if (field === "phone") {
-              if (!/^[1-9]\d{9}$/.test(phone)) {
-                msg.textContent = "Enter a valid 10-digit number";
-                msg.className = "mt-2 text-xs text-red-300";
-                msg.classList.remove("hidden");
-                return;
-              }
-              if (isDuplicate(phone)) {
-                msg.textContent = "This number was already submitted";
-                msg.className = "mt-2 text-xs text-red-300";
-                msg.classList.remove("hidden");
-                return;
-              }
+            if (!email) return;
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+              msg.textContent = "Enter a valid email address";
+              msg.className = "mt-2 text-xs text-red-300";
+              msg.classList.remove("hidden");
+              return;
             }
-            if (field === "email") {
-              if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                msg.textContent = "Enter a valid email address";
-                msg.className = "mt-2 text-xs text-red-300";
-                msg.classList.remove("hidden");
-                return;
-              }
-              if (isDuplicate(email)) {
-                msg.textContent = "This email was already submitted";
-                msg.className = "mt-2 text-xs text-red-300";
-                msg.classList.remove("hidden");
-                return;
-              }
+            if (isDuplicate(email)) {
+              msg.textContent = "This email was already submitted";
+              msg.className = "mt-2 text-xs text-red-300";
+              msg.classList.remove("hidden");
+              return;
             }
             const cooldown = Date.now() - lastSubmitted();
             if (cooldown < 30000 && cooldown > 0) {
@@ -186,9 +149,7 @@ import siteData from "../data/site.json";
               msg.classList.remove("hidden");
               return;
             }
-            const payload = { website: form.querySelector('[name="website"]').value };
-            if (email) payload.email = email;
-            if (phone) payload.phone = phone;
+            const payload = { website: form.querySelector('[name="website"]').value, email };
             btn.textContent = "Subscribing…";
             btn.disabled = true;
             msg.classList.add("hidden");
@@ -202,12 +163,12 @@ import siteData from "../data/site.json";
               if (json.success) {
                 msg.textContent = "Thank. We'll be in touch.";
                 msg.className = "mt-2 text-xs text-green-300";
-                markSubmitted(email || phone);
+                markSubmitted(email);
                 window.CFR_ANALYTICS?.track("newsletter_subscribed", {
                   property_name: "Corbett Foothills Retreat",
                 });
                 form.reset();
-                form.querySelectorAll("input[type='email'], input[type='tel']").forEach((el) => (el.value = ""));
+                form.querySelectorAll("input[type='email']").forEach((el) => (el.value = ""));
               } else {
                 msg.textContent = json.error || "Something went wrong.";
                 msg.className = "mt-2 text-xs text-red-300";
