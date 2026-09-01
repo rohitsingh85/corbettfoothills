@@ -1,0 +1,115 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<MainLayout title="Privacy Policy" description="Privacy Policy for Corbett Foothills Retreat — how we collect, use, and protect your personal information." breadcrumbs={[{name: "Privacy Policy"}]}>
+  <Fragment slot="header">
+    <Header />
+  </Fragment>
+
+  <section class="relative flex min-h-[30vh] items-end overflow-hidden pt-56">
+    <div class="absolute inset-0 bg-cfr-green-dark"></div>
+    <div class="absolute inset-0 bg-hero-pattern"></div>
+    <div class="absolute inset-0 bg-leaf-pattern opacity-30"></div>
+    <div class="relative z-10 w-full bg-cfr-green-dark">
+      <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8 lg:pb-16">
+        <div class="max-w-3xl">
+          <a href="/" class="inline-flex items-center gap-1 text-xs uppercase tracking-widest text-cfr-sand-300 hover:text-white transition-colors mb-4">
+            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+            Back to Home
+          </a>
+          <h1 class="font-display text-4xl font-bold text-white sm:text-5xl">
+            Privacy Policy
+          </h1>
+          <p class="mt-4 text-lg text-white">
+            Effective date: September 2026
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cfr-cream py-16 sm:py-20">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+      <div class="prose prose-cfr max-w-none space-y-6 text-base leading-relaxed text-cfr-earth-600">
+        <!-- DRAFT: This is placeholder privacy policy copy. It MUST be reviewed by a qualified legal professional before going live. Do not treat this as final legal text. -->
+
+        <p>
+          Corbett Foothills Retreat ("we", "us", "our") operates the website <a href="https://corbett.life" class="text-cfr-green-accent underline hover:text-cfr-green-dark">corbett.life</a> and provides hospitality services at our property in Ramnagar, Uttarakhand, India. This Privacy Policy explains how we collect, use, and protect your personal information when you visit our website, make a booking, or interact with our services.
+        </p>
+
+        <h2 class="font-display text-xl font-bold text-cfr-green-dark">Information We Collect</h2>
+        <p>
+          We may collect the following types of personal information:
+        </p>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><strong>Booking details:</strong> Name, email address, phone number, nationality, and special requests submitted through our booking form.</li>
+          <li><strong>Newsletter signup:</strong> Email address or phone number submitted through our "Stay Connected" form in the website footer.</li>
+          <li><strong>Contact enquiries:</strong> Name, email, phone number, and message content submitted through our contact form.</li>
+          <li><strong>Technical data:</strong> IP address, browser type, device information, and pages visited, collected automatically through analytics tools.</li>
+        </ul>
+
+        <h2 class="font-display text-xl font-bold text-cfr-green-dark">How We Use Your Information</h2>
+        <p>
+          We use your personal information for the following purposes:
+        </p>
+        <ul class="list-disc pl-6 space-y-2">
+          <li>To process and confirm your room reservation.</li>
+          <li>To communicate with you regarding your booking, including confirmation, changes, and pre-arrival information.</li>
+          <li>To send newsletters and promotional communications if you have opted in.</li>
+          <li>To respond to your enquiries and provide customer support.</li>
+          <li>To improve our website and services through aggregated analytics.</li>
+          <li>To comply with legal obligations.</li>
+        </ul>
+
+        <h2 class="font-display text-xl font-bold text-cfr-green-dark">Payment Processing</h2>
+        <p>
+          Payments for bookings are processed through Razorpay, a third-party payment gateway. We do not store your credit card or banking details on our servers. Razorpay's own <a href="https://razorpay.com/privacy/" target="_blank" rel="noopener noreferrer" class="text-cfr-green-accent underline hover:text-cfr-green-dark">Privacy Policy</a> governs the handling of your payment information.
+        </p>
+
+        <h2 class="font-display text-xl font-bold text-cfr-green-dark">Cookies and Analytics</h2>
+        <p>
+          Our website uses cookies and analytics tools to understand how visitors use our site. This helps us improve the user experience and measure the effectiveness of our content. You may disable cookies in your browser settings, though some features of the site may not function properly as a result.
+        </p>
+
+        <h2 class="font-display text-xl font-bold text-cfr-green-dark">Third-Party Services</h2>
+        <p>
+          We may use third-party services (such as Razorpay for payments, Google Analytics for site analytics, and Cloudflare for hosting and security) that collect information as part of their operation. These services have their own privacy policies, and we encourage you to review them.
+        </p>
+
+        <h2 class="font-display text-xl font-bold text-cfr-green-dark">Data Security</h2>
+        <p>
+          We take reasonable measures to protect your personal information from unauthorised access, alteration, or disclosure. However, no method of transmission over the Internet or electronic storage is completely secure, and we cannot guarantee absolute security.
+        </p>
+
+        <h2 class="font-display text-xl font-bold text-cfr-green-dark">Your Rights</h2>
+        <p>
+          You have the right to access, correct, or delete your personal information. To exercise these rights, or to opt out of marketing communications, please contact us at <a href="mailto:corbettfoothills@gmail.com" class="text-cfr-green-accent underline hover:text-cfr-green-dark">corbettfoothills@gmail.com</a>.
+        </p>
+
+        <h2 class="font-display text-xl font-bold text-cfr-green-dark">Children's Privacy</h2>
+        <p>
+          Our services are not directed to individuals under the age of 18. We do not knowingly collect personal information from children. If you believe a child has provided us with personal information, please contact us and we will take steps to delete it.
+        </p>
+
+        <h2 class="font-display text-xl font-bold text-cfr-green-dark">Changes to This Policy</h2>
+        <p>
+          We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated effective date. We encourage you to review this page periodically.
+        </p>
+
+        <h2 class="font-display text-xl font-bold text-cfr-green-dark">Contact Us</h2>
+        <p>
+          If you have any questions about this Privacy Policy, please contact us at <a href="mailto:corbettfoothills@gmail.com" class="text-cfr-green-accent underline hover:text-cfr-green-dark">corbettfoothills@gmail.com</a> or call <a href="tel:+919818193314" class="text-cfr-green-accent underline hover:text-cfr-green-dark">+91 98181 93314</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <Fragment slot="footer">
+    <Footer />
+  </Fragment>
+</MainLayout>

@@ -1,0 +1,121 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<MainLayout title="Terms of Service" description="Terms of Service for Corbett Foothills Retreat — booking terms, cancellation policy, and conditions of stay." breadcrumbs={[{name: "Terms of Service"}]}>
+  <Fragment slot="header">
+    <Header />
+  </Fragment>
+
+  <section class="relative flex min-h-[30vh] items-end overflow-hidden pt-56">
+    <div class="absolute inset-0 bg-cfr-green-dark"></div>
+    <div class="absolute inset-0 bg-hero-pattern"></div>
+    <div class="absolute inset-0 bg-leaf-pattern opacity-30"></div>
+    <div class="relative z-10 w-full bg-cfr-green-dark">
+      <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8 lg:pb-16">
+        <div class="max-w-3xl">
+          <a href="/" class="inline-flex items-center gap-1 text-xs uppercase tracking-widest text-cfr-sand-300 hover:text-white transition-colors mb-4">
+            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+            Back to Home
+          </a>
+          <h1 class="font-display text-4xl font-bold text-white sm:text-5xl">
+            Terms of Service
+          </h1>
+          <p class="mt-4 text-lg text-white">
+            Effective date: September 2026
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cfr-cream py-16 sm:py-20">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+      <div class="prose prose-cfr max-w-none space-y-6 text-base leading-relaxed text-cfr-earth-600">
+        <!-- DRAFT: This is placeholder terms of service copy. It MUST be reviewed by a qualified legal professional before going live. Do not treat this as final legal text. -->
+
+        <p>
+          These Terms of Service ("Terms") govern your use of the Corbett Foothills Retreat website (<a href="https://corbett.life" class="text-cfr-green-accent underline hover:text-cfr-green-dark">corbett.life</a>) and the booking of accommodation at our property in Ramnagar, Uttarakhand, India. By using our website or completing a booking, you agree to these Terms.
+        </p>
+
+        <h2 class="font-display text-xl font-bold text-cfr-green-dark">Booking and Reservation</h2>
+        <p>
+          A booking is confirmed only after you receive a confirmation from us. Room availability is subject to change and is not guaranteed until confirmation. We reserve the right to decline or cancel reservations at our discretion, including in cases of suspected fraudulent activity or misuse of our booking system.
+        </p>
+        <p>
+          A valid payment is required to secure your reservation. By providing payment details, you represent and warrant that you are authorised to use the payment method provided.
+        </p>
+
+        <h2 class="font-display text-xl font-bold text-cfr-green-dark">Pricing and Payment</h2>
+        <p>
+          All rates are quoted in Indian Rupees (INR) and are inclusive of applicable taxes unless stated otherwise. Rates may vary by season and are subject to change without prior notice. The rate confirmed at the time of booking will be honoured for your reservation period.
+        </p>
+        <p>
+          Payments are processed securely through Razorpay. We do not store your card or banking details. Additional charges for extras, extensions, or modifications will be communicated and charged separately.
+        </p>
+
+        <h2 class="font-display text-xl font-bold text-cfr-green-dark">Cancellation Policy</h2>
+        <p>
+          Cancellation terms are as follows:
+        </p>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><strong>7 days or more before check-in:</strong> Full refund of the advance payment.</li>
+          <li><strong>3 to 7 days before check-in:</strong> 50% of the advance payment will be charged.</li>
+          <li><strong>Less than 3 days before check-in:</strong> The full advance payment is non-refundable.</li>
+          <li><strong>No-show:</strong> The full booking amount is non-refundable.</li>
+        </ul>
+        <p>
+          Specific cancellation terms may apply to certain rates, packages, or promotional offers, and will be communicated at the time of booking.
+        </p>
+
+        <h2 class="font-display text-xl font-bold text-cfr-green-dark">Check-in and Check-out</h2>
+        <p>
+          Standard check-in time is 2:00 PM and check-out time is 11:00 AM. Early check-in or late check-out may be available on request and is subject to availability. We will do our best to accommodate your preferences, but we cannot guarantee availability.
+        </p>
+
+        <h2 class="font-display text-xl font-bold text-cfr-green-dark">Guest Conduct</h2>
+        <p>
+          Guests are expected to behave in a manner that is respectful of other guests, staff, and the property. We reserve the right to ask guests to leave without refund if their behaviour is disruptive, harmful, or violates these Terms. This includes but is not limited to excessive noise, damage to property, or violation of safety guidelines.
+        </p>
+
+        <h2 class="font-display text-xl font-bold text-cfr-green-dark">Pet Policy</h2>
+        <p>
+          Corbett Foothills Retreat welcomes pets. Pets must be kept on a leash near the forest boundary and farm animal enclosures. Guests are responsible for their pet's behaviour and any damage caused. Specific pet guidelines are available on our <a href="/pet-friendly-stay" class="text-cfr-green-accent underline hover:text-cfr-green-dark">pet-friendly stay page</a>.
+        </p>
+
+        <h2 class="font-display text-xl font-bold text-cfr-green-dark">Limitation of Liability</h2>
+        <p>
+          While we take every reasonable precaution to ensure guest safety, Corbett Foothills Retreat is not liable for loss, theft, or damage to personal belongings. Guests are responsible for securing their valuables. The property is located at the edge of a national park, and guests are responsible for following all safety guidelines provided by the property and park authorities.
+        </p>
+
+        <h2 class="font-display text-xl font-bold text-cfr-green-dark">Intellectual Property</h2>
+        <p>
+          All content on this website, including text, images, logos, and design elements, is the property of Corbett Foothills Retreat or its content suppliers and is protected by applicable intellectual property laws. You may not reproduce, distribute, or create derivative works without our prior written consent.
+        </p>
+
+        <h2 class="font-display text-xl font-bold text-cfr-green-dark">Modifications</h2>
+        <p>
+          We reserve the right to modify these Terms at any time. Changes will be effective immediately upon posting to this page. Your continued use of the website or our services after changes are posted constitutes your acceptance of the revised Terms.
+        </p>
+
+        <h2 class="font-display text-xl font-bold text-cfr-green-dark">Governing Law</h2>
+        <p>
+          These Terms are governed by and construed in accordance with the laws of India. Any disputes arising from these Terms or your use of our services shall be subject to the exclusive jurisdiction of the courts in Nainital, Uttarakhand.
+        </p>
+
+        <h2 class="font-display text-xl font-bold text-cfr-green-dark">Contact</h2>
+        <p>
+          For questions about these Terms, please contact us at <a href="mailto:corbettfoothills@gmail.com" class="text-cfr-green-accent underline hover:text-cfr-green-dark">corbettfoothills@gmail.com</a> or call <a href="tel:+919818193314" class="text-cfr-green-accent underline hover:text-cfr-green-dark">+91 98181 93314</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <Fragment slot="footer">
+    <Footer />
+  </Fragment>
+</MainLayout>
