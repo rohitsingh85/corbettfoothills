@@ -1,9 +1,9 @@
 ---
 title: "Jim Corbett Safari Zones: Which Zone Should You Actually Choose?"
 description: "Corbett isn't one forest — it's eight. This guide breaks down every safari zone, when it's open, and who it's best for, so you pick the right gate the first time."
-pubDate: 2026-08-15
+pubDate: 2026-09-01
 author: "Corbett Foothills Retreat"
-image: "/images/jim-corbett-safari-zones.webp"
+image: "/images/jim-corbett-safari-zones-3d06d791.webp"
 tags: ["jim corbett national park", "safari zones", "safari guide", "dhikala", "bijrani", "travel guide"]
 ---
 

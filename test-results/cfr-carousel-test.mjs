@@ -3,6 +3,7 @@ import { chromium } from "playwright";
 const BASE = "http://localhost:8788";
 
 const NIGHTLY_RATE = 3500;
+const DELUXE_RATE = 3200;
 
 function nightsBetween(checkin, checkout) {
   if (!checkin || !checkout) return 2;
@@ -74,7 +75,80 @@ function computeRoomAllocation(maxAdults, maxChildren, maxOccupancy, adults, chi
   return Array.from({ length: rooms }, (_, i) => ({ adults: adultPer[i], children: childPer[i] }));
 }
 
-function buildAvailability(checkin, checkout, adults, children) {
+// Bedding is InnPilot-provided per-room state (charge, mandatory vs optional).
+// CFR renders it verbatim; this mock mirrors a deterministic InnPilot rule:
+// a Family room needs extra bedding when a child is present and the room is
+// not already at capacity (3A+1C mandatory, 2A+1C optional, 3A+2C = no room).
+function beddingFor(roomType, roomAdults, roomChildren) {
+  if (roomType !== "Family Room" || roomChildren === 0) return null;
+  if (roomAdults + roomChildren >= 5) return null;
+  return {
+    mandatory: roomAdults >= 3 || roomChildren >= 2,
+    optional: true,
+    selected: false,
+    chargePerNight: 750,
+  };
+}
+
+function allocRoom(roomType, adults, children, rate, nights) {
+  const bedding = beddingFor(roomType, adults, children);
+  return {
+    adults,
+    children,
+    room_type: roomType,
+    nightly_rate: rate,
+    room_total: rate * nights,
+    bedding_total: bedding ? 750 * nights : 0,
+    bedding,
+  };
+}
+
+function buildFamilyAllocation(adults, children, nights) {
+  const rooms = computeRoomAllocation(3, 2, 5, adults, children);
+  if (!rooms) return null;
+  return rooms.map((r) => allocRoom("Family Room", r.adults, r.children, NIGHTLY_RATE, nights));
+}
+
+// InnPilot enumerates customer-selectable allocation options. When the party
+// needs 2 Family rooms we offer two: 2×Family (recommended) and Family+Deluxe
+// (mixed) so the E2E can exercise option switching and mixed room types.
+function familyAllocationOptions(roomsRequired, nights) {
+  if (roomsRequired !== 2) return null;
+  return [
+    {
+      rooms: [
+        allocRoom("Family Room", 3, 2, NIGHTLY_RATE, nights),
+        allocRoom("Family Room", 3, 2, NIGHTLY_RATE, nights),
+      ],
+      total: 2 * NIGHTLY_RATE * nights,
+      recommended: true,
+    },
+    {
+      rooms: [
+        allocRoom("Family Room", 3, 2, NIGHTLY_RATE, nights),
+        allocRoom("Deluxe Room", 3, 2, DELUXE_RATE, nights),
+      ],
+      total: (NIGHTLY_RATE + DELUXE_RATE) * nights,
+      recommended: false,
+    },
+  ];
+}
+
+function availabilityErrorFor(roomsRequired, requestedRooms, roomsLeft) {
+  if (roomsRequired === null) {
+    return { code: "OCCUPANCY_EXCEEDED", message: "Party does not fit this room type." };
+  }
+  if (requestedRooms > roomsLeft || roomsRequired > roomsLeft) {
+    return {
+      code: "INSUFFICIENT_INVENTORY",
+      message: "Not enough rooms left for these dates.",
+      minimum_rooms: roomsRequired,
+    };
+  }
+  return null;
+}
+
+function buildAvailability(checkin, checkout, adults, children, requestedRooms) {
   const nights = nightsBetween(checkin, checkout);
   // Deluxe Room is normally unavailable in the mock; it is made available for
   // the 6A+4C scenario so we can assert the party still cannot fit it (only 1
@@ -83,11 +157,13 @@ function buildAvailability(checkin, checkout, adults, children) {
 
   const familyRoomsRequired = computeRoomsRequired(3, 2, 5, adults, children);
   const familyRoomsLeft = 2;
-  const familyFits = familyRoomsRequired !== null && familyRoomsRequired <= familyRoomsLeft;
+  const familyFits =
+    familyRoomsRequired !== null && Math.max(requestedRooms, familyRoomsRequired) <= familyRoomsLeft;
 
   const deluxeRoomsRequired = computeRoomsRequired(2, 1, 3, adults, children);
   const deluxeRoomsLeft = deluxeAvailable ? 1 : 0;
-  const deluxeFits = deluxeRoomsRequired !== null && deluxeRoomsRequired <= deluxeRoomsLeft;
+  const deluxeFits =
+    deluxeRoomsRequired !== null && Math.max(requestedRooms, deluxeRoomsRequired) <= deluxeRoomsLeft;
 
   return {
     rooms: [
@@ -97,8 +173,12 @@ function buildAvailability(checkin, checkout, adults, children) {
         name: "Family Room",
         available: familyRoomsLeft > 0,
         fits: familyFits,
-        rooms_required: familyFits ? familyRoomsRequired : null,
-        allocation: familyFits ? computeRoomAllocation(3, 2, 5, adults, children) : null,
+        rooms_required: familyFits ? familyRoomsRequired : familyRoomsRequired,
+        minimum_rooms: familyRoomsRequired,
+        requested_rooms: requestedRooms,
+        allocation: familyFits ? buildFamilyAllocation(adults, children, nights) : null,
+        allocation_options: familyFits ? familyAllocationOptions(familyRoomsRequired, nights) : null,
+        availability_error: familyFits ? null : availabilityErrorFor(familyRoomsRequired, requestedRooms, familyRoomsLeft),
         roomsLeft: familyRoomsLeft,
         nightlyRate: NIGHTLY_RATE,
         originalNightlyRate: 4000,
@@ -115,9 +195,9 @@ function buildAvailability(checkin, checkout, adults, children) {
           maxAdults: 3,
           maxChildren: 2,
           maxOccupancy: 5,
-          roomsRequired: familyFits ? familyRoomsRequired : null,
+          roomsRequired: familyRoomsRequired,
           fits: familyFits,
-          allocation: familyFits ? computeRoomAllocation(3, 2, 5, adults, children) : null,
+          allocation: familyFits ? buildFamilyAllocation(adults, children, nights) : null,
           label: "Sleeps 5",
         },
       },
@@ -127,8 +207,12 @@ function buildAvailability(checkin, checkout, adults, children) {
         name: "Deluxe Room",
         available: deluxeRoomsLeft > 0,
         fits: deluxeFits,
-        rooms_required: deluxeFits ? deluxeRoomsRequired : null,
+        rooms_required: deluxeRoomsRequired,
+        minimum_rooms: deluxeRoomsRequired,
+        requested_rooms: requestedRooms,
         allocation: deluxeFits ? computeRoomAllocation(2, 1, 3, adults, children) : null,
+        allocation_options: null,
+        availability_error: deluxeFits ? null : availabilityErrorFor(deluxeRoomsRequired, requestedRooms, deluxeRoomsLeft),
         roomsLeft: deluxeRoomsLeft,
         nightlyRate: 3200,
         originalNightlyRate: null,
@@ -145,7 +229,7 @@ function buildAvailability(checkin, checkout, adults, children) {
           maxAdults: 2,
           maxChildren: 1,
           maxOccupancy: 3,
-          roomsRequired: deluxeFits ? deluxeRoomsRequired : null,
+          roomsRequired: deluxeRoomsRequired,
           fits: deluxeFits,
           allocation: deluxeFits ? computeRoomAllocation(2, 1, 3, adults, children) : null,
           label: "Sleeps 3",
@@ -179,7 +263,12 @@ function buildQuote(body) {
     room_subtotal: total,
     room_count: roomsRequired,
     rooms_required: roomsRequired,
-    allocation,
+    minimum_rooms: roomsRequired,
+    allocation: family
+      ? buildFamilyAllocation(adults, children, nights)
+      : allocation.map((r) => allocRoom(body.room_id || "Deluxe Room", r.adults, r.children, 3200, nights)),
+    allocation_options: family ? familyAllocationOptions(roomsRequired, nights) : null,
+    availability_error: null,
     occupancy: {
       maxAdults: cfg.maxAdults,
       maxChildren: cfg.maxChildren,
@@ -220,16 +309,31 @@ page.on("console", (msg) => {
   if (msg.type() === "error") errors.push("console: " + msg.text());
 });
 
+let lastQuoteBody = null;
+let lastSubmitBody = null;
+
 await page.route("**/api/booking/availability**", (route) => {
   const u = new URL(route.request().url());
   const checkin = u.searchParams.get("checkin");
   const checkout = u.searchParams.get("checkout");
   const adults = parseInt(u.searchParams.get("adults") || "2", 10);
   const children = parseInt(u.searchParams.get("children") || "0", 10);
+  const requestedRooms = parseInt(u.searchParams.get("rooms") || "1", 10);
+  let payload = buildAvailability(checkin, checkout, adults, children, requestedRooms);
+  if (adults === 2 && children === 0 && requestedRooms === 3) {
+    // Regression mirror of the production-capped path (InnPilot room-count fix
+    // 2602923): the customer requested 3 rooms but this party needs only 1, so
+    // the server serves the effective allocation (1 room) and relays the
+    // original requested count for reference — it never books the stale 3.
+    payload = buildAvailability(checkin, checkout, adults, children, 1);
+    payload.rooms.forEach((r) => {
+      r.requested_rooms = requestedRooms;
+    });
+  }
   route.fulfill({
     status: 200,
     contentType: "application/json",
-    body: JSON.stringify(buildAvailability(checkin, checkout, adults, children)),
+    body: JSON.stringify(payload),
   });
 });
 
@@ -238,10 +342,31 @@ await page.route("**/api/booking/quote**", (route) => {
   try {
     body = JSON.parse(route.request().postData() || "{}");
   } catch {}
+  lastQuoteBody = body;
   route.fulfill({
     status: 200,
     contentType: "application/json",
     body: JSON.stringify(buildQuote(body)),
+  });
+});
+
+await page.route("**/api/booking/submit**", (route) => {
+  let body = {};
+  try {
+    body = JSON.parse(route.request().postData() || "{}");
+  } catch {}
+  lastSubmitBody = body;
+  route.fulfill({
+    status: 200,
+    contentType: "application/json",
+    body: JSON.stringify({
+      success: true,
+      booking_id: "bk-test-" + Date.now(),
+      amount: 700000,
+      currency: "INR",
+      razorpay_key_id: "rzp_test_000000000000",
+      razorpay_order_id: "order_test_000",
+    }),
   });
 });
 
@@ -450,10 +575,10 @@ const amenityCount = await page
 check("6 amenity items with icons", amenityCount === 6, String(amenityCount));
 
 // Per-room occupant allocation (2A+0C -> single room, alternating icons)
-const firstCardAlloc = page.locator("#state-results article").first().locator("[data-allocation]");
-check("2A card shows allocation block", (await firstCardAlloc.count()) === 1);
+const firstCardAlloc = page.locator("#state-results article").first().locator("[data-allocation-rows]");
+check("2A card shows allocation editor", (await page.locator("#state-results article").first().locator("[data-allocation-editor]").count()) === 1);
 check("2A allocation has one room row", (await firstCardAlloc.locator("li").count()) === 1);
-const allocLabelA = (await firstCardAlloc.locator("li").first().getAttribute("aria-label")) || "";
+const allocLabelA = (await firstCardAlloc.locator("li").first().locator("[aria-label]").getAttribute("aria-label")) || "";
 check("2A allocation row = Room 1: 2 adults", allocLabelA === "Room 1: 2 adults", allocLabelA);
 const allocSvgsA = await firstCardAlloc.locator("li").first().locator("svg").count();
 check("2A row renders 2 adult icons (male+female)", allocSvgsA === 2, String(allocSvgsA));
@@ -603,12 +728,13 @@ check("1-night review shows 1 night (not 2)", freshStay.includes("1 night") && !
 const freshTotal = ((await page.locator("[data-booking-summary]").first().textContent()) || "").trim();
 check("1-night review total ₹3,500 (not ₹7,000)", freshTotal.includes("3,500") && !freshTotal.includes("7,000"), freshTotal.slice(0, 80));
 
-// ---- Occupancy & cot: mandatory cot (3 adults + 1 child) ----
+// ---- Occupancy & bedding: mandatory bedding (3 adults + 1 child) ----
 await page.evaluate(() => window.scrollTo(0, 0));
 await page.fill("#checkin", fmtDate(1));
 await page.fill("#checkout", fmtDate(3));
-await page.selectOption("#adults", "3");
-await page.selectOption("#children", "1");
+await page.fill("#adults", "3");
+await page.fill("#children", "1");
+await page.fill("#rooms", "1");
 await page.click("#search-btn");
 await page.waitForSelector("#state-results:not(.hidden)", { timeout: 15000 });
 await page.waitForTimeout(800);
@@ -616,11 +742,16 @@ await page.waitForTimeout(800);
 const familyCardA = page.locator("#state-results article").first();
 const famTextA = (await familyCardA.textContent()) || "";
 check("3A+1C family card selectable", (await familyCardA.locator(".select-room-btn").isEnabled()) === true);
-check("3A+1C no cot checkbox (InnPilot decides occupancy)", (await familyCardA.locator("[data-cot-check]").count()) === 0);
-check("3A+1C no cot notice on family card", !/cot/i.test(famTextA), famTextA.slice(0, 90));
-const allocLabel3A1C = (await familyCardA.locator("[data-allocation] li").first().getAttribute("aria-label")) || "";
+const mandatoryBedding = familyCardA.locator("[data-bedding-check]");
+check("3A+1C shows a bedding checkbox", (await mandatoryBedding.count()) === 1);
+check("3A+1C bedding checkbox checked (mandatory)", (await mandatoryBedding.isChecked()) === true);
+check("3A+1C bedding checkbox disabled (mandatory)", (await mandatoryBedding.isDisabled()) === true);
+const beddingLabel3A1C = (await familyCardA.locator("[data-bedding-room]").textContent()) || "";
+check("3A+1C bedding labelled required (included)", /Extra bedding required \(included\)/.test(beddingLabel3A1C), beddingLabel3A1C.trim());
+check("3A+1C bedding charge shown", /₹750\/night/.test(beddingLabel3A1C), beddingLabel3A1C.trim());
+const allocLabel3A1C = (await familyCardA.locator("[data-allocation-rows] li [aria-label]").first().getAttribute("aria-label")) || "";
 check("3A+1C allocation row = Room 1: 3 adults, 1 child", allocLabel3A1C === "Room 1: 3 adults, 1 child", allocLabel3A1C);
-const iconCounts3A1C = await familyCardA.locator("[data-allocation] svg").evaluateAll((els) => ({ adult: els.filter((e) => e.classList.contains("text-cfr-green-accent")).length, child: els.filter((e) => e.classList.contains("text-cfr-green-leaf")).length }));
+const iconCounts3A1C = await familyCardA.locator("[data-allocation-rows] svg").evaluateAll((els) => ({ adult: els.filter((e) => e.classList.contains("text-cfr-green-accent")).length, child: els.filter((e) => e.classList.contains("text-cfr-green-leaf")).length }));
 check("3A+1C icons = 3 adult + 1 child", iconCounts3A1C.adult === 3 && iconCounts3A1C.child === 1, JSON.stringify(iconCounts3A1C));
 
 await familyCardA.locator(".select-room-btn").click();
@@ -632,22 +763,25 @@ await page.fill("#guest-phone", "+91 91111 00000");
 await page.click("#proceed-to-review");
 await page.waitForTimeout(800);
 const oneRoomSummaryA = ((await page.locator("[data-booking-summary]").first().textContent()) || "").trim();
-check("3A+1C total ₹7,000 (single room, no cot)", oneRoomSummaryA.includes("7,000"), oneRoomSummaryA.slice(0, 120));
+check("3A+1C total ₹8,500 (₹7,000 room + ₹1,500 bedding)", oneRoomSummaryA.includes("8,500"), oneRoomSummaryA.slice(0, 140));
 const pricingA = ((await page.locator("#review-pricing").textContent()) || "").trim();
-check("3A+1C review has no Extra cot line", !/Extra cot/.test(pricingA), pricingA.slice(0, 120));
+check("3A+1C review shows Extra bedding line", /Extra bedding/.test(pricingA), pricingA.slice(0, 140));
 
-// ---- Occupancy: 2 adults + 2 children -> single room, no cot UI ----
+// ---- Occupancy: 2 adults + 2 children -> single room, bedding verbatim ----
 await page.evaluate(() => window.scrollTo(0, 0));
 await page.fill("#checkin", fmtDate(1));
 await page.fill("#checkout", fmtDate(3));
-await page.selectOption("#adults", "2");
-await page.selectOption("#children", "2");
+await page.fill("#adults", "2");
+await page.fill("#children", "2");
+await page.fill("#rooms", "1");
 await page.click("#search-btn");
 await page.waitForSelector("#state-results:not(.hidden)", { timeout: 15000 });
 await page.waitForTimeout(800);
 
 const familyCardB = page.locator("#state-results article").first();
-check("2A+2C no optional cot checkbox (InnPilot decides occupancy)", (await familyCardB.locator("[data-cot-check]").count()) === 0);
+check("2A+2C bedding checkbox rendered from InnPilot state", (await familyCardB.locator("[data-bedding-check]").count()) === 1);
+const famTextB = (await familyCardB.textContent()) || "";
+check("2A+2C single room allocation (Rooms required: 1)", /Rooms required: 1/.test(famTextB), famTextB.slice(0, 90));
 
 await familyCardB.locator(".select-room-btn").click();
 await page.waitForTimeout(1200);
@@ -658,14 +792,15 @@ await page.fill("#guest-phone", "+91 92222 11111");
 await page.click("#proceed-to-review");
 await page.waitForTimeout(800);
 const noCotSummary = ((await page.locator("[data-booking-summary]").first().textContent()) || "").trim();
-check("2A+2C -> ₹7,000, no cot line", noCotSummary.includes("7,000") && !/Extra cot/.test(noCotSummary), noCotSummary.slice(0, 120));
+check("2A+2C -> ₹8,500 with bedding line", noCotSummary.includes("8,500") && /Extra bedding/.test(noCotSummary), noCotSummary.slice(0, 120));
 
 // ---- Occupancy: 6A+4C -> 2 rooms required; Deluxe gated (needs 4 rooms, 1 left) ----
 await page.evaluate(() => window.scrollTo(0, 0));
 await page.fill("#checkin", fmtDate(1));
 await page.fill("#checkout", fmtDate(3));
-await page.selectOption("#adults", "6");
-await page.selectOption("#children", "4");
+await page.fill("#adults", "6");
+await page.fill("#children", "4");
+await page.fill("#rooms", "1");
 await page.click("#search-btn");
 await page.waitForSelector("#state-results:not(.hidden)", { timeout: 15000 });
 await page.waitForTimeout(800);
@@ -676,11 +811,12 @@ const deluxeCard = cardsC.nth(1);
 const famTextC = (await famCardC.textContent()) || "";
 check("6A+4C family card shows rooms-required heading", /Rooms required: 2/.test(famTextC), famTextC.slice(0, 90));
 check("6A+4C family card selectable", (await famCardC.locator(".select-room-btn").isEnabled()) === true);
-check("6A+4C family card shows per-room allocation rows", (await famCardC.locator("[data-allocation] li").count()) === 2);
-const allocLabelsC = await famCardC.locator("[data-allocation] li").evaluateAll((els) => els.map((e) => e.getAttribute("aria-label")));
+check("6A+4C family card shows per-room allocation rows", (await famCardC.locator("[data-allocation-rows] li").count()) === 2);
+const allocLabelsC = await famCardC.locator("[data-allocation-rows] li [aria-label]").evaluateAll((els) => els.map((e) => e.getAttribute("aria-label")));
 check("6A+4C allocation splits 3A+2C per room", JSON.stringify(allocLabelsC) === JSON.stringify(["Room 1: 3 adults, 2 children", "Room 2: 3 adults, 2 children"]), JSON.stringify(allocLabelsC));
-const famIconCountsC = await famCardC.locator("[data-allocation] svg").evaluateAll((els) => ({ total: els.length, adult: els.filter((e) => e.classList.contains("text-cfr-green-accent")).length, child: els.filter((e) => e.classList.contains("text-cfr-green-leaf")).length }));
+const famIconCountsC = await famCardC.locator("[data-allocation-rows] svg").evaluateAll((els) => ({ total: els.length, adult: els.filter((e) => e.classList.contains("text-cfr-green-accent")).length, child: els.filter((e) => e.classList.contains("text-cfr-green-leaf")).length }));
 check("6A+4C icons: 6 adults + 4 children rendered", famIconCountsC.total === 10 && famIconCountsC.adult === 6 && famIconCountsC.child === 4, JSON.stringify(famIconCountsC));
+check("6A+4C family card no bedding (rooms at capacity)", (await famCardC.locator("[data-bedding-check]").count()) === 0);
 check("6A+4C deluxe card gated (too many guests)", (await deluxeCard.locator('button', { hasText: "Too many guests" }).count()) === 1);
 
 await famCardC.locator(".select-room-btn").click();
@@ -692,10 +828,10 @@ await page.fill("#guest-phone", "+91 93333 22222");
 await page.click("#proceed-to-review");
 await page.waitForTimeout(800);
 const multiSummary = ((await page.locator("[data-booking-summary]").first().textContent()) || "").trim();
-check("6A+4C total ₹14,000 (2 rooms, no cots)", multiSummary.includes("14,000"), multiSummary.slice(0, 140));
+check("6A+4C total ₹14,000 (2 rooms, no bedding)", multiSummary.includes("14,000"), multiSummary.slice(0, 140));
 check("6A+4C summary shows 2 Rooms required", /2 Rooms required/.test(multiSummary), multiSummary.slice(0, 140));
 const multiPricing = ((await page.locator("#review-pricing").textContent()) || "").trim();
-check("6A+4C pricing shows 2 × room, no Extra cot line", /2 \u00d7/.test(multiPricing) && !/Extra cot/.test(multiPricing), multiPricing.slice(0, 140));
+check("6A+4C pricing shows 2 × room, no Extra bedding line", /2 \u00d7/.test(multiPricing) && !/Extra bedding/.test(multiPricing), multiPricing.slice(0, 140));
 
 // Allocation block rendered verbatim in summary + review guests info
 const summaryAlloc = page.locator("[data-booking-summary]").first().locator("[data-allocation]");
@@ -705,6 +841,220 @@ const reviewGuestsAlloc = page.locator("#review-guests-info").locator("[data-all
 check("6A+4C review guests block shows allocation", (await reviewGuestsAlloc.count()) === 1);
 const reviewGuestsLabels = await page.locator("#review-guests-info [data-allocation] li").evaluateAll((els) => els.map((e) => e.getAttribute("aria-label")));
 check("6A+4C review allocation splits per room", JSON.stringify(reviewGuestsLabels) === JSON.stringify(["Room 1: 3 adults, 2 children", "Room 2: 3 adults, 2 children"]), JSON.stringify(reviewGuestsLabels));
+
+// ---- Scenario A: Rooms input validation (<1, >12, non-numeric) ----
+await page.evaluate(() => window.scrollTo(0, 0));
+await page.fill("#checkin", fmtDate(1));
+await page.fill("#checkout", fmtDate(3));
+await page.fill("#adults", "2");
+await page.fill("#children", "0");
+await page.fill("#rooms", "0");
+await page.click("#search-btn");
+await page.waitForTimeout(400);
+check("A: rooms=0 shows inline error", await page.locator("#rooms-error").isVisible());
+const roomsErr0 = ((await page.locator("#rooms-error").textContent()) || "").trim();
+check("A: rooms=0 error message", roomsErr0 === "At least 1 room is required", roomsErr0);
+check("A: invalid rooms does not trigger a search", !(await page.locator("#state-loading:not(.hidden)").isVisible()) && !(await page.locator("#state-results:not(.hidden)").isVisible()));
+
+await page.fill("#rooms", "13");
+await page.click("#search-btn");
+await page.waitForTimeout(400);
+check("A: rooms=13 error message", ((await page.locator("#rooms-error").textContent()) || "").trim() === "Rooms cannot exceed 12");
+
+await page.fill("#rooms", "abc");
+await page.click("#search-btn");
+await page.waitForTimeout(400);
+check("A: non-numeric rooms error message", ((await page.locator("#rooms-error").textContent()) || "").trim() === "Rooms must be a whole number");
+
+// ---- Scenario E: 6A+4C requesting 3 rooms -> INSUFFICIENT_INVENTORY ----
+await page.fill("#checkin", fmtDate(1));
+await page.fill("#checkout", fmtDate(3));
+await page.fill("#adults", "6");
+await page.fill("#children", "4");
+await page.fill("#rooms", "3");
+await page.click("#search-btn");
+await page.waitForSelector("#state-results:not(.hidden)", { timeout: 15000 });
+await page.waitForTimeout(800);
+const cardsE = page.locator("#state-results article");
+const famCardE = cardsE.nth(0);
+const deluxeCardE = cardsE.nth(1);
+const famErrE = famCardE.locator("[data-availability-error]");
+check("E: family card shows inventory error block", (await famErrE.count()) === 1);
+const famErrTextE = (await famErrE.textContent()) || "";
+check("E: family error = not enough rooms", /Not enough rooms left for these dates/.test(famErrTextE), famErrTextE.trim());
+check("E: family error shows minimum room count", /needs at least 2 rooms/.test(famErrTextE), famErrTextE.trim());
+check("E: family card gated (no Select button)", (await famCardE.locator(".select-room-btn").count()) === 0);
+check("E: deluxe card gated (no Select button)", (await deluxeCardE.locator(".select-room-btn").count()) === 0);
+
+// ---- Scenario F: allocation options + switching (6A+4C, 2 rooms) ----
+await page.fill("#rooms", "2");
+await page.click("#search-btn");
+await page.waitForSelector("#state-results:not(.hidden)", { timeout: 15000 });
+await page.waitForTimeout(800);
+const famCardF = page.locator("#state-results article").first();
+check("F: allocation options rendered", (await famCardF.locator("[data-allocation-options]").count()) === 1);
+check("F: two allocation options", (await famCardF.locator("[data-allocation-radio]").count()) === 2);
+const optTextF = (await famCardF.locator("[data-allocation-options]").textContent()) || "";
+check("F: first option recommended (Best price)", /Best price/.test(optTextF), optTextF.slice(0, 90));
+check("F: option prices shown", /14,000/.test(optTextF) && /13,400/.test(optTextF), optTextF.slice(0, 120));
+check("F: first option pre-selected", (await famCardF.locator("[data-allocation-radio]:checked").getAttribute("data-option-index")) === "0");
+check("F: mixed option row count still 2 rooms", (await famCardF.locator("[data-allocation-rows] li").count()) === 2);
+
+// Switch to option 2 (Family + Deluxe) -> rows re-render
+await famCardF.locator("[data-allocation-radio]").nth(1).check();
+await page.waitForTimeout(400);
+check("F: option 2 now selected", (await famCardF.locator("[data-allocation-radio]:checked").getAttribute("data-option-index")) === "1");
+const editorTextF = (await famCardF.locator("[data-allocation-rows]").textContent()) || "";
+check("F: rows re-rendered with Deluxe room type", /Deluxe Room/.test(editorTextF), editorTextF.trim().slice(0, 120));
+
+// ---- Scenario G: mixed room types echoed verbatim in summary/review ----
+await famCardF.locator(".select-room-btn").click();
+await page.waitForTimeout(1200);
+await page.fill("#guest-firstName", "Mohan");
+await page.fill("#guest-lastName", "Iyer");
+await page.fill("#guest-email", "mohan@test.com");
+await page.fill("#guest-phone", "+91 94444 33333");
+await page.click("#proceed-to-review");
+await page.waitForTimeout(800);
+const mixedSummary = ((await page.locator("[data-booking-summary]").first().textContent()) || "").trim();
+check("G: summary shows 2 Rooms required", /2 Rooms required/.test(mixedSummary), mixedSummary.slice(0, 120));
+const mixedAlloc = page.locator("[data-booking-summary]").first().locator("[data-allocation]");
+check("G: summary allocation shows mixed room types", /Deluxe Room/.test((await mixedAlloc.textContent()) || ""), ((await mixedAlloc.textContent()) || "").trim().slice(0, 120));
+check("G: mixed allocation shows both room types", /Family Room/.test((await mixedAlloc.textContent()) || "") && /Deluxe Room/.test((await mixedAlloc.textContent()) || ""));
+
+// ---- Scenario H: optional bedding toggle (2A+1C) reflected in total + submit ----
+await page.evaluate(() => window.scrollTo(0, 0));
+await page.fill("#checkin", fmtDate(1));
+await page.fill("#checkout", fmtDate(3));
+await page.fill("#adults", "2");
+await page.fill("#children", "1");
+await page.fill("#rooms", "1");
+await page.click("#search-btn");
+await page.waitForSelector("#state-results:not(.hidden)", { timeout: 15000 });
+await page.waitForTimeout(800);
+const famCardH = page.locator("#state-results article").first();
+const beddingH = famCardH.locator("[data-bedding-check]");
+check("H: optional bedding checkbox present", (await beddingH.count()) === 1);
+check("H: optional bedding unchecked + enabled", (await beddingH.isChecked()) === false && (await beddingH.isEnabled()) === true);
+await beddingH.check();
+await page.waitForTimeout(200);
+check("H: optional bedding now checked", (await beddingH.isChecked()) === true);
+
+await famCardH.locator(".select-room-btn").click();
+await page.waitForTimeout(1200);
+await page.fill("#guest-firstName", "Ravi");
+await page.fill("#guest-lastName", "Nair");
+await page.fill("#guest-email", "ravi@test.com");
+await page.fill("#guest-phone", "+91 95555 44444");
+await page.click("#proceed-to-review");
+await page.waitForTimeout(800);
+const beddingSummary = ((await page.locator("[data-booking-summary]").first().textContent()) || "").trim();
+check("H: summary total includes bedding (₹8,500)", beddingSummary.includes("8,500"), beddingSummary.slice(0, 140));
+check("H: summary pricing shows Extra bedding line", /Extra bedding/.test(beddingSummary), beddingSummary.slice(0, 140));
+
+await page.locator("#booking-confirmation").check();
+await page.waitForTimeout(200);
+await page.locator("#complete-booking-btn").click();
+await page.waitForTimeout(800);
+check("H: Complete -> payment step", await page.locator("#state-payment:not(.hidden)").isVisible());
+// submit only fires when the order is created on the payment step; stub Razorpay
+await page.evaluate(() => {
+  window.Razorpay = class {
+    constructor() {}
+    open() {}
+  };
+});
+await page.locator("#pay-now-btn").click();
+await page.waitForTimeout(800);
+check("H: submit carries rooms_required", lastSubmitBody && lastSubmitBody.rooms_required === 1, JSON.stringify(lastSubmitBody));
+check("H: submit carries bedding special request", lastSubmitBody && /Extra bedding requested for 1 room/.test(lastSubmitBody.guest?.specialRequests || ""), JSON.stringify(lastSubmitBody));
+
+// ---- Scenario I: quote + availability carry requested room count ----
+await page.evaluate(() => window.scrollTo(0, 0));
+await page.fill("#checkin", fmtDate(1));
+await page.fill("#checkout", fmtDate(3));
+await page.fill("#adults", "2");
+await page.fill("#children", "0");
+await page.fill("#rooms", "2");
+await page.click("#search-btn");
+await page.waitForSelector("#state-results:not(.hidden)", { timeout: 15000 });
+await page.waitForTimeout(800);
+const famCardI = page.locator("#state-results article").first();
+const famTextI = (await famCardI.textContent()) || "";
+check("I: rooms=2 with party needing 1 -> no error block", (await famCardI.locator("[data-availability-error]").count()) === 0, famTextI.slice(0, 90));
+check("I: allocation shows actual single room", /Rooms required: 1/.test(famTextI), famTextI.slice(0, 90));
+await famCardI.locator(".select-room-btn").click();
+await page.waitForTimeout(1200);
+check("I: quote request carries rooms_required=2", lastQuoteBody && lastQuoteBody.rooms_required === 2, JSON.stringify(lastQuoteBody));
+check("I: quote body carries room/date/guest data", lastQuoteBody && lastQuoteBody.room_id === "Family Room" && lastQuoteBody.checkin && lastQuoteBody.adults === 2, JSON.stringify(lastQuoteBody));
+
+// ---- Scenario J: requested 3 > server-effective 1 -> submit uses effective count ----
+// Regression for the production room-count bug (P0 fix): a party needing 1 room
+// that requests 3 must flow Search -> Quote -> Review -> Submit as the
+// server-effective rooms_required (1), never the stale client-requested 3.
+await page.evaluate(() => window.scrollTo(0, 0));
+await page.fill("#checkin", fmtDate(1));
+await page.fill("#checkout", fmtDate(3));
+await page.fill("#adults", "2");
+await page.fill("#children", "0");
+await page.fill("#rooms", "3");
+await page.click("#search-btn");
+await page.waitForSelector("#state-results:not(.hidden)", { timeout: 15000 });
+await page.waitForTimeout(800);
+
+const famCardJ = page.locator("#state-results article").first();
+const famTextJ = (await famCardJ.textContent()) || "";
+check("J: requested 3 succeeds (no inventory error)", (await famCardJ.locator("[data-availability-error]").count()) === 0, famTextJ.slice(0, 90));
+check("J: results reflect server-effective count (Rooms required: 1)", /Rooms required: 1/.test(famTextJ), famTextJ.slice(0, 90));
+const allocRowsJ = famCardJ.locator("[data-allocation-rows] li");
+check("J: single allocated room (no empty room)", (await allocRowsJ.count()) === 1, String(await allocRowsJ.count()));
+const allocLabelJ = (await allocRowsJ.first().locator("[aria-label]").getAttribute("aria-label")) || "";
+check("J: allocated room occupied by 2 adults", allocLabelJ === "Room 1: 2 adults", allocLabelJ);
+check("J: room selectable", (await famCardJ.locator(".select-room-btn").isEnabled()) === true);
+
+await famCardJ.locator(".select-room-btn").click();
+await page.waitForTimeout(1200);
+check("J: quote request relays stale requested 3 (reproduces bug path)", lastQuoteBody && lastQuoteBody.rooms_required === 3, JSON.stringify(lastQuoteBody));
+
+await page.fill("#guest-firstName", "Kiran");
+await page.fill("#guest-lastName", "Mehta");
+await page.fill("#guest-email", "kiran@test.com");
+await page.fill("#guest-phone", "+91 96666 55555");
+await page.click("#proceed-to-review");
+await page.waitForTimeout(800);
+
+const summaryJ = ((await page.locator("[data-booking-summary]").first().textContent()) || "").trim();
+check("J: review reflects effective count (Rooms required: 1)", /Rooms required: 1/.test(summaryJ), summaryJ.slice(0, 120));
+check("J: review total = 1 room (₹7,000), not 3 rooms (₹21,000)", summaryJ.includes("7,000") && !summaryJ.includes("21,000"), summaryJ.slice(0, 120));
+const pricingJ = ((await page.locator("#review-pricing").textContent()) || "").trim();
+check("J: review pricing consistent (no bedding line)", !/Extra bedding/.test(pricingJ), pricingJ.slice(0, 120));
+const summaryAllocJ = await page.locator("[data-booking-summary]").first().locator("[data-allocation] li").count();
+const summaryContainersJ = await page.locator("[data-booking-summary]").count();
+check("J: review allocation = single room", summaryAllocJ === 1, `allocation li=${summaryAllocJ}, summaries=${summaryContainersJ}`);
+
+await page.locator("#booking-confirmation").check();
+await page.waitForTimeout(200);
+await page.locator("#complete-booking-btn").click();
+await page.waitForTimeout(800);
+check("J: Complete -> payment step", await page.locator("#state-payment:not(.hidden)").isVisible());
+
+// Submit only fires when the order is created on the payment step; stub Razorpay
+await page.evaluate(() => {
+  window.Razorpay = class {
+    constructor() {}
+    open() {}
+  };
+});
+// Scenario H's pay-now click left the button disabled (its Razorpay stub never
+// dismisses the modal), so re-enable to simulate a freshly-entered payment step.
+await page.locator("#pay-now-btn").evaluate((el) => {
+  el.disabled = false;
+});
+await page.locator("#pay-now-btn").click();
+await page.waitForTimeout(800);
+
+check("J: submit carries server-effective rooms_required = 1", lastSubmitBody && lastSubmitBody.rooms_required === 1, JSON.stringify(lastSubmitBody));
+check("J: submit does NOT carry stale requested 3", lastSubmitBody && lastSubmitBody.rooms_required !== 3, JSON.stringify(lastSubmitBody));
 
 // No console errors
 check("no console/page errors", errors.length === 0, errors.slice(0, 3).join(" | "));
