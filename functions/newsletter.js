@@ -94,6 +94,11 @@ export async function onRequest(context) {
   // Use email if provided, otherwise generate a placeholder for Brevo contact
   const contactEmail = email || `phone-${phone.replace(/[^0-9]/g, "")}@corbett.life`;
 
+  // Prefer the documented variable name (BREVO_LIST_NEWSLETTER) but keep
+  // BREVO_LIST_ID working as a fallback for existing deployments.
+  const listIdRaw = env.BREVO_LIST_NEWSLETTER || env.BREVO_LIST_ID || "";
+  const listIds = listIdRaw ? [parseInt(listIdRaw, 10)] : [];
+
   try {
     // Step 1: Add/update contact in Brevo
     const attributes = {
@@ -105,7 +110,7 @@ export async function onRequest(context) {
     const contactPayload = {
       email: contactEmail,
       updateEnabled: true,
-      listIds: env.BREVO_LIST_ID ? [parseInt(env.BREVO_LIST_ID)] : [],
+      listIds,
       attributes,
     };
 
@@ -116,12 +121,15 @@ export async function onRequest(context) {
     });
 
     if (!contactRes.ok && contactRes.status !== 409) {
-      const errText = await contactRes.text();
-      console.error("Brevo contact error:", contactRes.status, errText);
-      return new Response(JSON.stringify({ error: "Failed to subscribe" }), {
-        status: 500,
-        headers,
-      });
+      let detail = "";
+      try {
+        detail = (await contactRes.text()).slice(0, 500);
+      } catch {}
+      console.error("Brevo contact error:", contactRes.status, detail);
+      return new Response(
+        JSON.stringify({ error: "Failed to subscribe", status: contactRes.status, detail }),
+        { status: 500, headers }
+      );
     }
 
     // Step 2: Send welcome email (only if real email provided)
