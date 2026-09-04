@@ -48,13 +48,16 @@ import siteData from "../data/site.json";
       <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div class="mx-auto max-w-3xl text-center">
           <div class="flex flex-wrap justify-center gap-4">
-            <a href="/accommodation" class="inline-flex items-center justify-center gap-2 rounded-lg bg-cfr-green-accent px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2 !rounded-full !px-8 !py-4 !text-base">
-              Explore Stays
+            <a href="/booking/" class="inline-flex items-center justify-center gap-2 rounded-lg bg-cfr-green-accent px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2 !rounded-full !px-8 !py-4 !text-base">
+              Check Availability
               <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
               </svg>
             </a>
 
+            <a href="/accommodation" class="inline-flex items-center justify-center gap-2 rounded-full border-2 border-cfr-sand-500 px-8 py-4 text-base font-semibold text-cfr-sand-200 transition-all duration-300 hover:bg-cfr-sand-500/20 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-sand-400 focus-visible:ring-offset-2">
+              Explore Stays
+            </a>
           </div>
 
           <div class="mt-12 flex flex-col items-center gap-0 border-t border-white/10 pt-10 md:grid md:grid-cols-3 md:gap-0 md:items-start">
@@ -194,13 +197,16 @@ import siteData from "../data/site.json";
       <div class="mt-12 text-center">
         <p class="text-lg leading-relaxed text-white max-w-3xl mx-auto">{siteData.accommodationCta}</p>
         <div class="mt-6 flex flex-wrap justify-center gap-4">
+          <a href="/booking/" class="inline-flex items-center justify-center gap-2 rounded-full bg-cfr-green-accent px-10 py-4 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2">
+            Book Your Stay
+          </a>
           <a href="/accommodation" class="inline-flex items-center justify-center gap-2 rounded-lg border-2 border-cfr-green-accent px-6 py-3 text-sm font-semibold text-cfr-green-accent transition-all duration-300 hover:bg-cfr-green-accent hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2 !border-cfr-sand-500 !text-cfr-sand-200 hover:!bg-cfr-sand-500/20 !rounded-full !px-10 !py-4">
             View All Accommodations
             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
             </svg>
           </a>
-          <a href="/tariff" class="inline-flex items-center justify-center gap-2 rounded-full bg-cfr-green-accent px-10 py-4 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark hover:shadow-lg hover:-translate-y-0.5">
+          <a href="/tariff" class="inline-flex items-center justify-center gap-2 rounded-full border-2 border-cfr-sand-500 px-10 py-4 text-sm font-semibold text-cfr-sand-200 transition-all duration-300 hover:bg-cfr-sand-500/20 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-sand-400 focus-visible:ring-offset-2">
             View Rates & Pricing
           </a>
         </div>
@@ -310,6 +316,20 @@ import siteData from "../data/site.json";
             <path d="M4.583 17.321C3.553 16.227 3 15 3 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311C9.591 11.69 11 13.167 11 15c0 1.933-1.567 3.5-3.5 3.5-1.271 0-2.402-.642-2.917-1.179zm10 0C13.553 16.227 13 15 13 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311C19.591 11.69 21 13.167 21 15c0 1.933-1.567 3.5-3.5 3.5-1.271 0-2.402-.642-2.917-1.179z" />
           </svg>
           <p class="text-base leading-relaxed text-cfr-earth-700 italic md:text-lg">&ldquo;{siteData.about.paragraphs[0]}&rdquo;</p>
+        </div>
+
+        <div class="mt-12 text-center">
+          <p class="text-lg leading-relaxed text-cfr-earth-700 max-w-2xl mx-auto">
+            With only six exclusive suites, every stay at Corbett Foothills Retreat is shaped around you. Check availability for your dates and book your stay.
+          </p>
+          <div class="mt-6 flex flex-wrap justify-center gap-4">
+            <a href="/booking/" class="inline-flex items-center justify-center gap-2 rounded-full bg-cfr-green-accent px-10 py-4 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-cfr-green-dark hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2">
+              Check Availability
+            </a>
+            <a href="/accommodation" class="inline-flex items-center justify-center gap-2 rounded-full border-2 border-cfr-green-accent px-10 py-4 text-sm font-semibold text-cfr-green-accent transition-all duration-300 hover:bg-cfr-green-accent hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-cfr-green-accent focus-visible:ring-offset-2">
+              Explore the Stay
+            </a>
+          </div>
         </div>
       </div>
     </div>
