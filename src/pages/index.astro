@@ -386,7 +386,7 @@ import siteData from "../data/site.json";
 
           <!-- Right: form -->
           <div class="rounded-2xl bg-white/80 shadow-premium backdrop-blur-sm transition-all duration-300 hover:shadow-glow p-8">
-            <form action="#" method="POST" class="space-y-5">
+            <form id="home-contact-form" class="space-y-5" novalidate>
               <div class="grid gap-5 sm:grid-cols-2">
                 <div>
                   <label for="name" class="block text-sm font-medium text-cfr-earth-700">Full Name</label>
@@ -465,7 +465,62 @@ import siteData from "../data/site.json";
                   <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
                 </svg>
               </button>
+              <p id="home-contact-msg" class="text-xs text-center hidden"></p>
             </form>
+            <script>
+              document.getElementById("home-contact-form")?.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const form = e.currentTarget;
+                const btn = form.querySelector('button[type="submit"]');
+                const msg = document.getElementById("home-contact-msg");
+                const name = form.querySelector("#name").value.trim();
+                const email = form.querySelector("#email").value.trim();
+                const checkin = form.querySelector("#checkin").value;
+                const checkout = form.querySelector("#checkout").value;
+                const guests = form.querySelector("#guests").value;
+                const message = form.querySelector("#message").value.trim();
+
+                if (!name || !email || !message) {
+                  msg.textContent = "Please fill in your name, email, and message.";
+                  msg.className = "text-xs text-center text-red-500";
+                  msg.classList.remove("hidden");
+                  return;
+                }
+
+                btn.textContent = "Sending\u2026";
+                btn.disabled = true;
+                msg.classList.add("hidden");
+
+                try {
+                  const res = await fetch("/contact", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name, email, phone: "", checkin, checkout, guests, message }),
+                  });
+                  const json = await res.json();
+                  if (json.success) {
+                    msg.textContent = "Thank you! We\u2019ll get back to you within 24 hours.";
+                    msg.className = "text-xs text-center text-cfr-green-accent";
+                    msg.classList.remove("hidden");
+                    form.reset();
+                    window.CFR_ANALYTICS?.track("contact_submitted", {
+                      property_name: "Corbett Foothills Retreat",
+                    });
+                  } else {
+                    msg.textContent = json.error || "Something went wrong. Please try again.";
+                    msg.className = "text-xs text-center text-red-500";
+                    msg.classList.remove("hidden");
+                  }
+                } catch {
+                  msg.textContent = "Network error. Please try again.";
+                  msg.className = "text-xs text-center text-red-500";
+                  msg.classList.remove("hidden");
+                }
+
+                btn.textContent = "Send Enquiry";
+                btn.disabled = false;
+              });
+            </script>
           </div>
         </div>
       </div>
